@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.system.mapper.Synchro.Formmain0028Mapper">
+    <select id="selectformmain0028" resultType="com.system.pojo.Synchro.Formmain0028">
+        select field0001, field0003, field0005, field0006
+        from formmain_0028
+    </select>
+    <select id="selectList" resultType="String">
+        select field0001
+        from formmain_0028
+        where field0001 = #{code}
+    </select>
+
+    <update id="updateFormmain0028Field0001">
+        update formmain_0028
+        set field0007=#{code}
+        where field0001 = #{field0001}
+    </update>
+    <update id="updateFormmain0028Syn">
+        update formmain_0028
+        set field0008=#{errmsg}
+        where field0001 = #{field0001}
+    </update>
+</mapper>

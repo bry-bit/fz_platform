@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.system.mapper.Synchro.Formmain0047TempMapper">
+    <select id="selectFormmain0047" parameterType="String" resultType="com.system.pojo.Synchro.Formson_0047_temp">
+        select ID,
+               formmain_id,
+               field0008,
+               field0010,
+               field0018,
+               field0012,
+               field0013,
+               field0032,
+               field0033,
+               field0034,
+               field0035,
+               field0036,
+               field0014,
+               field0015,
+               field0030,
+               field0016,
+               field0027,
+               field0025,
+               field0028,
+               field0026,
+               field0038
+        from Formson_0047_temp
+        where formmain_id = #{map}
+    </select>
+    <select id="selectEmptyfield0012" parameterType="String" resultType="com.system.pojo.Synchro.Formson_0047_temp">
+        select ID,
+               formmain_id,
+               field0008,
+               field0010,
+               field0018,
+               field0012,
+               field0013,
+               field0032,
+               field0033,
+               field0034,
+               field0035,
+               field0036,
+               field0014,
+               field0015,
+               field0030,
+               field0016,
+               field0027,
+               field0025,
+               field0028,
+               field0026,
+               field0038
+        from Formson_0047_temp
+        where formmain_id = #{map}
+          and field0012 is null
+    </select>
+    <select id="selectformmain0046" parameterType="String" resultType="com.system.pojo.Synchro.Formmain_0046_temp">
+        select *
+        from Formmain_0046_temp
+        where ID = #{map}
+    </select>
+
+    <update id="updatefield0012">
+        update Formson_0047_temp
+        set field0012=#{field0001}
+        where ID = #{id}
+    </update>
+    <update id="updatefield00121">
+        update Formson_0047_temp
+        set field0012=#{code}
+        where ID = #{id}
+    </update>
+    <select id="selectEmptyfield00121" parameterType="String" resultType="com.system.pojo.Synchro.Formson_0047_temp">
+        select ID,
+               formmain_id,
+               field0008,
+               field0010,
+               field0018,
+               field0012,
+               field0013,
+               field0032,
+               field0033,
+               field0034,
+               field0035,
+               field0036,
+               field0014,
+               field0015,
+               field0030,
+               field0016,
+               field0027,
+               field0025,
+               field0028,
+               field0026,
+               field0038
+        from Formson_0047_temp
+        where formmain_id = #{map}
+          and field0012 is null
+    </select>
+    <select id="selectEmptyfield00122" parameterType="String" resultType="com.system.pojo.Synchro.Formson_0047_temp">
+        select ID,
+               formmain_id,
+               field0008,
+               field0010,
+               field0018,
+               field0012,
+               field0013,
+               field0032,
+               field0033,
+               field0034,
+               field0035,
+               field0036,
+               field0014,
+               field0015,
+               field0030,
+               field0016,
+               field0027,
+               field0025,
+               field0028,
+               field0026,
+               field0038
+        from Formson_0047_temp
+        where formmain_id = #{map}
+          and field0012 is not null
+    </select>
+
+    <update id="Updatefiel0023" parameterType="String">
+        update formmain_0046_temp
+        set field0023=(select field0023 from formmain_0046 where field0043 = #{map})
+        where id = #{map}
+    </update>
+    <select id="selectfield0023" parameterType="String" resultType="String">
+        select field0023
+        from formmain_0046
+        where field0043 = #{map}
+    </select>
+    <update id="updatefield00231" parameterType="String">
+        update formmain_0046_temp
+        set field0023=#{gg}
+        where id = #{map}
+    </update>
+</mapper>

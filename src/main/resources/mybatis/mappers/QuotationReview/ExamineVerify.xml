@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.system.mapper.QuotationReview.AuditPushContractMapper">
+    <!-- 主表查询数据 -->
+    <select id="temp" resultType="com.system.pojo.QuotationReview.SummaryPush">
+        with temp as (
+            select Main_quotation.item_code,
+                   Main_quotation.item_name,
+                   Main_quotation.form_code,
+                   Main_quotation.form_name,
+                   d.supplier_name,
+                   d.supplier_code
+            from Main_quotation
+                     INNER JOIN Sub_quotation d ON d.relation_id = Main_quotation.ID
+            where d.bid_state = '2'
+            UNION all
+            select Main_quotation.item_code,
+                   Main_quotation.item_name,
+                   Main_quotation.form_code,
+                   Main_quotation.form_name,
+                   d.supplier_name,
+                   d.supplier_code
+            from Main_quotation
+                     INNER JOIN Sub_quotation d ON d.relation_id = Main_quotation.ID
+            where d.bid_state = '2'
+        )
+        SELECT distinct *
+        FROM temp;
+    </select>
+
+    <!-- 子表查询数据 -->
+    <select id="temp1" resultType="com.system.pojo.QuotationReview.SummaryPush">
+        WITH temp1
+                 AS (SELECT Sub_quotation.*
+                     FROM Sub_quotation
+                              INNER JOIN Main_quotation ON Sub_quotation.relation_id = Main_quotation.ID
+                     WHERE Main_quotation.item_name = #{item_name}
+                       and Sub_quotation.supplier_name = #{supplier_name}
+                       and Sub_quotation.bid_state = '2'
+                     UNION ALL
+                     SELECT d.*
+                     FROM Main_quotation
+                              INNER JOIN Sub_quotation d ON d.relation_id = Main_quotation.ID
+                     where Main_quotation.item_name = #{item_name}
+                       and d.supplier_name = #{supplier_name}
+                       and d.bid_state = '2'
+            )
+        SELECT distinct *
+        FROM temp1;
+    </select>
+
+    <update id="updateStateZhong">
+        update Sub_quotation
+        set bid_state=2,
+            select_or_not=1
+        where id = #{id}
+          and relation_id = #{relation_id}
+          and supplier_name = #{supplier_name}
+          and stock_name = #{stock_name}
+          and stock_code = #{stock_code}
+          and norms = #{norms}
+          and brand = #{brand}
+          and unit = #{unit}
+          and offer = #{offer}
+          and offer_date = #{offer_date}
+          and bid_state != '5'
+    </update>
+
+    <update id="updateStateWei">
+        update Sub_quotation
+        set bid_state=3,
+            select_or_not=0
+        where id = #{id}
+          and relation_id = #{relation_id}
+          and supplier_name != #{supplier_name}
+          and stock_name = #{stock_name}
+          and stock_code = #{stock_code}
+          and norms = #{norms}
+          and brand = #{brand}
+          and unit = #{unit}
+          and bid_state != '5'
+    </update>
+
+    <select id="selStockName" resultType="com.system.pojo.Purchase.Sub_quotation">
+        select distinct m.item_code,
+                        m.item_name,
+                        s.*
+        from Sub_quotation s
+                 left join Main_quotation m on s.relation_id = m.id
+                 left join org_member on org_member.ID = m.proposer
+                 left join org_unit on org_member.ORG_DEPARTMENT_ID = org_unit.ID
+        where s.enable_status = '正常'
+          and s.bid_state = 1
+          and org_member.NAME = #{name}
+        order by s.stock_code, s.stock_name, s.norms asc
+    </select>
+
+    <select id="selSupName" resultType="com.system.pojo.Purchase.Sub_quotation">
+        select distinct m.item_code,
+                        m.item_name,
+                        s.*
+        from Sub_quotation s
+                 left join Main_quotation m on s.relation_id = m.id
+                 left join org_member on org_member.ID = m.proposer
+                 left join org_unit on org_member.ORG_DEPARTMENT_ID = org_unit.ID
+        where s.enable_status = '正常'
+          and (s.bid_state != 5 or s.bid_state is null)
+          and org_member.NAME = #{name}
+          and s.id = #{id}
+    </select>
+</mapper>

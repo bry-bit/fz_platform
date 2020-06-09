@@ -1,0 +1,28 @@
+{
+  "properties": [
+    {
+      "name": "spring.mybatis.type-aliases-package",
+      "type": "java.lang.String",
+      "description": "Description for spring.mybatis.type-aliases-package."
+    },
+    {
+      "name": "spring.datasource.test2.url",
+      "type": "java.lang.String",
+      "description": "Description for spring.datasource.test2.url."
+    },
+    {
+      "name": "spring.datasource.test1.url",
+      "type": "java.lang.String",
+      "description": "Description for spring.datasource.test1.url."
+    },
+    {
+      "name": "spring.datasource.test1.driver-class-name",
+      "type": "java.lang.String",
+      "description": "Description for spring.datasource.test1.driver-class-name."
+    },
+    {
+      "name": "spring.datasource.test2.driver-class-name",
+      "type": "java.lang.String",
+      "description": "Description for spring.datasource.test2.driver-class-name."
+    }
+  ] }

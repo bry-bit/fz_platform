@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.system.mapper.Synchro.Formmain0027Mapper">
+
+    <resultMap id="excelMap" type="com.system.pojo.Synchro.Formmain0027">
+        <result column="field0001" property="field0001" jdbcType="VARCHAR"/>
+        <result column="field0003" property="field0003" jdbcType="VARCHAR"/>
+        <result column="field0004" property="field0004" jdbcType="VARCHAR"/>
+        <result column="field0005" property="field0005" jdbcType="VARCHAR"/>
+        <result column="field0006" property="field0006" jdbcType="VARCHAR"/>
+        <result column="field0007" property="field0007" jdbcType="VARCHAR"/>
+        <result column="field0008" property="field0008" jdbcType="VARCHAR"/>
+        <result column="field0010" property="field0010" jdbcType="VARCHAR"/>
+        <result column="field0011" property="field0011" jdbcType="VARCHAR"/>
+        <result column="field0013" property="field0013" jdbcType="VARCHAR"/>
+        <result column="field0014" property="field0014" jdbcType="VARCHAR"/>
+        <result column="field0016" property="field0016" jdbcType="VARCHAR"/>
+        <result column="field0017" property="field0017" jdbcType="VARCHAR"/>
+        <result column="field0018" property="field0018" jdbcType="VARCHAR"/>
+        <result column="field0019" property="field0019" jdbcType="VARCHAR"/>
+        <result column="field0020" property="field0020" jdbcType="VARCHAR"/>
+        <result column="field0021" property="field0021" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <insert id="addNan1" parameterType="com.system.pojo.Synchro.Formmain0027">
+        insert into formmain_0027_test(
+        <if test="field0001 != null and field0001 != ''">field0001
+        </if>
+        <if test="field0003 != null and field0003 != ''">
+            ,field0003
+        </if>
+        <if test="field0004 != null and field0004 != ''">
+            ,field0004
+        </if>
+        <if test="field0005 != null and field0005 != ''">
+            ,field0005
+        </if>
+        <if test="field0006 != null and field0006 != ''">
+            ,field0006
+        </if>
+        <if test="field0007 != null and field0007 != ''">
+            ,field0007
+        </if>
+        <if test="field0008 != null and field0008 != ''">
+            ,field0008
+        </if>
+        )
+        values(
+        <if test="field0001 != null and field0001 != ''">
+            #{field0001}
+        </if>
+        <if test="field0003 != null and field0003 != ''">
+            ,#{field0003}
+        </if>
+        <if test="field0004 != null and field0004 != ''">
+            ,#{field0004}
+        </if>
+        <if test="field0005 != null and field0005 != ''">
+            ,#{field0005}
+        </if>
+        <if test="field0006 != null and field0006 != ''">
+            ,#{field0006}
+        </if>
+        <if test="field0007 != null and field0007 != ''">
+            ,#{field0007}
+        </if>
+        <if test="field0008 != null and field0008 != ''">
+            ,#{field0008}
+        </if>
+        )
+    </insert>
+    <select id="selectAll" resultType="com.system.pojo.Synchro.Formmain0027">
+        select field0001, field0003, field0004, field0005, field0006, field0007, field0008
+        from formmain_0027_test
+    </select>
+    <select id="selectformmain0027" resultType="com.system.pojo.Synchro.Formmain0027">
+        select field0001,
+               field0003,
+               field0004,
+               field0005,
+               field0006,
+               field0007,
+               field0008,
+               field0010,
+               field0011,
+               field0014,
+               field0016,
+               field0017,
+               field0018,
+               field0019,
+               field0020,
+               field0021,
+               field0022,
+               field0013,
+               field0024,
+               field0026,
+               field0027
+        from formmain_0027
+    </select>
+    <select id="selectList" resultType="String">
+        select field0001
+        from formmain_0027
+        where field0001 = #{code}
+    </select>
+    <update id="updateFormmain0027Field0001">
+        update formmain_0027
+        set field0023=#{code}
+        where field0001 = #{field0001}
+    </update>
+    <update id="updateFormmain0027Syn">
+        update formmain_0027
+        set field0024=#{errmsg}
+        where field0001 = #{field0001}
+    </update>
+    <select id="selectfield0001" resultType="String">
+        select field0001
+        from formmain_0027
+        where field0024 = #{field0038}
+          and field0026 = #{field0032}
+          and field0027 = #{field0034}
+    </select>
+
+</mapper>

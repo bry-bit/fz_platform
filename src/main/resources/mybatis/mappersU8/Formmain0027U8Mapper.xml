@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.system.mapperU8.Formmain0027U8Mapper">
+    <select id="selectFormmain0027U8" resultType="com.system.pojo.Synchro.Inventory">
+        select cInvCode, cInvccode, cinvstd, caddress
+        from inventory
+    </select>
+    <select id="selectMaxcode" resultType="java.lang.Integer">
+        select MAX(I_id) cInvCode
+        from inventory
+    </select>
+    <select id="selectFormmain0047" resultType="com.system.pojo.Synchro.Formson_0047_temp">
+        select ID,
+               formmain_id,
+               field0008,
+               field0010,
+               field0018,
+               field0012,
+               field0013,
+               field0032,
+               field0033,
+               field0034,
+               field0035,
+               field0036,
+               field0014,
+               field0015,
+               field0030,
+               field0016,
+               field0027,
+               field0025,
+               field0028,
+               field0026,
+               field0038
+        from Formson_0047_temp
+        where formmain_id = #{map}
+    </select>
+</mapper>

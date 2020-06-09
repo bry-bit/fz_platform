@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>模板二上传</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="../../layuiadmin/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="../../layuiadmin/style/admin.css" media="all">
+    <link rel="stylesheet" href="../../layuiadmin/style/login.css" media="all">
+</head>
+<body>
+<div class="layui-card">
+    <div class="layui-card-body">
+        <table class="layui-table" id="demo1" lay-filter="demo1">
+
+            <tbody>
+            <tr>
+                <td colspan="2" rowspan="3" style="text-align: center">
+                    <img height="60px"
+                         src="../../layuiadmin/layui/images/face/B69AC16B-FEDD-4b7f-A638-B7B15E7480F1.png">
+                </td>
+                <td colspan="6" rowspan="3"><h1 style="text-align: center">明 细 表</h1></td>
+                <td style="text-align: center">设计：</td>
+                <td style="text-align: center">-</td>
+            </tr>
+            <tr>
+                <td style="text-align: center">审核：</td>
+                <td style="text-align: center">杨景杰</td>
+            </tr>
+            <tr>
+                <td style="text-align: center">会签：</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td colspan="2" style="text-align: center">用户名称：广汽本田</td>
+                <td colspan="2" style="text-align: center">设备名称：--</td>
+                <td colspan="4" style="text-align: center">项目代号：2LN (2019-020)</td>
+                <td style="text-align: center">日期：</td>
+                <td style="text-align: center">2020-02-25</td>
+            </tr>
+            <tr>
+                <td colspan="2"></td>
+                <td colspan="2"></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td style="text-align: center">工位号</td>
+                <td></td>
+            </tr>
+            </tbody>
+        </table>
+        <hr>
+        <table class="layui-hide" id="demo" lay-filter="demo"></table>
+    </div>
+    <div style="float: right;padding-top: 5px;">
+        <button type="button" class="layui-btn" id="test1">完成并发起请购单</button>
+        <button type="button" class="layui-btn" id="test2">完成并待发请购单</button>
+        <button type="button" class="layui-btn" id="test3">完成并关闭</button>
+    </div>
+</div>
+
+<script src="../../layuiadmin/layui/layui.js"></script>
+<script>
+    layui.config({
+        base: '../../layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'table', 'upload', 'laydate'], function () {
+        var $ = layui.jquery
+            , upload = layui.upload
+            , table = layui.table;
+
+        table.render({
+            elem: '#demo'
+            , data: []
+            , cols: [
+                [
+                    {field: "field0008", title: "序号", rowspan: 2, align: "center"}
+                    , {field: "tuhao", title: "图号", rowspan: 2, align: "center"}
+                    , {field: "field0013", title: "名称", rowspan: 2, align: "center"}
+                    , {field: "field0032", title: "规格型号", rowspan: 2, align: "center"}
+                    , {field: "field0035", title: "材质供应商", rowspan: 2, align: "center"}
+                    , {field: "", title: "数量", colspan: 2, align: "center"}
+                    , {field: "duichenx", title: "对称性", rowspan: 2, align: "center"}
+                    , {field: "danz", title: "单重", rowspan: 2, align: "center"}
+                    , {field: "", title: "备注", rowspan: 2, align: "center"}
+                ], [
+                    {field: "left", title: "左", align: "center", edit: true}
+                    , {field: "regiht", title: "右", align: "center", edit: true}
+                ]
+            ]
+        })
+    });
+</script>
+</body>
+</html>

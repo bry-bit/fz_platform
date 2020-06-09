@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.system.mapper.Purchase.QuotationMapper">
+    <insert id="insertMain_quotation">
+        insert into Main_quotation(id
+        <if test="item_code != null and item_code != ''">
+            , item_code
+        </if>
+        <if test="item_name != null and item_name != ''">
+            , item_name
+        </if>
+        <if test="form_code != null and form_code != ''">
+            , form_code
+        </if>
+        <if test="form_name != null and form_name != ''">
+            , form_name
+        </if>
+        <if test="proposer != null and proposer != ''">
+            , proposer
+        </if>
+        <if test="dept != null and dept != ''">
+            , dept
+        </if>
+        <if test="create_date != null and create_date != ''">
+            , create_date
+        </if>
+        <if test="total != null and total != ''">
+            , total
+        </if>)
+        values (#{id}
+        <if test="item_code != null and item_code != ''">
+            , #{item_code}
+        </if>
+        <if test="item_name != null and item_name != ''">
+            , #{item_name}
+        </if>
+        <if test="form_code != null and form_code != ''">
+            , #{form_code}
+        </if>
+        <if test="form_name != null and form_name != ''">
+            , #{form_name}
+        </if>
+        <if test="proposer != null and proposer != ''">
+            , #{proposer}
+        </if>
+        <if test="dept != null and dept != ''">
+            , #{dept}
+        </if>
+        <if test="create_date != null and create_date != ''">
+            , #{create_date}
+        </if>
+        <if test="total != null and total != ''">
+            , #{total}
+        </if>)
+    </insert>
+
+    <insert id="insertSub_quotation">
+        insert into Sub_quotation(id, relation_id, orders, line, stock_code, stock_name, class_code, stock_sort,
+                                  station_no, norms, unit, brand, supplier_name, supplier_code, delivery_date, quantity,
+                                  offer, subtotal, offer_date, field0025, field0024, field0027, remarks, open_date,
+                                  close_date, enable_status, select_or_not, bid_id, contract_id, upload_buyer,
+                                  upload_supplier, bid_state, issuance_date)
+        values (#{id}, #{relation_id}, #{orders}, #{line}, #{stock_code}, #{stock_name}, #{class_code}, #{stock_sort},
+                #{station_no}, #{norms}, #{unit},
+                #{brand}, #{supplier_name}, #{supplier_code}, #{delivery_date}, #{quantity}, #{offer}, #{subtotal},
+                #{offer_date}, #{field0025},
+                #{field0024}, #{field0027}, #{remarks}, #{open_date}, #{close_date}, #{enable_status}, #{select_or_not},
+                #{bid_id}, #{contract_id},
+                #{upload_buyer}, #{upload_supplier}, #{bid_state}, #{issuance_date})
+    </insert>
+
+    <select id="whetherOrNotId" resultType="com.system.pojo.Purchase.Main_quotation">
+        select *
+        from Main_quotation
+        where id = #{id}
+    </select>
+
+    <select id="selSubQuo" resultType="com.system.pojo.Purchase.Sub_quotation"
+            parameterType="com.system.pojo.Purchase.Sub_quotation">
+        select m.item_code,m.item_name,s.*
+        from Sub_quotation s
+        left join Main_quotation m on s.relation_id=m.id
+        left join org_member on org_member.ID = m.proposer
+        left join org_unit on org_member.ORG_DEPARTMENT_ID = org_unit.ID
+        where s.enable_status = '正常'
+        <if test="brand != null and brand != ''">
+            and s.brand = #{brand}
+        </if>
+        <if test="stock_name != null and stock_name != ''">
+            and s.stock_name=#{stock_name}
+        </if>
+        <if test="norms != null and norms != ''">
+            and s.norms = #{norms}
+        </if>
+        <if test="supplier_name != null and supplier_name != ''">
+            and s.supplier_name = #{supplier_name}
+        </if>
+        <if test="proposer != null and proposer != ''">
+            and org_member.NAME=#{proposer}
+        </if>
+        <if test='bid_state.equals("zhongbiao")'>
+            and (s.bid_state = 2 or s.bid_state = 3)
+        </if>
+        <if test='bid_state.equals("0") or bid_state.equals("1") '>
+            and s.bid_state = #{bid_state}
+        </if>
+        order by s.stock_code,s.stock_name,s.norms,s.bid_state asc
+    </select>
+
+    <update id="updateSubQuo">
+        update Sub_quotation
+        <set>
+            <if test="id != null and id != ''">
+                id = #{id}
+            </if>
+            <if test="offer != null and offer != ''">
+                ,offer = #{offer}
+            </if>
+            <if test="offer_date != null and offer_date != ''">
+                ,offer_date = #{offer_date}
+            </if>
+            <if test="upload_buyer != null and upload_buyer != ''">
+                ,upload_buyer = #{upload_buyer}
+            </if>
+            <if test="upload_supplier != null and upload_supplier != ''">
+                ,upload_supplier = #{upload_supplier}
+            </if>
+            <if test="issuance_date != null and issuance_date != ''">
+                ,issuance_date = #{issuance_date}
+            </if>
+            ,bid_state = '1'
+        </set>
+        where id=#{id} and supplier_name=#{supplier_name} and stock_name = #{stock_name}
+        and norms = #{norms} and brand = #{brand} and stock_code = #{stock_code}
+    </update>
+
+    <!--退回报价-->
+    <update id="updateBackSubquotation" parameterType="com.system.pojo.Purchase.Sub_quotation">
+        UPDATE sub_quotation
+        SET bid_state = '5'
+        WHERE id = #{id}
+          and offer = #{offer}
+          and (offer_date = #{offer_date} or offer_date is null)
+    </update>
+
+    <!--查看被退回的历史报价         AND (s.bid_state = 3 OR s.bid_state = 4)-->
+    <select id="selSubQuoHistory" resultType="com.system.pojo.Purchase.Sub_quotation" parameterType="string">
+        SELECT
+        m.item_code
+        ,m.item_name
+        ,s.*
+        FROM Sub_quotation s
+        LEFT JOIN Main_quotation m ON s.relation_id=m.id
+        WHERE s.enable_status = '正常'
+        <if test="yemian == 'quotedHistory' ">
+            AND s.bid_state = 2
+            AND s.stock_code =#{stock_code}
+            AND s.stock_name =#{stock_name}
+            AND (s.stock_sort =#{stock_sort} or s.stock_sort is null)
+            AND s.norms =#{norms}
+            AND s.unit =#{unit}
+            AND s.brand =#{brand}
+        </if>
+        <if test="yemian == 'Purchase' ">
+            AND s.stock_code =#{stock_code}
+            AND s.stock_name =#{stock_name}
+            AND s.stock_sort =#{stock_sort}
+            AND s.norms =#{norms}
+            AND s.unit =#{unit}
+            AND s.brand =#{brand}
+            and (s.bid_state=2 or s.bid_state=3)
+        </if>
+        <if test="proName!=null and proName!=''">
+            AND m.item_name = #{proName}
+        </if>
+    </select>
+</mapper>

@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<!--suppress ALL -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>报价审核</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="../../layuiadmin/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="../../layuiadmin/style/admin.css" media="all">
+    <link rel="stylesheet" href="../../layuiadmin/layui/font/iconfont.css" media="all">
+</head>
+<style>
+    .layui-table-cell {
+        font-size: 12px;
+        /*padding: 0 5px;*/
+        height: auto;
+        overflow: visible;
+        text-overflow: inherit;
+        white-space: normal;
+        word-break: break-all;
+    }
+</style>
+<body>
+<div class="layui-card">
+    <div class="layui-card-body">
+        <a type="button" class="layui-btn layui-btn-sm" id="edit">推中标档案</a>
+        <a type="button" class="layui-btn layui-btn-sm" id="return" style="float: right;margin-right: 30px">退回</a>
+        <a type="button" class="layui-btn layui-btn-sm" id="winning" style="float: right;margin-right: 10px">中标</a>
+        <!--        <hr>-->
+        <table class="layui-hide" id="demo" lay-filter="demo"></table>
+    </div>
+</div>
+
+<script type="text/html" id="offer">{{test1(d.offer)}}</script>
+<script src="layuiadmin/layui/layui.js"></script>
+<script>
+    layui.config({
+        base: 'layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'table', 'form', 'laydate', 'layer', 'mockjax', 'testTablePlug'], function () {
+        var $ = layui.$
+            , table = layui.table
+            , form = layui.form
+            , layer = layui.layer
+            , laydate = layui.laydate
+            , tablePlug = layui.tablePlug //表格插件
+            , testTablePlug = layui.testTablePlug // 测试js模块
+            , renderFormSelectsIn = layui.renderFormSelectsIn // 针对form在特定场合下的渲染的封装
+            , formSelects = layui.formSelects; //多选下拉插件
+
+        table.render({
+            elem: '#demo'
+            , height: 'full-35'
+            , url: '/selStockName?name=' + parent.layui.index.getCookie("loginName")
+            // 是否开启字段筛选的记忆功能，支持true/false/'local'/'session'/其他 开启的情况下默认是session，除非显式的指定为'local'
+            , colFilterRecord: true
+            // 开启智能重载
+            , smartReloadModel: true
+            , cols: [
+                [
+                    {field: 'stock_code', title: '存货编码', align: "center", width: 90}
+                    , {field: 'stock_name', title: '存货名称', align: "center", width: 110}
+                    , {field: 'norms', title: '规格型号', align: "center", width: 120}
+                    , {field: 'item_code', title: '项目编码', align: "center", width: 80}
+                    , {field: 'item_name', title: '项目名称', align: "center", width: 80}
+                    , {field: 'supplier_name', title: '供应商', align: "center", width: 200, filter: true}
+                    , {field: 'unit', title: '单位', align: "center", width: 60}
+                    , {field: 'brand', title: '品牌', align: "center", width: 60}
+                    , {field: 'quantity', title: '数量', align: "center", width: 70}
+                    , {field: 'offer', title: '报价', align: "center", width: 100, templet: '#offer'}
+                    , {title: '是否中标', type: 'radio', width: 60}
+                    , {title: '是否退回', type: 'checkbox', width: 60}
+                ]
+            ]
+            , done: function (res) {
+                var data = res.data;
+                var mark = 1; //这里涉及到简单的运算，mark是计算每次需要合并的格子数
+                var columsName = ['stock_code', 'stock_name', 'norms'];//需要合并的列名称
+                var columsIndex = [0, 1, 2];//需要合并的列索引值
+
+                //这里循环所有要合并的列
+                for (var k = 0; k < columsName.length; k++) {
+                    //这里循环表格当前的数据
+                    for (var i = 1; i < res.data.length; i++) {
+                        var trArr = $(".layui-table-body .layui-table").find("tr");//所有行
+                        var tdCurArr = trArr.eq(i).find("td").eq(columsIndex[k]);//获取当前行的当前列
+                        var tdPreArr = trArr.eq(i - 1).find("td").eq(columsIndex[k]);//获取上一行的当前列
+                        if (data[i]['RN'] != data[i - 1]['RN']) {
+                            continue;
+                        }
+                        //后一行的值与前一行的值做比较，相同就需要合并
+                        if (data[i][columsName[k]] == data[i - 1][columsName[k]]) {
+                            mark += 1;
+                            if (mark > 2) {
+                                tdPreArr = trArr.eq(i - mark + 1).find("td").eq(columsIndex[k]);
+                            }
+                            //上一行增加rowspan属性
+                            tdPreArr.each(function () {
+                                $(this).attr("rowspan", mark);
+                                // $(this).attr("colspan", mark);
+                            });
+                            //当前行隐藏
+                            tdCurArr.each(function () {
+                                $(this).css("display", "none");
+                            });
+                        } else {
+                            //一旦前后两行的值不一样了，那么需要合并的格子数mark就需要重新计算
+                            mark = 1;
+                        }
+                    }
+                    //第一个合并完成，重置mark进行下一个合并
+                    mark = 1;
+                }
+
+                $(".laytable-cell-checkbox:first").html("是否退回");
+            }
+        });
+
+        $('#edit').on('click', function () {
+            var topLayui = parent === self ? layui : top.layui;
+            topLayui.index.openTabsPage("/page?url=/review/test.html", "推送采购中标审批单");
+        });
+
+        $('#return').on('click', function () {
+            var checkStatus = table.checkStatus('demo')
+                , data = checkStatus.data;
+            layer.confirm('是否对此数据进行退回？', function (index) {
+                $.ajax({
+                    type: 'post'
+                    , url: '/backSubquotation'
+                    , data: JSON.stringify(data)
+                    , dataType: 'json'
+                    , contentType: 'application/json; charset=utf-8'
+                    , success: function (res) {
+                        if (res.code == "0") {
+                            layer.msg('退回成功！', {
+                                offset: '15px'
+                                , icon: 1
+                                , time: 1000
+                            }, function () {
+                                location.reload(index);
+                            });
+                        } else {
+                            layer.msg('退回失败！', {
+                                offset: '15px'
+                                , icon: 1
+                                , time: 1000
+                            });
+                        }
+                    }
+                });
+                layer.close(index);
+            });
+        });
+
+
+        $('#winning').on('click', function () {
+            var checkStatus = table.checkStatus('demo')
+                , data = checkStatus.data;
+            layer.confirm('是否选择该数据？', function (index) {
+                $.ajax({
+                    type: 'post'
+                    , url: '/WhetherOrNotSel'
+                    , data: JSON.stringify(data)
+                    , dataType: 'json'
+                    , contentType: 'application/json; charset=utf-8'
+                    , success: function (res) {
+                        if (res.code == "0") {
+                            layer.msg('选择成功！', {
+                                offset: '15px'
+                                , icon: 1
+                                , time: 1000
+                            }, function () {
+                                location.reload(index);
+                            });
+                        } else {
+                            layer.msg(res.msg, {
+                                offset: '15px'
+                                , icon: 1
+                                , time: 1000
+                            });
+                        }
+                    }
+                });
+                layer.close(index);
+            });
+        });
+    });
+
+    //小数位为4
+    function test1(str) {
+        if (!str) str = "0.0000";
+        let ret = Math.round(parseFloat(str) * 10000) / 10000;
+        if (str.split(".").length === 1){
+            return ret.toString()+".0000";
+        }
+        var decimal = str.split(".")[0];
+        var floats = str.split(".")[1].substring(0, 4);
+        return decimal + "." + floats;
+    }
+</script>
+</body>
+</html>

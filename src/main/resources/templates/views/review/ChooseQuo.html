@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>选择是否中标供应商</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="../../layuiadmin/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="../../layuiadmin/style/admin.css" media="all">
+</head>
+<body>
+<div class="layui-card">
+    <div class="layui-card-body">
+        <a type="button" class="layui-btn layui-btn-sm" id="return">退回</a>
+        <a type="button" class="layui-btn layui-btn-sm" id="winning">中标</a>
+        <hr>
+        <table class="layui-hide" id="demo" lay-filter="demo"></table>
+    </div>
+</div>
+
+<script src="../../layuiadmin/layui/layui.js"></script>
+<script>
+    layui.config({
+        base: '../../layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'table', 'form', 'laydate', 'layer'], function () {
+        var $ = layui.$
+            , table = layui.table
+            , form = layui.form
+            , layer = layui.layer
+            , laydate = layui.laydate
+            , index = parent.layer.getFrameIndex(window.name);
+
+        table.render({
+            elem: '#demo'
+            , height: 'full-95'
+            , url: '/selSupName?stock_id=' + parent.layui.index.getCookie("stock_id")
+                + '&name=' + parent.layui.index.getCookie("loginName")
+            , cols: [
+                [
+                    {type: 'radio'}
+                    , {field: 'stock_code', title: '存货编码', align: "center", width: 95}
+                    , {field: 'stock_name', title: '存货名称', align: "center", width: 95}
+                    , {field: 'norms', title: '规格', align: "center", width: 140}
+                    , {field: 'item_code', title: '项目编码', align: "center", width: 110}
+                    , {field: 'item_name', title: '项目名称', align: "center", width: 110}
+                    , {field: 'brand', title: '品牌', align: "center", width: 80}
+                    , {field: 'unit', title: '单位', align: "center", width: 60}
+                    , {field: 'quantity', title: '请购数量', align: "center", width: 95}
+                    , {field: 'delivery_date', title: '期望到货日期', align: "center", width: 110}
+                    , {field: 'issuance_date', title: '发货日期', align: "center", width: 110}
+                    , {field: 'supplier_name', title: '供应商', align: "center", width: 100, fixed: 'right'}
+                    , {field: 'offer', title: '报价', align: "center", width: 95, fixed: 'right'}
+                    , {
+                    field: '', title: '中标状态', align: "center", width: 95, fixed: 'right', templet: function (row) {
+                        if (row.select_or_not == "1") {
+                            return '<a type="button" class="layui-btn layui-btn-sm layui-bg-red">中标</a>'
+                        } else if (row.select_or_not == "0") {
+                            return '<a type="button" class="layui-btn layui-btn-sm layui-bg-black">未中标</a>'
+                        } else if ((row.select_or_not == "" || row.select_or_not == null || row.select_or_not == undefined)
+                            && row.bid_state == "1") {
+                            return '<a type="button" class="layui-btn layui-btn-sm layui-btn-warm">已报价</a>'
+                        } else if ((row.select_or_not == "" || row.select_or_not == null || row.select_or_not == undefined)
+                            && (row.bid_state == "0" || row.bid_state == null)) {
+                            return '<a type="button" class="layui-btn layui-btn-sm">未报价</a>'
+                        }
+                    }
+                }
+                ]
+            ]
+            , done: function (res) {
+                for (var i in res.data) {
+                    var item = res.data[i];
+                    if (item.select_or_not == "0" || item.select_or_not == "1") {
+                        $('tr[data-index=' + i + '] input[type="radio"]').prop('disabled', true);
+                        $('tr[data-index=' + i + '] input[type="radio"]').prop('checked', false);
+                        $('tr[data-index=' + i + '] input[type="radio"]').next().remove();
+                    }
+                }
+            }
+        });
+
+
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>采购需求-子表</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="../../layuiadmin/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="../../layuiadmin/style/admin.css" media="all">
+</head>
+<style>
+    .layui-table-cell {
+        font-size: 13px;
+        /*padding: 0 5px;*/
+        height: auto;
+        overflow: visible;
+        text-overflow: inherit;
+        white-space: normal;
+        word-break: break-all;
+    }
+</style>
+<body>
+<div class="layui-card">
+    <div class="layui-card-body">
+        <form class="layui-form" action="">
+            <!--            <div class="layui-inline">-->
+            <!--                <label class="layui-form-label">信息查询</label>-->
+            <!--                <div class="layui-input-inline">-->
+            <!--                    <select name="stock_name" lay-verify="required" lay-search="" class="stock_name"-->
+            <!--                            lay-filter="stock_name">-->
+            <!--                        <option value="">选择或搜索存货名称</option>-->
+            <!--                    </select>-->
+            <!--                </div>-->
+            <!--                <div class="layui-input-inline">-->
+            <!--                    <select name="norms" lay-verify="required" lay-search="" class="norms" lay-filter="norms">-->
+            <!--                        <option value="">选择或搜索规格</option>-->
+            <!--                    </select>-->
+            <!--                </div>-->
+            <!--                <div class="layui-input-inline">-->
+            <!--                    <select name="brand" lay-verify="required" lay-search="" class="brand" lay-filter="brand">-->
+            <!--                        <option value="">选择或搜索品牌</option>-->
+            <!--                    </select>-->
+            <!--                </div>-->
+            <!--            </div>-->
+            <!--            <button type="button" class="layui-btn layui-btn-normal" id="query">查询</button>-->
+            <button type="button" class="layui-btn layui-btn-sm layui-bg-cyan" id="chooseSup">选择供应商</button>
+            <button type="button" class="layui-btn layui-btn-sm layui-btn-danger" id="release">发布</button>
+        </form>
+        <hr>
+        <table class="layui-hide" id="demo" lay-filter="demo"></table>
+    </div>
+</div>
+
+<script src="../../layuiadmin/layui/layui.js"></script>
+<script>
+    var brand = "";
+    var stock_name = "";
+    var norms = "";
+    layui.config({
+        base: '../../layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'table', 'layer', 'form', 'mockjax', 'testTablePlug'], function () {
+        var $ = layui.$
+            , table = layui.table
+            , form = layui.form
+            , layer = layui.layer
+            , tablePlug = layui.tablePlug //表格插件
+            , testTablePlug = layui.testTablePlug // 测试js模块
+            , renderFormSelectsIn = layui.renderFormSelectsIn // 针对form在特定场合下的渲染的封装
+            , formSelects = layui.formSelects; //多选下拉插件;
+
+        // layer.alert(parent.layui.index.getCookie("mergeData"));
+
+        // $.ajax({
+        //     url: '/mergeTable?data=' + parent.layui.index.getCookie("mergeData")
+        //     , dataType: 'json'
+        //     , type: 'post'
+        //     , async: false
+        //     , success: function (result) {
+        //         $.each(result.data, function (index, item) {
+        //             $(".stock_name").append("<option value='" + item["stock_name"] + "'>" + item["stock_name"] + "</option>");
+        //             if ($(".stock_name option:contains('" + item["stock_name"] + "')").length > 1) {
+        //                 $(".stock_name option:contains('" + item["stock_name"] + "'):gt(0)").remove();
+        //             }
+        //         });
+        //         form.render("select");
+        //     }
+        // });
+
+        // $.ajax({
+        //     url: '/mergeTable?data=' + parent.layui.index.getCookie("mergeData")
+        //     , dataType: 'json'
+        //     , type: 'post'
+        //     , async: false
+        //     , contentType: 'application/json; charset=utf-8'
+        //     , success: function (result) {
+        //         $.each(result.data, function (index, item) {
+        //             $(".norms").append("<option value='" + item["norms"] + "'>" + item["norms"] + "</option>");
+        //             if ($(".norms option:contains('" + item["norms"] + "')").length > 1) {
+        //                 $(".norms option:contains('" + item["norms"] + "'):gt(0)").remove();
+        //             }
+        //         });
+        //         form.render("select");
+        //     }
+        // });
+
+        // $.ajax({
+        //     url: '/mergeTable?data=' + parent.layui.index.getCookie("mergeData")
+        //     , contentType: 'application/json; charset=utf-8'
+        //     , dataType: 'json'
+        //     , type: 'post'
+        //     , async: false
+        //     , success: function (result) {
+        //         $.each(result.data, function (index, item) {
+        //             $(".brand").append("<option value='" + item["brand"] + "'>" + item["brand"] + "</option>");
+        //             if ($(".brand option:contains('" + item["brand"] + "')").length > 1) {
+        //                 $(".brand option:contains('" + item["brand"] + "'):gt(0)").remove();
+        //             }
+        //         });
+        //         form.render("select");
+        //     }
+        // });
+
+        // //监听brand值的变化
+        // form.on('select(brand)', function (data) {
+        //     brand = data.value;
+        // });
+        //
+        // //监听norms值的变化
+        // form.on('select(norms)', function (data) {
+        //     norms = data.value;
+        // });
+        //
+        // //监听stock_name值的变化
+        // form.on('select(stock_name)', function (data) {
+        //     stock_name = data.value;
+        // });
+
+
+        table.render({
+            elem: '#demo'
+            , url: '/mergeTable'
+            , method: 'post'
+            , where: {
+                data: parent.layui.index.getCookie("mergeData")
+            }
+            , page: true
+            , limit: 30
+            , limits: [30, 50, 100]
+            , height: 'full-85'
+            , cols: [
+                [
+                    {type: 'checkbox'}
+                    // , {field: 'orders', title: '序号', align: "center", width: 60}
+                    , {field: 'stock_code', title: '存货编码', align: "center", width: 90}
+                    , {field: 'stock_name', title: '存货名称', align: "center", width: 135, filter: true}
+                    , {field: 'norms', title: '规格', align: "center", width: 155, filter: true}
+                    , {field: 'brand', title: '品牌', align: "center", width: 85, filter: true}
+                    , {field: 'unit', title: '单位', align: "center", width: 60}
+                    , {field: 'quantity', title: '数量', align: "center", width: 80}
+                    , {field: 'station_no', title: '工位号', align: "center", width: 85}
+                    , {field: 'delivery_date', title: '期望交货日期', align: "center", width: 110}
+                    , {
+                    field: 'field0002', title: '供应商', align: "center", width: 120, templet: function (row) {
+                        if (row.field0002 == null || row.field0002 == undefined || row.field0002 == "") {
+                            return '<a class="layui-btn layui-btn-sm layui-btn-disabled">未选供应商</a>';
+                        } else {
+                            return '<a class="layui-btn layui-btn-sm layui-btn-normal" lay-event="fianlSup">已选'
+                                + row.sum + '家供应商</a>';
+                        }
+
+                    }
+                }
+                    , {
+                    field: 'post_status', title: '发布状态', align: "center", width: 90, templet: function (row) {
+                        if (row.post_status == "0") {
+                            return '<button type="button" class="layui-btn layui-btn-sm layui-btn-primary">未发布</button>';
+                        } else if (row.post_status == "1") {
+                            return '<button type="button" class="layui-btn layui-btn-warm layui-btn-sm">正在发布中</button>';
+                        } else {
+                            return '<button type="button" class="layui-btn layui-btn-disabled layui-btn-sm">已发布</button>';
+                        }
+                    }
+                }
+                    , {
+                    field: 'a', title: '历史报价', align: "center", width: 100, templet: function (row) {
+                        return '<a type="button" class="layui-btn layui-btn-sm" lay-event="history">历史报价</a>'
+                    }
+                }
+                ]
+            ]
+            , done: function (res) {
+                for (var i in res.data) {
+                    var item = res.data[i];
+                    if (item.post_status === "2") {
+                        $('tr[data-index=' + i + '] input[type="checkbox"]').prop('disabled', true);
+                        $('tr[data-index=' + i + '] input[type="checkbox"]').prop('checked', false);
+                        $('tr[data-index=' + i + '] input[type="checkbox"]').next().remove();
+                    }
+                }
+            }
+            , parseData: function (res) {
+                var data = res.data;
+                for (index in data) {
+                    var date = data[index].delivery_date;
+                    var time = new Date(date);
+                    data[index].delivery_date = time.getFullYear() + "-" + (time.getMonth() + 1) + "-" + time.getDate();
+                }
+            }
+        });
+
+        $('#chooseSup').on('click', function () {
+            var checkStatus = table.checkStatus('demo')
+                , data = checkStatus.data;
+            parent.layui.index.setCookie("dataLength", data.length, "1");
+            parent.layui.index.setCookie("data", JSON.stringify(data), "1");
+            parent.layer.open({
+                type: 2
+                , title: data.field0016
+                , area: ['70%', '70%']
+                , shade: 0
+                , maxmin: true
+                , content: ['/page?url=/demand/SelectSupplier.html', 'yes']
+            });
+        });
+
+        table.on('tool(demo)', function (obj) {
+            if (obj.event === 'fianlSup') {
+                parent.layui.index.setCookie("subId", obj.data.id, "1");
+                parent.layui.index.setCookie("post_status", obj.data.post_status, "1");
+                parent.layer.open({
+                    type: 2,
+                    title: obj.data.stock_name + '(' + obj.data.stock_code + ')',
+                    area: ['750px', '450px'],
+                    skin: 'layui-layer-rim',
+                    content: ['/page?url=/demand/DataShow.html', 'yes']
+                });
+            }
+            if (obj.event == 'history') {
+                var data = obj.data;
+                console.log(JSON.stringify(data));
+                layer.open({
+                    type: 2
+                    , title: '历史报价'
+                    , area: ['1100px', '500px']
+                    , skin: 'layui-layer-rim'
+                    , content: ['page?url=/demand/purchaseHistory.html', 'yes']
+                    , success: function (layero, index) {
+                        var body = layui.layer.getChildFrame('body', index);
+                        if (data) {
+                            body.find("#mainSn").val(data.id); //将选中的数据的id传到编辑页面的隐藏域，便于根据ID修改数据
+                            body.find("#stock_code").val(data.stock_code);
+                            body.find("#stock_name").val(data.stock_name);
+                            body.find("#stock_sort").val(data.stock_sort);
+                            body.find("#norms").val(data.norms);
+                            body.find("#unit").val(data.unit);
+                            body.find("#brand").val(data.brand);
+                        }
+                        setTimeout(function () {
+                            layui.layer.tips('点击此处返回', '.layui-layer-setwin .layui-layer-close', {
+                                tips: 3
+                            });
+                        }, 500)
+                    }
+                });
+            }
+
+        });
+
+        $('#query').on('click', function () {
+            table.reload('demo', {
+                url: '/selPurTable?stock_name=' + stock_name + '&brand=' + brand + '&norms=' + norms + '&id=' +
+                    parent.layui.index.getCookie("relation_id")
+            })
+        });
+
+        $('#release').on('click', function () {
+            var checkStatus = table.checkStatus('demo')
+                , data = checkStatus.data;
+            // layer.alert(JSON.stringify(data));
+            $.ajax({
+                type: 'post'
+                , url: '/RequirementRelease'
+                , data: JSON.stringify(data)
+                , dataType: 'json'
+                , async: false
+                , contentType: 'application/json; charset=utf-8'
+                , success: function (res) {
+                    if (res.code == "0") {
+                        layer.msg('发布成功！', {
+                            offset: '15px'
+                            , icon: 1
+                            , time: 1000
+                        }, function () {
+                            location.reload();
+                        });
+                    } else {
+                        layer.msg('发布失败！', {
+                            offset: '15px'
+                            , icon: 1
+                            , time: 1000
+                        });
+                    }
+                }
+            })
+        })
+    });
+</script>
+</body>
+</html>

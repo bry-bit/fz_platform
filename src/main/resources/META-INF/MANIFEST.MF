@@ -1,0 +1,40 @@
+Manifest-Version: 1.0
+Class-Path: seeyon-apps-blog.jar seeyon-apps-bulletin.jar jersey-contain
+ er-servlet-core.jar seeyon-apps-edoc.jar jersey-container-servlet.jar s
+ eeyon-apps-hr.jar seeyon-apps-behavioranalysis.jar hk2-locator.jar seey
+ on-apps-multicall.jar seeyon-apps-seeyonreport.jar jersey-common.jar se
+ eyon-apps-imo.jar jackson-jaxrs-json-provider.jar seeyon-apps-rss.jar j
+ ersey-client.jar seeyon-apps-office.jar seeyon-apps-ctrip.jar seeyon-ap
+ ps-project.jar jackson-dataformat-smile.jar hk2-api.jar javax.ws.rs-api
+ .jar seeyon-apps-gke.jar jackson-dataformat-yaml.jar seeyon-apps-info.j
+ ar javax.servlet.jsp.jstl.jar seeyon-apps-soap.jar seeyon-apps-meeting.
+ jar seeyon-apps-archive.jar jackson-module-jaxb-annotations.jar jackson
+ -dataformat-xml.jar seeyon-apps-collaboration.jar seeyon-apps-attendanc
+ e.jar jackson-databind.jar jackson-mapper-asl.jar localstore.jar jackso
+ n-core.jar seeyon-apps-formtalk.jar javax.inject.jar seeyon-apps-news.j
+ ar jersey-media-multipart.jar json-lib.jar json.jar seeyon-apps-show.ja
+ r seeyon-apps-performancereport.jar seeyon-apps-m3.jar seeyon-apps-plan
+ .jar seeyon-api.jar jackson-jaxrs-base.jar seeyon-apps-doc.jar seeyon-a
+ pps-inquiry.jar jackson-annotations.jar seeyon-apps-api.jar seeyon-apps
+ -mplus.jar seeyon-apps-calendar.jar jackson-dataformat-cbor.jar jersey-
+ media-jaxb.jar fastutil.jar json-lib-jdk15.jar seeyon-apps-organization
+ .jar org.apache.oltu.oauth2.client.jar seeyon-apps-ai.jar seeyon-apps-m
+ all.jar org.apache.oltu.oauth2.common.jar seeyon-apps-nc.jar jersey-gua
+ va.jar seeyon-apps-dee.jar fastjson.jar seeyon-apps-monitor.jar javax.s
+ ervlet.jsp.jstl-api.jar seeyon-apps-bbs.jar hk2-utils.jar seeyon-apps-c
+ ommon.jar jersey-server.jar jackson-jaxrs-xml-provider.jar seeyon-apps-
+ task.jar seeyon-apps-u8.jar seeyon-apps-uc.jar seeyon-apps-videoconfere
+ nce.jar seeyon-apps-vjoin.jar seeyon-apps-voucher.jar seeyon-apps-vrepo
+ rt.jar seeyon-apps-webmail.jar seeyon-apps-weixin.jar seeyon-apps-wfana
+ lysis.jar seeyon-apps-xiaoz.jar seeyon-apps-yunxuetang.jar seeyon-cap-a
+ pi.jar seeyon-cap-core.jar seeyon-cap-custom-control.jar seeyon-cap-mag
+ icengine.jar seeyon-cip-api.jar seeyon-cip-biinside.jar seeyon-cip-elea
+ rning.jar seeyon-cip-service.jar seeyon-cip-qunje.jar seeyon-cryptix.ja
+ r seeyon-ctp-common.jar seeyon-ctp-core.jar seeyon-ctp-form.jar seeyon-
+ ctp-index-api.jar seeyon-ctp-index.jar seeyon-ctp-message-api.jar seeyo
+ n-ctp-message.jar seeyon-ctp-monitor.jar seeyon-ctp-organization.jar se
+ eyon-ctp-portal-api.jar seeyon-ctp-portal.jar seeyon-ctp-report-api.jar
+  seeyon-ctp-report.jar seeyon-ctp-workflow-api.jar seeyon-ctp-workflow-
+ component.jar seeyon-ctp-workflow.jar seeyon-dee-common.jar seeyon-dee-
+ core.jar
+

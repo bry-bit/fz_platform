@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>采购需求-选择供应商</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="../../layuiadmin/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="../../layuiadmin/style/admin.css" media="all">
+</head>
+<body>
+<div class="layui-card">
+    <div class="layui-card-body">
+        <form class="layui-form" action="">
+            <div class="layui-inline">
+                <label class="layui-form-label">供应商名称</label>
+                <div class="layui-input-inline">
+                    <input type="search" class="layui-input" id="field0002" placeholder="请输入关键词" autocomplete="off">
+                </div>
+            </div>
+            <button type="button" class="layui-btn layui-btn-normal" id="query">查询</button>
+            <button type="button" class="layui-btn layui-btn-normal" id="selectSup">保存</button>
+        </form>
+        <hr>
+        <table class="layui-hide" id="demo" lay-filter="demo"></table>
+    </div>
+</div>
+
+<script src="../../layuiadmin/layui/layui.js"></script>
+<script>
+    layui.config({
+        base: '../../layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'table', 'layer', 'laydate', 'mockjax', 'testTablePlug'], function () {
+        var $ = layui.jquery
+            , table = layui.table
+            , layer = layui.layer
+            , laydate = layui.laydate
+            , index = parent.layer.getFrameIndex(window.name);
+
+        table.render({
+            elem: '#demo'
+            , url: '/SupTable'
+            , height: 'full-85'
+            , cols: [
+                [
+                    {type: 'checkbox'}
+                    , {field: 'field0001', title: '供应商编码', align: "center"}
+                    , {field: 'field0002', title: '供应商名称', align: "center", filter: true}
+                    , {field: 'open_date', title: '开标日期', align: "center", edit: 'text', event: 'date'}
+                    , {field: 'close_date', title: '结标日期', align: "center", edit: 'text', event: 'date2'}
+                ]
+            ]
+        });
+
+        //监听行工具事件
+        table.on('tool(demo)', function (obj) {
+            var data = obj.data;
+            if (obj.event === 'date') {
+                var field = $(this).data('field');
+                laydate.render({
+                    elem: this.firstChild
+                    , show: true //直接显示
+                    , closeStop: this
+                    , calendar: true
+                    , theme: '#393D49'
+                    , done: function (value, date) {
+                        obj.update({
+                            [field]: value
+                        });
+                    }
+                });
+            } else if (obj.event === 'date2') {
+                var field = $(this).data('field');
+                laydate.render({
+                    elem: this.firstChild
+                    , show: true //直接显示
+                    , closeStop: this
+                    , calendar: true
+                    , theme: '#393D49'
+                    , done: function (value, date) {
+                        obj.update({
+                            [field]: value
+                        });
+                    }
+                });
+            }
+        });
+
+        $('#selectSup').on('click', function () {
+            var tipList = {};
+            tipList.data = parent.layui.index.getCookie("data");
+            var checkLength = $("input:checkbox[name='layTableCheckbox']:checked").length;
+            var lists=[];
+            $("input:checkbox[name='layTableCheckbox']").each(function () { //遍历checkbox的选择状态
+                if ($(this).is(':checked')) { //如果值为checked表明选中了
+                    var list = {};
+                    list.field0001 = $(this).closest('tr').find('td').eq(1).text();
+                    list.field0002 = $(this).closest('tr').find('td').eq(2).text();
+                    list.open_date = $(this).closest('tr').find('td').eq(3).text();
+                    list.close_date = $(this).closest('tr').find('td').eq(4).text();
+                    lists.push(list);
+                }
+            });
+            tipList.list = lists;
+            // layer.alert(JSON.stringify(tipList));
+            $.ajax({
+                type: 'post'
+                , url: '/InsertTable'
+                , data: JSON.stringify(tipList)
+                , dataType: 'json'
+                , async: false
+                , contentType: 'application/json; charset=utf-8'
+                , success: function (res) {
+                    if (res.code == "0") {
+                        layer.msg('添加供应商成功！', {
+                            offset: '15px'
+                            , icon: 1
+                            , time: 1000
+                        }, function () {
+                            parent.layer.close(index);//关闭弹出层
+                        });
+                    } else {
+                        layer.msg(res.msg, {
+                            offset: '15px'
+                            , icon: 1
+                            , time: 1000
+                        });
+                    }
+                }
+            })
+        });
+
+        $('#query').on('click', function () {
+            table.reload('demo', {
+                url: '/findSupplier?field0002=' + $('#field0002').val()
+            })
+        });
+    });
+</script>
+</body>
+</html>

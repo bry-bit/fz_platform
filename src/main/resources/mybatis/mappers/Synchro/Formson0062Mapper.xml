@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.system.mapper.Synchro.Formson0062Mapper">
+    <select id="selectListExcel" resultType="String">
+        select id
+        from formson_0062
+        where field0039 = #{field0024}
+          and field0032 = #{field0026}
+          and field0034 = #{field0027}
+    </select>
+    <select id="selectformson0062" resultType="com.system.pojo.Synchro.Formson0062">
+        select *
+        from formson_0062
+    </select>
+</mapper>

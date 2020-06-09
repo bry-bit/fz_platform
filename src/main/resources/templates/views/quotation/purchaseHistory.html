@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>历史</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <style>
+        .layui-form-label {
+            padding-right: 5px;
+            padding-left: 5px;
+        }
+    </style>
+    <script type="text/html" id="xuhao">
+        {{d.LAY_TABLE_INDEX+1}}
+    </script>
+    <script src="layuiadmin/layui/layui.js" charset="utf-8"></script>
+    <link rel="stylesheet" href="layuiadmin/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="layuiadmin/style/admin.css" media="all">
+    <script type="text/javascript" src="jquery/jquery-3.4.1.js"></script>
+    <script type="text/javascript" src="jquery/jquery-3.4.1.min.js"></script>
+    <script type="text/javascript" src="jquery/jquery.cookie.js"></script>
+</head>
+<body>
+
+<div class="layui-fluid">
+    <input id="mainSn" type="hidden">
+    <input id="stock_code" type="hidden">
+    <input id="stock_name" type="hidden">
+    <input id="stock_sort" type="hidden">
+    <input id="norms" type="hidden">
+    <input id="unit" type="hidden">
+    <input id="brand" type="hidden">
+
+    <div class="layui-tab-item layui-show">
+        <table class="layui-hide" id="table-WZD" lay-filter="table-WZD"></table>
+    </div>
+
+</div>
+
+<script type="text/html" id="barDemo">
+    <!-- 这里同样支持 laytpl 语法，如： -->
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="detail">关键件绑定记录</a>
+</script>
+<script>
+    layui.config({
+        base: 'layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'table', 'upload', 'form', 'laydate'], function () {
+        var table = layui.table;
+        var laydate = layui.laydate;
+        var form = layui.form;
+
+        table.render({
+            elem: '#table-WZD'
+            , url: 'selSubQuoHistory'
+            , method: 'post'
+            , where: {id: $("#mainSn").val()
+                        ,yemian:'Purchase'
+                        ,stock_code:$("#stock_code").val()
+                        ,stock_name:$("#stock_name").val()
+                        ,stock_sort:$("#stock_sort").val()
+                        ,norms:$("#norms").val()
+                        ,unit:$("#unit").val()
+                        ,brand:$("#brand").val()
+                     }
+            , cols:
+                [
+                    [
+                        {type: 'numbers', title: '序号', align: 'center', width: 30}
+                        , {field: 'item_code', title: '项目编码', align: "center", width: 110}
+                        , {field: 'item_name', title: '项目名称', align: "center", width: 110}
+                        , {field: 'stock_code', title: '存货编码', align: "center", width: 95}
+                        , {field: 'stock_name', title: '存货名称', align: "center", width: 95}
+                        , {field: 'norms', title: '规格', align: "center", width: 140}
+                        , {field: 'brand', title: '品牌', align: "center", width: 80}
+                        , {field: 'unit', title: '单位', align: "center", width: 60}
+                        , {field: 'quantity', title: '请购数量', align: "center", width: 95}
+                        , {field: 'supplier_name', title: '供应商', align: "center", width: 180}
+                        // ,{fixed: 'right', width: 150, align: 'center', toolbar: '#barDemo', title: '操作'} //这里的toolbar值是模板元素的选择器
+                    ]
+                ]
+        });
+
+
+    });
+
+
+</script>
+
+<script>
+
+</script>
+
+</body>
+</html>

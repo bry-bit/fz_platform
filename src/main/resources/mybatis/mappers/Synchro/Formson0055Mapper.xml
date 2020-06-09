@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.system.mapper.Synchro.Formson0055Mapper">
+    <insert id="addNan" parameterType="com.system.pojo.Synchro.Formson0055">
+        insert into formson_0055(
+        <if test="field0006 != null and field0006 != ''">
+            field0006
+        </if>
+        <if test="field0008 != null and field0008 != ''">
+            ,field0008
+        </if>
+        <if test="field0009 != null and field0009 != ''">
+            ,field0009
+        </if>
+        <if test="field0010 != null and field0010 != ''">
+            ,field0010
+        </if>
+        <if test="field0024 != null and field0024 != ''">
+            ,field0024
+        </if>
+        <if test="field0025 != null and field0025 != ''">
+            ,field0025
+        </if>
+        <if test="field0027 != null and field0027 != ''">
+            ,field0027
+        </if>
+        )
+        values(
+        <if test="field0006 != null and field0006 != ''">
+            #{field0006}
+        </if>
+        <if test="field0008 != null and field0008 != ''">
+            ,#{field0008}
+        </if>
+        <if test="field0009 != null and field0009 != ''">
+            ,#{field0009}
+        </if>
+        <if test="field0010 != null and field0010 != ''">
+            ,#{field0010}
+        </if>
+        <if test="field0024 != null and field0024 != ''">
+            ,#{field0024}
+        </if>
+        <if test="field0025 != null and field0025 != ''">
+            ,#{field0025}
+        </if>
+        <if test="field0027 != null and field0027 != ''">
+            ,#{field0027}
+        </if>
+        )
+    </insert>
+</mapper>

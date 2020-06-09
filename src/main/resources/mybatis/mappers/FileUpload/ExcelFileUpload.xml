@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.system.mapper.FileUpload.ExcelFileUploadMapper">
+    <insert id="insert">
+        insert into File_leading(
+        fileName
+        <if test="produceStatus != null and produceStatus != ''">
+            , produceStatus
+        </if>
+        <if test="requisitionStatus != null and requisitionStatus != ''">
+            , requisitionStatus
+        </if>
+        <if test="identifier != null and identifier != ''">
+            , identifier
+        </if>
+        <if test="uploadTime != null and uploadTime != ''">
+            ,uploadTime
+        </if>
+        <if test="fid != null and fid != ''">
+            ,fid
+        </if>
+        )
+        VALUES (
+        #{fileName}
+        <if test="produceStatus != null and produceStatus != ''">
+            , #{produceStatus}
+        </if>
+        <if test="requisitionStatus != null and requisitionStatus != ''">
+            , #{requisitionStatus}
+        </if>
+        <if test="identifier != null and identifier != ''">
+            , #{identifier}
+        </if>
+        <if test="uploadTime != null and uploadTime != ''">
+            , #{uploadTime}
+        </if>
+        <if test="fid != null and fid != ''">
+            ,#{fid}
+        </if>
+        )
+    </insert>
+
+    <select id="select" resultType="com.system.pojo.FileUpload.File_leading">
+        select *
+        from File_leading where 1=1
+        <if test="fileName != null and fileName != ''">
+            and fileName =#{fileName}
+        </if>
+        <if test="produceStatus != null and produceStatus != ''">
+            and produceStatus = #{produceStatus}
+        </if>
+        <if test="requisitionStatus != null and requisitionStatus != ''">
+            and requisitionStatus = #{requisitionStatus}
+        </if>
+        <if test="identifier != null and identifier != ''">
+            and identifier = #{identifier}
+        </if>
+        <if test="uploadTime != null and uploadTime != ''">
+            and uploadTime = #{uploadTime}
+        </if>
+        <if test="fid != null and fid != ''">
+            and fid = #{fid}
+        </if>
+    </select>
+
+    <select id="getAchieve" resultType="com.system.pojo.FileUpload.Org_member">
+        select org_member.name, org_unit.NAME as orgName, formmain_0034.field0001, formmain_0034.field0002
+        from org_member
+                 left join org_unit on org_member.ORG_DEPARTMENT_ID = org_unit.ID
+                 left join formmain_0034 on org_member.ORG_ACCOUNT_ID = formmain_0034.field0006
+        where org_member.ID = #{ID}
+    </select>
+
+    <insert id="Formmain_0046">
+        insert into formmain_0046_temp(ID, field0005, field0006, field0001, field0003, field0020, field0021, field0024,
+                                       field0025, field0026, field0027, fileName)
+        values (#{ID}, #{field0005}, #{field0006}, #{field0001}, #{field0003}, #{field0020}, #{field0021}, #{field0024},
+                #{field0025}, #{field0026}, #{field0027}, #{fileName})
+    </insert>
+
+    <insert id="Formson_0047">
+        insert into formson_0047_temp(ID, formmain_id, field0008, field0013, field0032, field0014, field0034, field0038,
+                                      field0039, fileName, field0033, field0018, field0041, field0010)
+        values (#{ID}, #{formmain_id}, #{field0008}, #{field0013}, #{field0032}, #{field0014}, #{field0034},
+                #{field0038}, #{field0039}, #{fileName}, #{field0033}, #{field0018}, #{field0041}, #{field0010})
+    </insert>
+
+    <select id="showForma046" resultType="com.system.pojo.FileUpload.Formmain_0046_temp">
+        select *
+        from formmain_0046_temp
+        where fileName = #{fileName}
+          and ID = #{ID}
+    </select>
+
+    <select id="showForms047" resultType="com.system.pojo.FileUpload.Formson_0047_temp">
+        select top ${limit} b.*
+        from (
+                 select a.*, ROW_NUMBER() over (ORDER BY ID ASC) as rownumber
+                 from (select * from formson_0047_temp where fileName = #{fileName} and formmain_id = #{formmain_id}) a
+             ) b
+        where rownumber > ((${limit} * ${page}) - ${limit})
+        order by b.field0008 asc
+    </select>
+</mapper>
