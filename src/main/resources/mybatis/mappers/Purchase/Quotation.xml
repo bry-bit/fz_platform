@@ -154,24 +154,13 @@
         WHERE s.enable_status = '正常'
         <if test="yemian == 'quotedHistory' ">
             AND s.bid_state = 2
-            AND s.stock_code =#{stock_code}
             AND s.stock_name =#{stock_name}
-            AND (s.stock_sort =#{stock_sort} or s.stock_sort is null)
             AND s.norms =#{norms}
-            AND s.unit =#{unit}
-            AND s.brand =#{brand}
         </if>
         <if test="yemian == 'Purchase' ">
-            AND s.stock_code =#{stock_code}
             AND s.stock_name =#{stock_name}
-            AND s.stock_sort =#{stock_sort}
             AND s.norms =#{norms}
-            AND s.unit =#{unit}
-            AND s.brand =#{brand}
             and (s.bid_state=2 or s.bid_state=3)
-        </if>
-        <if test="proName!=null and proName!=''">
-            AND m.item_name = #{proName}
         </if>
     </select>
 </mapper>

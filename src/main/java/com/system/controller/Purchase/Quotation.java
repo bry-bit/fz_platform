@@ -1,6 +1,5 @@
 package com.system.controller.Purchase;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.system.pojo.Purchase.Sub_quotation;
@@ -15,7 +14,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -205,15 +203,15 @@ public class Quotation {
     @ResponseBody
     public String selSubQuoHistory(@RequestParam(value = "id") String id, @RequestParam(value = "yemian") String yemian
             , @RequestParam(value = "stock_name", required = false) String stock_name
-            , @RequestParam(value = "stock_sort", required = false) String stock_sort
+//            , @RequestParam(value = "stock_sort", required = false) String stock_sort
             , @RequestParam(value = "norms", required = false) String norms
-            , @RequestParam(value = "unit", required = false) String unit
-            , @RequestParam(value = "brand", required = false) String brand
-            , @RequestParam(value = "stock_code", required = false) String stock_code
-            , @RequestParam(value = "proName", required = false) String proName
+//            , @RequestParam(value = "unit", required = false) String unit
+//            , @RequestParam(value = "brand", required = false) String brand
+//            , @RequestParam(value = "stock_code", required = false) String stock_code
+//            , @RequestParam(value = "proName", required = false) String proName
     ) {
 
-        return service.selSubQuoHistory(id, yemian, stock_code, stock_name, stock_sort, norms, unit, brand, proName);
+        return service.selSubQuoHistory(yemian, stock_name, norms);
     }
 
 

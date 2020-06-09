@@ -21,15 +21,9 @@ public interface QuotationMapper {
 
     int backSubquotation(Sub_quotation subQuotation);
 
-    List<Sub_quotation> selSubQuoHistory(@Param("id")String id
-            ,@Param("yemian")String yemian
-                                        ,@Param("stock_code")String stock_code,
-                                         @Param("stock_name")String stock_name,
-                                         @Param("stock_sort")String stock_sort,
-                                         @Param("norms")String norms,
-                                         @Param("unit")String unit,
-                                         @Param("brand")String brand,
-                                         @Param("proName")String proName);
+    List<Sub_quotation> selSubQuoHistory(@Param("yemian") String yemian
+            , @Param("stock_name") String stock_name
+            , @Param("norms") String norms);
 
     void updateBackSubquotation(Sub_quotation subQuotation);
 }

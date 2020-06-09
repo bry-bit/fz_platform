@@ -41,7 +41,7 @@
         base: 'layuiadmin/' //静态资源所在路径
     }).extend({
         index: 'lib/index' //主入口模块
-    }).use(['index', 'table', 'form', 'laydate', 'layer', 'mockjax', 'testTablePlug'], function () {
+    }).use(['index', 'table', 'form', 'laydate', 'layer', 'testTablePlug'], function () {
         var $ = layui.$
             , table = layui.table
             , form = layui.form
@@ -74,6 +74,9 @@
                     , {field: 'offer', title: '报价', align: "center", width: 100, templet: '#offer'}
                     , {title: '是否中标', type: 'radio', width: 60}
                     , {title: '是否退回', type: 'checkbox', width: 60}
+                    , {field: 'a', title: '历史报价', align: "center", width: 90, templet: function () {
+                        return '<a type="button" class="layui-btn layui-btn-sm" lay-event="history">历史报价</a>'
+                    }}
                 ]
             ]
             , done: function (res) {
@@ -117,6 +120,36 @@
                 }
 
                 $(".laytable-cell-checkbox:first").html("是否退回");
+            }
+        });
+
+        table.on('tool(demo)', function (obj) {
+            if (obj.event == 'history') {
+                var data = obj.data;
+                layer.open({
+                    type: 2
+                    , title: '历史报价'
+                    , area: ['1100px', '500px']
+                    , skin: 'layui-layer-rim'
+                    , content: ['page?url=/quotation/quotedHistory.html', 'yes']
+                    , success: function (layero, index) {
+                        var body = layui.layer.getChildFrame('body', index);
+                        if (data) {
+                            body.find("#mainSn").val(data.id); //将选中的数据的id传到编辑页面的隐藏域，便于根据ID修改数据
+                            body.find("#stock_code").val(data.stock_code);
+                            body.find("#stock_name").val(data.stock_name);
+                            body.find("#stock_sort").val(data.stock_sort);
+                            body.find("#norms").val(data.norms);
+                            body.find("#unit").val(data.unit);
+                            body.find("#brand").val(data.brand);
+                        }
+                        setTimeout(function () {
+                            layui.layer.tips('点击此处返回', '.layui-layer-setwin .layui-layer-close', {
+                                tips: 3
+                            });
+                        }, 500)
+                    }
+                });
             }
         });
 

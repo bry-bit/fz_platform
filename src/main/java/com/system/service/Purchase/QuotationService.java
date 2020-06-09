@@ -19,7 +19,7 @@ public interface QuotationService {
 
     String backSubquotation(List<Sub_quotation> subQuotation);
 
-    String selSubQuoHistory(String id,String yemian,String a,String b,String c,String d,String e,String f,String proName);
+    String selSubQuoHistory(String yemian,String a,String b);
 
     void updateBackSubquotation(Sub_quotation subQuotation);
 }

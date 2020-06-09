@@ -10,6 +10,11 @@
     <link rel="stylesheet" href="../../layuiadmin/layui/css/layui.css" media="all">
     <link rel="stylesheet" href="../../layuiadmin/style/admin.css" media="all">
 </head>
+<style>
+    .layui-table-cell {
+        font-size: 12px;
+    }
+</style>
 <body>
 <div class="layui-card">
     <div class="layui-card-body">
@@ -84,7 +89,7 @@
                             if (row.offer == null || row.offer == undefined || row.offer == "") {
                                 return 0;
                             } else {
-                                return row.offer;
+                                return test1(row.offer);
                             }
                         } else {
                             if (nowtime < kaishi) {
@@ -93,7 +98,7 @@
                                 if (row.offer == null || row.offer == undefined || row.offer == "") {
                                     return 0;
                                 } else {
-                                    return row.offer;
+                                    return test1(row.offer);
                                 }
                             }
                         }

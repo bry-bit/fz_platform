@@ -59,9 +59,9 @@ public class QuotationServiceImpl implements QuotationService {
     }
 
     @Override
-    public String selSubQuoHistory(String id,String yemian,String a,String b,String c,String d,String e,String f,String proName) {
+    public String selSubQuoHistory(String yemian, String a, String b) {
         JSONUtil jsonUtil = new JSONUtil();
-        List<Sub_quotation> sub_quotations = mapper.selSubQuoHistory(id,yemian,a,b, c, d, e, f,proName);
+        List<Sub_quotation> sub_quotations = mapper.selSubQuoHistory(yemian, a, b);
         return jsonUtil.toJson("0", sub_quotations, "请求成功！", "");
     }
 

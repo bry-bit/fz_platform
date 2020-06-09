@@ -10,42 +10,14 @@
     <link rel="stylesheet" href="../../layuiadmin/layui/css/layui.css" media="all">
     <link rel="stylesheet" href="../../layuiadmin/style/admin.css" media="all">
 </head>
+<style>
+    .layui-table-cell {
+        font-size: 12px;
+    }
+</style>
 <body>
 <div class="layui-card">
     <div class="layui-card-body">
-        <!--        <form class="layui-form" action="">-->
-        <!--            <div class="layui-form-item">-->
-        <!--                <label class="layui-form-label">信息查询</label>-->
-        <!--                <div class="layui-input-inline">-->
-        <!--                    <select name="quiz1">-->
-        <!--                        <option value="">请选择组织编码</option>-->
-        <!--                        <option value="001">001</option>-->
-        <!--                        <option value="002">002</option>-->
-        <!--                        <option value="003">003</option>-->
-        <!--                    </select>-->
-        <!--                </div>-->
-        <!--                <div class="layui-input-inline">-->
-        <!--                    <select name="quiz2">-->
-        <!--                        <option value="">请选择项目名称</option>-->
-        <!--                        <option value="项目001">项目001</option>-->
-        <!--                        <option value="项目002">项目002</option>-->
-        <!--                        <option value="项目003">项目003</option>-->
-        <!--                    </select>-->
-        <!--                </div>-->
-        <!--                <div class="layui-input-inline">-->
-        <!--                    <select name="quiz3">-->
-        <!--                        <option value="">请选择存货名称</option>-->
-        <!--                        <option value="轮胎">轮胎</option>-->
-        <!--                        <option value="钉子">钉子</option>-->
-        <!--                        <option value="停盘">停盘</option>-->
-        <!--                    </select>-->
-        <!--                </div>-->
-        <!--                <button type="button" class="layui-btn"><i class="layui-icon layui-icon-search"></i></button>-->
-        <!--            </div>-->
-        <!--        </form>-->
-        <!--        <hr>-->
-
-        <hr>
         <table class="layui-hide" id="demo" lay-filter="demo"></table>
     </div>
 </div>
@@ -54,89 +26,48 @@
 <script type="text/javascript" src="jquery/jquery-3.4.1.js"></script>
 <script type="text/javascript" src="jquery/jquery-3.4.1.min.js"></script>
 <script type="text/javascript" src="jquery/jquery.cookie.js"></script>
+<script type="text/html" id="offer">{{test1(d.offer)}}</script>
 
-<script type="text/html" id="barDemo">
-
-</script>
 <script>
-    Date.prototype.Format = function (fmt) {
-        var o = {
-            "M+": this.getMonth() + 1, //月份
-            "d+": this.getDate(), //日
-            "H+": this.getHours(), //小时
-            "m+": this.getMinutes(), //分
-            "s+": this.getSeconds(), //秒
-            "q+": Math.floor((this.getMonth() + 3) / 3), //季度
-            "S": this.getMilliseconds() //毫秒
-        };
-        if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
-        for (var k in o)
-            if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
-        return fmt;
-    }
     layui.config({
         base: '../../layuiadmin/' //静态资源所在路径
     }).extend({
         index: 'lib/index' //主入口模块
-    }).use(['index', 'table', 'layer', 'upload'], function () {
+    }).use(['index', 'table', 'layer', 'upload', 'testTablePlug'], function () {
         var $ = layui.$
             , table = layui.table
             , layer = layui.layer
-            , upload = layui.upload;
+            , upload = layui.upload
+            , tablePlug = layui.tablePlug //表格插件
+            , testTablePlug = layui.testTablePlug // 测试js模块
+            , renderFormSelectsIn = layui.renderFormSelectsIn // 针对form在特定场合下的渲染的封装
+            , formSelects = layui.formSelects;
 
         table.render({
             elem: '#demo'
-            , height: 'full-65'
+            , height: 'full-15'
             , url: '/selSubQuo?name=' + parent.layui.index.getCookie("loginName")
                 + '&state=' + parent.layui.index.getCookie("loginLimits_state")
                 + '&bid_state=zhongbiao'
             , cols: [
                 [
-                    {type: 'checkbox'}
-                    , {field: 'stock_code', title: '存货编码', align: "center", width: 95}
-                    , {field: 'stock_name', title: '存货名称', align: "center", width: 95}
-                    , {field: 'stock_sort', title: '存货分类', align: "center", width: 95}
-                    , {field: 'norms', title: '规格', align: "center", width: 140}
+                    {field: 'stock_code', title: '存货编码', align: "center", width: 90}
+                    , {field: 'stock_name', title: '存货名称', align: "center", width: 105, filter: true}
+                    , {field: 'stock_sort', title: '存货分类', align: "center", width: 90}
+                    , {field: 'norms', title: '规格', align: "center", width: 120}
                     , {field: 'item_code', title: '项目编码', align: "center", width: 110}
                     , {field: 'item_name', title: '项目名称', align: "center", width: 110}
-                    , {field: 'brand', title: '品牌', align: "center", width: 80}
+                    , {field: 'brand', title: '品牌', align: "center", width: 70, filter: true}
                     , {field: 'unit', title: '单位', align: "center", width: 60}
-                    , {field: 'quantity', title: '请购数量', align: "center", width: 95}
-                    , {field: 'supplier_name', title: '供应商', align: "center", width: 100}
+                    , {field: 'quantity', title: '请购数量', align: "center", width: 80}
+                    , {field: 'supplier_name', title: '供应商', align: "center", width: 135, filter: true}
+                    , {field: 'offer', title: '报价', align: "center", width: 95, templet: '#offer'}
+                    , {field: 'issuance_date', title: '发货日期', align: "center", width: 100}
+                    , {field: 'delivery_date', title: '期望到货日期', align: "center", width: 105}
+                    , {field: 'open_date', title: '开标日期', align: "center", width: 100}
+                    , {field: 'close_date', title: '结标日期', align: "center", width: 100}
                     , {
-                    field: 'offer', title: '报价', align: "center", width: 95, templet: function (row) {
-                        var open_date = row.open_date.substring(0, 19).replace(/-/g, '/');
-                        var close_date = row.close_date.substring(0, 19).replace(/-/g, '/');
-                        var kaishi = new Date(open_date).getTime();//开标日时间戳
-                        var jieshu = new Date(close_date).getTime();//结标日时间戳
-                        var time = new Date($.ajax({async: false}).getResponseHeader("Date")).Format("yyyy-MM-dd");
-                        var nowtime = new Date(time).getTime() - 28800000;
-
-                        if (parent.layui.index.getCookie("loginLimits_state") == "3") {
-                            if (row.offer == null || row.offer == undefined || row.offer == "") {
-                                return 0;
-                            } else {
-                                return row.offer;
-                            }
-                        } else {
-                            if (nowtime < kaishi) {
-                                return '*';
-                            } else {
-                                if (row.offer == null || row.offer == undefined || row.offer == "") {
-                                    return 0;
-                                } else {
-                                    return row.offer;
-                                }
-                            }
-                        }
-                    }
-                }
-                    , {field: 'issuance_date', title: '发货日期', align: "center", width: 110}
-                    , {field: 'delivery_date', title: '期望到货日期', align: "center", width: 110}
-                    , {field: 'open_date', title: '开标日期', align: "center", width: 110}
-                    , {field: 'close_date', title: '结标日期', align: "center", width: 110}
-                    , {
-                    field: '', title: '供应商图纸上传', align: "center", width: 110, templet: function (row) {
+                    field: 'a', title: '供应商图纸上传', align: "center", width: 115, templet: function (row) {
                         if (parent.layui.index.getCookie("loginLimits_state") == "3") {
                             return '<input type="file" id="btn_file" style="display:none;" onchange="upload(this)">' +
                                 '<a class="table-btn uploadTableInfo" lay-event="uploadeSup" style="color: #029789">上传附件</a>'
@@ -146,7 +77,7 @@
                     }
                 }
                     , {
-                    field: '', title: '采购员图纸上传', align: "center", width: 110, templet: function (row) {
+                    field: 'a', title: '采购员图纸上传', align: "center", width: 115, templet: function (row) {
                         if (parent.layui.index.getCookie("loginLimits_state") == "3") {
                             return '<button class="layui-btn layui-btn-normal layui-btn-xs" lay-event="downloadFileQuo">下载附件</button>'
                         } else {
@@ -156,63 +87,16 @@
                     }
                 }
                     , {
-                    field: '', title: '中标状态', align: "center", width: 105, templet: function (row) {
-                        var open_date = row.open_date.substring(0, 19).replace(/-/g, '/');
-                        var close_date = row.close_date.substring(0, 19).replace(/-/g, '/');
-                        var kaishi = new Date(open_date).getTime();//开标日时间戳
-                        var jieshu = new Date(close_date).getTime();//结标日时间戳
-                        var time = new Date($.ajax({async: false}).getResponseHeader("Date")).Format("yyyy-MM-dd");
-                        var nowtime = new Date(time).getTime() - 28800000;
-
-                        if (parent.layui.index.getCookie("loginLimits_state") == "3") {
-                            if (row.bid_state == "0" || row.bid_state == null) {
-                                if (nowtime < kaishi) {
-                                    return '<a type="button" class="layui-btn layui-btn-sm layui-btn-disabled">未开始报价</a>'
-                                } else if (nowtime >= kaishi) {
-                                    return '<a type="button" class="layui-btn layui-btn-sm">报价</a>'
-                                } else if (nowtime > jieshu) {
-                                    return '<a type="button" class="layui-btn layui-btn-sm layui-btn-disabled">已结束报价</a>'
-                                }
-                            } else if (row.bid_state == "1") {
-                                if (nowtime <= jieshu) {
-                                    return '<a type="button" class="layui-btn layui-btn-sm layui-btn-warm">已报价</a>'
-                                } else if (nowtime > jieshu) {
-                                    return '<a type="button" class="layui-btn layui-btn-sm layui-btn-disabled">已结束报价</a>'
-                                }
-                            } else if (row.bid_state == "2") {
-                                return '<a type="button" class="layui-btn layui-btn-sm layui-bg-red">中标</a>'
-                            } else if (row.bid_state == "3") {
-                                return '<a type="button" class="layui-btn layui-btn-sm layui-bg-black">未中标</a>'
-                            } else if (row.bid_state == "4") {
-                                return '<a type="button" class="layui-btn layui-btn-sm">已推送</a>'
-                            }
-                        } else {
-                            if (row.bid_state == "0" || row.bid_state == null) {
-                                if (nowtime < kaishi) {
-                                    return '<a type="button" class="layui-btn layui-btn-sm layui-btn-disabled">未开始报价</a>'
-                                } else if (nowtime >= kaishi) {
-                                    return '<a type="button" class="layui-btn layui-btn-sm">报价</a>'
-                                } else if (nowtime > jieshu) {
-                                    return '<a type="button" class="layui-btn layui-btn-sm layui-btn-disabled">已结束报价</a>'
-                                }
-                            } else if (row.bid_state == "1") {
-                                if (nowtime <= jieshu) {
-                                    return '<a type="button" class="layui-btn layui-btn-sm layui-btn-warm">已报价</a>'
-                                } else if (nowtime > jieshu) {
-                                    return '<a type="button" class="layui-btn layui-btn-sm layui-btn-disabled">已结束报价</a>'
-                                }
-                            } else if (row.bid_state == "2") {
-                                return '<a type="button" class="layui-btn layui-btn-sm layui-bg-red">中标</a>'
-                            } else if (row.bid_state == "3") {
-                                return '<a type="button" class="layui-btn layui-btn-sm layui-bg-black">未中标</a>'
-                            } else if (row.bid_state == "4") {
-                                return '<a type="button" class="layui-btn layui-btn-sm">已推送</a>'
-                            }
+                    field: 'a', title: '中标状态', align: "center", width: 80, templet: function (row) {
+                        if (row.bid_state == "2") {
+                            return '<a type="button" class="layui-btn layui-btn-sm layui-bg-red">中标</a>'
+                        } else if (row.bid_state == "3") {
+                            return '<a type="button" class="layui-btn layui-btn-sm layui-bg-black">未中标</a>'
                         }
                     }
                 }
                     , {
-                    field: '', title: '历史报价', align: "center", width: 110, templet: function (row) {
+                    field: 'a', title: '历史报价', align: "center", width: 90, templet: function () {
                         return '<a type="button" class="layui-btn layui-btn-sm" lay-event="history">历史报价</a>'
                     }
                 }
@@ -354,6 +238,18 @@
         ele.setAttribute('download', result.data);//用于设置下载文件的文件名
         ele.click();
         console.log();
+    }
+
+    //小数位为4
+    function test1(str) {
+        if (!str) str = "0.0000";
+        let ret = Math.round(parseFloat(str) * 10000) / 10000;
+        if (str.split(".").length === 1) {
+            return ret.toString() + ".0000";
+        }
+        var decimal = str.split(".")[0];
+        var floats = str.split(".")[1].substring(0, 4);
+        return decimal + "." + floats;
     }
 </script>
 </body>

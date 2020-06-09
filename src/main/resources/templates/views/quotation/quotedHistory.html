@@ -12,6 +12,10 @@
             padding-right: 5px;
             padding-left: 5px;
         }
+
+        .layui-table-cell {
+            font-size: 12px;
+        }
     </style>
     <script type="text/html" id="xuhao">
         {{d.LAY_TABLE_INDEX+1}}
@@ -40,10 +44,7 @@
 
 </div>
 
-<script type="text/html" id="barDemo">
-    <!-- 这里同样支持 laytpl 语法，如： -->
-    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="detail">关键件绑定记录</a>
-</script>
+<script type="text/html" id="offer">{{test1(d.offer)}}</script>
 
 <script>
     layui.config({
@@ -61,12 +62,8 @@
             , method: 'post'
             , where: {
                 id: $("#mainSn").val()
-                , stock_code: $("#stock_code").val()
                 , stock_name: $("#stock_name").val()
-                , stock_sort: $("#stock_sort").val()
                 , norms: $("#norms").val()
-                , unit: $("#unit").val()
-                , brand: $("#brand").val()
                 , yemian: 'quotedHistory'
             }
             , cols:
@@ -81,7 +78,7 @@
                         , {field: 'unit', title: '单位', align: "center", width: 60}
                         , {field: 'quantity', title: '请购数量', align: "center", width: 95}
                         , {field: 'supplier_name', title: '供应商', align: "center", width: 100}
-                        , {field: 'offer', title: '报价', align: "center", width: 95}
+                        , {field: 'offer', title: '报价', align: "center", width: 95, templet: '#offer'}
                         , {field: 'issuance_date', title: '发货日期', align: "center", width: 110}
                         , {field: 'delivery_date', title: '期望到货日期', align: "center", width: 110}
                         // ,{fixed: 'right', width: 150, align: 'center', toolbar: '#barDemo', title: '操作'} //这里的toolbar值是模板元素的选择器
@@ -91,6 +88,17 @@
 
     });
 
+    //小数位为4
+    function test1(str) {
+        if (!str) str = "0.0000";
+        let ret = Math.round(parseFloat(str) * 10000) / 10000;
+        if (str.split(".").length === 1) {
+            return ret.toString() + ".0000";
+        }
+        var decimal = str.split(".")[0];
+        var floats = str.split(".")[1].substring(0, 4);
+        return decimal + "." + floats;
+    }
 </script>
 </body>
 </html>
