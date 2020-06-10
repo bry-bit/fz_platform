@@ -132,6 +132,7 @@
         </set>
         where id=#{id} and supplier_name=#{supplier_name} and stock_name = #{stock_name}
         and norms = #{norms} and brand = #{brand} and stock_code = #{stock_code}
+        and (return_msg=#{return_msg} or return_msg is null)
     </update>
 
     <!--退回报价-->

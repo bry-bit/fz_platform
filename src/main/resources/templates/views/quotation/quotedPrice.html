@@ -60,7 +60,7 @@
 
         table.render({
             elem: '#demo'
-            , height: 'full-65'
+            , height: 'full-75'
             , url: '/selSubQuo?name=' + parent.layui.index.getCookie("loginName")
                 + '&state=' + parent.layui.index.getCookie("loginLimits_state")
                 + '&bid_state=0'
@@ -163,47 +163,10 @@
                 }
                 ]
             ]
-            , done: function (res) {
-                var data = res.data;
-                var mark = 1; //这里涉及到简单的运算，mark是计算每次需要合并的格子数
-                var columsName = ['stock_code', 'stock_name', 'norms'];//需要合并的列名称
-                var columsIndex = [1, 2, 3];//需要合并的列索引值
-
-                //这里循环所有要合并的列
-                for (var k = 0; k < columsName.length; k++) {
-                    //这里循环表格当前的数据
-                    for (var i = 1; i < res.data.length; i++) {
-                        var trArr = $(".layui-table-body .layui-table").find("tr");//所有行
-                        var tdCurArr = trArr.eq(i).find("td").eq(columsIndex[k]);//获取当前行的当前列
-                        var tdPreArr = trArr.eq(i - 1).find("td").eq(columsIndex[k]);//获取上一行的当前列
-                        if (data[i]['RN'] != data[i - 1]['RN']) {
-                            continue;
-                        }
-                        //后一行的值与前一行的值做比较，相同就需要合并
-                        if (data[i][columsName[k]] == data[i - 1][columsName[k]]) {
-                            mark += 1;
-                            if (mark > 2) {
-                                tdPreArr = trArr.eq(i - mark + 1).find("td").eq(columsIndex[k]);
-                            }
-                            //上一行增加rowspan属性
-                            tdPreArr.each(function () {
-                                $(this).attr("rowspan", mark);
-                                // $(this).attr("colspan", mark);
-                            });
-                            //当前行隐藏
-                            tdCurArr.each(function () {
-                                $(this).css("display", "none");
-                            });
-                        } else {
-                            //一旦前后两行的值不一样了，那么需要合并的格子数mark就需要重新计算
-                            mark = 1;
-                        }
-                    }
-                    //第一个合并完成，重置mark进行下一个合并
-                    mark = 1;
+            , done: function () {
+                if (parent.layui.index.getCookie("loginLimits_state") != "3") {
+                    $('#piliang').hide();
                 }
-
-                $(".laytable-cell-checkbox:first").html("是否退回");
             }
         });
 

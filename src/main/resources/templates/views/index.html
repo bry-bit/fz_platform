@@ -73,6 +73,13 @@
 <!--                            <dd><a lay-href="page?url=/leading-in/UploadFile.html">Excel文件上传</a></dd>-->
 <!--                        </dl>-->
 <!--                    </li>-->
+                    <li class="layui-nav-item layui-nav-itemed" id="xunjia">
+                        <a href="javascript:;"><i class="layui-icon layui-icon-app"></i>供应商询价</a>
+                        <dl class="layui-nav-child">
+                            <dd><a lay-href="" id="xunjiaCai">多品牌询价</a></dd>
+                            <dd><a lay-href="" id="xunjiaSup">多品牌询价中标</a></dd>
+                        </dl>
+                    </li>
                     <li class="layui-nav-item layui-nav-itemed" id="caigou">
                         <a href="javascript:;"><i class="layui-icon layui-icon-app"></i>采购需求</a>
                         <dl class="layui-nav-child">
@@ -88,7 +95,7 @@
                             <dd><a lay-href="page?url=/quotation/quotedPrice.html">未报价</a></dd>
                             <dd><a lay-href="page?url=/quotation/quotedPrice2.html">已报价</a></dd>
                             <dd><a lay-href="page?url=/quotation/quotedPrice3.html">已中标</a></dd>
-                            <dd><a lay-href="">已完成</a></dd>
+                            <dd><a lay-href="1">已完成</a></dd>
                         </dl>
                     </li>
                 </ul>
@@ -154,7 +161,8 @@
             } else {
                 $('#username').html(parent.layui.index.getCookie("loginName"));
                 $('#daoru').attr("style", "display:none");
-                $('#caigou').attr("style", "display:none")
+                $('#caigou').attr("style", "display:none");
+                $('#xunjiaSup').attr("style", "display:none");
             }
         } else {
             location.href = '/page?url=user/login';

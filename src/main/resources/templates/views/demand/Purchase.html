@@ -145,15 +145,15 @@
             , cols: [
                 [
                     {type: 'checkbox'}
-                    , {field: 'orders', title: '序号', align: "center", width: 60}
-                    , {field: 'stock_code', title: '存货编码', align: "center", width: 90}
+                    // , {field: 'orders', title: '序号', align: "center", width: 60}
+                    , {field: 'stock_code', title: '存货编码', align: "center", width: 110}
                     , {field: 'stock_name', title: '存货名称', align: "center", width: 90}
                     , {field: 'norms', title: '规格', align: "center", width: 140}
                     , {field: 'brand', title: '品牌', align: "center", width: 80}
                     , {field: 'unit', title: '单位', align: "center", width: 60}
-                    , {field: 'quantity', title: '数量', align: "center", width: 80}
+                    , {field: 'quantity', title: '数量', align: "center", width: 70}
                     , {field: 'station_no', title: '工位号', align: "center", width: 80}
-                    , {field: 'delivery_date', title: '期望交货日期', align: "center", width: 120}
+                    , {field: 'delivery_date', title: '期望交货日期', align: "center", width: 105}
                     , {
                     field: '', title: '供应商', align: "center", width: 120, templet: function (row) {
                         if (row.field0002 == null || row.field0002 == undefined || row.field0002 == "") {
@@ -205,16 +205,19 @@
 
         $('#chooseSup').on('click', function () {
             var checkStatus = table.checkStatus('demo')
-                , data = checkStatus.data;
-            parent.layui.index.setCookie("dataLength", data.length, "1");
-            parent.layui.index.setCookie("SupData", JSON.stringify(data), "1");
+                , trdata = checkStatus.data;
             parent.layer.open({
                 type: 2
-                , title: data.field0016
+                , title: trdata.field0016
                 , area: ['70%', '70%']
                 , shade: 0
                 , maxmin: true
                 , content: ['/page?url=/demand/SelectSupplier.html', 'yes']
+                , success: function (layero, index) {
+                    var body = parent.layui.layer.getChildFrame('body', index);
+                    // alert(JSON.stringify(data));
+                    body.find("#SupData").val(JSON.stringify(trdata)); //将选中的数据的id传到编辑页面的隐藏域，便于根据ID修改数据
+                }
             });
         });
 

@@ -262,9 +262,9 @@ public class AuditPushContract {
                 for (int i = 0; i < list.size(); i++) {
                     Sub_quotation subQuotation = JSONObject.parseObject(
                             JSONObject.toJSONString(list.get(i)), Sub_quotation.class);
-//                    service.updateStateZhong(subQuotation);
-//
-//                    service.updateStateWei(subQuotation);
+                    service.updateStateZhong(subQuotation);
+
+                    service.updateStateWei(subQuotation);
                 }
 
                 return jsonUtil.toJson("0", "", "中标成功！", "");

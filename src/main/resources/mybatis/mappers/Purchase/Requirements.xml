@@ -40,7 +40,7 @@
         <if test="norms != null and norms != ''">
             and s.norms = #{norms}
         </if>
-        order by s.orders asc
+        order by s.stock_code asc
     </select>
 
     <select id="SupTable" resultType="com.system.pojo.Purchase.Tabulation_listing">

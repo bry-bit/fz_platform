@@ -64,25 +64,35 @@
                 [
                     {field: 'stock_code', title: '存货编码', align: "center", width: 90}
                     , {field: 'stock_name', title: '存货名称', align: "center", width: 110}
-                    , {field: 'norms', title: '规格型号', align: "center", width: 120}
+                    , {field: 'norms', title: '规格型号', align: "center", width: 100}
                     , {field: 'item_code', title: '项目编码', align: "center", width: 80}
                     , {field: 'item_name', title: '项目名称', align: "center", width: 80}
-                    , {field: 'supplier_name', title: '供应商', align: "center", width: 200, filter: true}
+                    , {field: 'supplier_name', title: '供应商', align: "center", width: 100, filter: true}
                     , {field: 'unit', title: '单位', align: "center", width: 60}
                     , {field: 'brand', title: '品牌', align: "center", width: 60}
                     , {field: 'quantity', title: '数量', align: "center", width: 70}
                     , {field: 'offer', title: '报价', align: "center", width: 100, templet: '#offer'}
                     , {
                     field: 'a',
-                    title: '是否中标' + '<input type="radio" name="" lay-skin="primary" lay-filter="allChoose">',
-                    width: 100,
+                    title: '是否中标',
+                    // type: 'radio',
+                    width: 90,
                     align: "center",
                     templet: function (row) {
-                        var html = "<input type='radio' name='" + row.stock_code + "'>";
+                        var html = '<input type="radio" id="bid" name="' + row.stock_code + '" lay-filter="layTableRadio">';
                         return html;
                     }
                 }
-                    , {title: '是否退回', type: 'checkbox', width: 60}
+                    , {
+                    field: 'a',
+                    title: '是否退回' + '<input type="checkbox" name="layTableCheckbox" lay-skin="primary" lay-filter="layTableAllChoose">',
+                    width: 100,
+                    align: "center",
+                    templet: function (row) {
+                        var html = "<input type='checkbox' name='layTableCheckbox' lay-skin='primary' lay-filter='layTableCheckbox'>";
+                        return html;
+                    }
+                }
                     , {
                     field: 'a', title: '历史报价', align: "center", width: 90, templet: function () {
                         return '<a type="button" class="layui-btn layui-btn-sm" lay-event="history">历史报价</a>'
@@ -90,48 +100,46 @@
                 }
                 ]
             ]
-            , done: function (res) {
-                var data = res.data;
-                var mark = 1; //这里涉及到简单的运算，mark是计算每次需要合并的格子数
-                var columsName = ['stock_code', 'stock_name', 'norms'];//需要合并的列名称
-                var columsIndex = [0, 1, 2];//需要合并的列索引值
-
-                //这里循环所有要合并的列
-                for (var k = 0; k < columsName.length; k++) {
-                    //这里循环表格当前的数据
-                    for (var i = 1; i < res.data.length; i++) {
-                        var trArr = $(".layui-table-body .layui-table").find("tr");//所有行
-                        var tdCurArr = trArr.eq(i).find("td").eq(columsIndex[k]);//获取当前行的当前列
-                        var tdPreArr = trArr.eq(i - 1).find("td").eq(columsIndex[k]);//获取上一行的当前列
-                        if (data[i]['RN'] != data[i - 1]['RN']) {
-                            continue;
-                        }
-                        //后一行的值与前一行的值做比较，相同就需要合并
-                        if (data[i][columsName[k]] == data[i - 1][columsName[k]]) {
-                            mark += 1;
-                            if (mark > 2) {
-                                tdPreArr = trArr.eq(i - mark + 1).find("td").eq(columsIndex[k]);
-                            }
-                            //上一行增加rowspan属性
-                            tdPreArr.each(function () {
-                                $(this).attr("rowspan", mark);
-                                // $(this).attr("colspan", mark);
-                            });
-                            //当前行隐藏
-                            tdCurArr.each(function () {
-                                $(this).css("display", "none");
-                            });
-                        } else {
-                            //一旦前后两行的值不一样了，那么需要合并的格子数mark就需要重新计算
-                            mark = 1;
-                        }
-                    }
-                    //第一个合并完成，重置mark进行下一个合并
-                    mark = 1;
-                }
-
-                $(".laytable-cell-checkbox:first").html("是否退回");
-            }
+            // , done: function (res) {
+            //     var data = res.data;
+            //     var mark = 1; //这里涉及到简单的运算，mark是计算每次需要合并的格子数
+            //     var columsName = ['stock_code', 'stock_name', 'norms'];//需要合并的列名称
+            //     var columsIndex = [0, 1, 2];//需要合并的列索引值
+            //
+            //     //这里循环所有要合并的列
+            //     for (var k = 0; k < columsName.length; k++) {
+            //         //这里循环表格当前的数据
+            //         for (var i = 1; i < res.data.length; i++) {
+            //             var trArr = $(".layui-table-body .layui-table").find("tr");//所有行
+            //             var tdCurArr = trArr.eq(i).find("td").eq(columsIndex[k]);//获取当前行的当前列
+            //             var tdPreArr = trArr.eq(i - 1).find("td").eq(columsIndex[k]);//获取上一行的当前列
+            //             if (data[i]['RN'] != data[i - 1]['RN']) {
+            //                 continue;
+            //             }
+            //             //后一行的值与前一行的值做比较，相同就需要合并
+            //             if (data[i][columsName[k]] == data[i - 1][columsName[k]]) {
+            //                 mark += 1;
+            //                 if (mark > 2) {
+            //                     tdPreArr = trArr.eq(i - mark + 1).find("td").eq(columsIndex[k]);
+            //                 }
+            //                 //上一行增加rowspan属性
+            //                 tdPreArr.each(function () {
+            //                     $(this).attr("rowspan", mark);
+            //                     // $(this).attr("colspan", mark);
+            //                 });
+            //                 //当前行隐藏
+            //                 tdCurArr.each(function () {
+            //                     $(this).css("display", "none");
+            //                 });
+            //             } else {
+            //                 //一旦前后两行的值不一样了，那么需要合并的格子数mark就需要重新计算
+            //                 mark = 1;
+            //             }
+            //         }
+            //         //第一个合并完成，重置mark进行下一个合并
+            //         mark = 1;
+            //     }
+            // }
         });
 
         table.on('tool(demo)', function (obj) {
@@ -209,13 +217,32 @@
 
 
         $('#winning').on('click', function () {
-            var checkStatus = table.checkStatus('demo')
-                , data = checkStatus.data;
+            var checkLength = $("input:radio[id='bid']:checked").length;
+            var lists = [];
+            $("input:radio[id='bid']").each(function () {
+                //遍历radio的选择状态
+                if ($(this).is(':checked') && $(this).closest('tr').find('td').eq(1).text() != "") {
+                    //如果值为checked表明选中了
+                    var list = {};
+                    list.stock_code = $(this).closest('tr').find('td').eq(0).text();
+                    list.stock_name = $(this).closest('tr').find('td').eq(1).text();
+                    list.norms = $(this).closest('tr').find('td').eq(2).text();
+                    list.item_code = $(this).closest('tr').find('td').eq(3).text();
+                    list.item_name = $(this).closest('tr').find('td').eq(4).text();
+                    list.supplier_name = $(this).closest('tr').find('td').eq(5).text();
+                    list.unit = $(this).closest('tr').find('td').eq(6).text();
+                    list.brand = $(this).closest('tr').find('td').eq(7).text();
+                    list.quantity = $(this).closest('tr').find('td').eq(8).text();
+                    list.offer = $(this).closest('tr').find('td').eq(9).text();
+                    lists.push(list);
+                }
+            });
+            // layer.alert(JSON.stringify(lists));
             layer.confirm('是否选择该数据？', function (index) {
                 $.ajax({
                     type: 'post'
                     , url: '/WhetherOrNotSel'
-                    , data: JSON.stringify(data)
+                    , data: JSON.stringify(lists)
                     , dataType: 'json'
                     , contentType: 'application/json; charset=utf-8'
                     , success: function (res) {

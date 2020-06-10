@@ -22,8 +22,10 @@
     }
 </style>
 <body>
+
 <div class="layui-card">
     <div class="layui-card-body">
+        <input id="SupData" type="hidden">
         <form class="layui-form" action="">
             <div class="layui-inline">
                 <label class="layui-form-label">供应商名称</label>
@@ -103,7 +105,7 @@
 
         $('#selectSup').on('click', function () {
             var tipList = {};
-            tipList.data = parent.layui.index.getCookie("SupData");
+            tipList.data = $('#SupData').val();
             var checkLength = $("input:checkbox[name='layTableCheckbox']:checked").length;
             var lists = [];
             $("input:checkbox[name='layTableCheckbox']").each(function () { //遍历checkbox的选择状态
