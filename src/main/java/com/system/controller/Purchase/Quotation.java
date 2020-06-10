@@ -181,16 +181,17 @@ public class Quotation {
      */
     @PostMapping("/backSubquotation")
     @ResponseBody
-    public String backSubquotation(@RequestBody String data) {
+    public String backSubquotation(@RequestBody String data, String msg) {
         List<Sub_quotation> sub_quotations = JSONArray.parseArray(data, Sub_quotation.class);
         System.out.println(sub_quotations);
 
         for (int i = 0; i < sub_quotations.size(); i++) {
             Sub_quotation subQuotation = JSONObject.parseObject(
                     JSONObject.toJSONString(sub_quotations.get(i)), Sub_quotation.class);
+            subQuotation.setRelation_id(msg);
             service.updateBackSubquotation(subQuotation);
         }
-        return service.backSubquotation(sub_quotations);
+        return service.backSubquotation(sub_quotations,msg);
     }
 
     /**

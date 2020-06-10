@@ -2,19 +2,16 @@ package com.system.controller.QuotationReview;
 
 import com.seeyon.client.CTPRestClient;
 import com.seeyon.client.CTPServiceClientManager;
-import com.seeyon.oainterface.impl.exportdata.FileUploadExporter;
 import com.system.util.JSONUtil;
-import lombok.SneakyThrows;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.BufferedInputStream;
-import java.io.DataOutputStream;
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
@@ -41,12 +38,10 @@ public class Test extends HttpServlet {
         super.doPost(req, resp);
     }
 
-    public String updateFile(HttpServletRequest request, HttpServletResponse response) {
+    @RequestMapping("updateFile")
+    @ResponseBody
+    public String updateFile(HttpServletRequest req, HttpServletResponse resp) {
         try {
-            request.setCharacterEncoding("UTF-8");
-            response.setCharacterEncoding("UTF-8");
-            response.setContentType("text/html;charset=UTF-8");
-
             //获取token
             CTPServiceClientManager clientManager = CTPServiceClientManager
                     .getInstance("http://oa.tjasset.com:19997");
@@ -72,8 +67,8 @@ public class Test extends HttpServlet {
 
 
             BufferedInputStream input = new BufferedInputStream(
-                    new FileInputStream("C:\\Users\\Administrator\\Desktop\\测试文档.docx"));
-            String fileName="测试文档.docx";
+                    new FileInputStream("C:\\Users\\Administrator\\Desktop\\测试文档.doc"));
+            String fileName="测试文档.doc";
             StringBuffer sb = new StringBuffer();
             sb.append("--");
             sb.append("---------------------------7d4a6d158c9");
@@ -87,10 +82,24 @@ public class Test extends HttpServlet {
             DataOutputStream dos = new DataOutputStream(hc.getOutputStream());
             dos.write(end_data);
 
-            FileUploadExporter fileUpload = new FileUploadExporter();
-            String outStr = fileUpload.processUpload(request);
+            int cc=0;
+            while((cc=input.read())!=-1)
+            {
+                dos.write(cc);
+            }
+            dos.write(end_data);
+            dos.flush();
+            dos.close();
+            FileOutputStream file = new FileOutputStream("C:\\Users\\Administrator\\Desktop\\test.txt");
+            InputStream is = hc.getInputStream();
+            int ch;
+            while ((ch = is.read()) != -1) {
+                file.write(ch);
+            }
+            if (is != null)
+                is.close();
 
-            return jsonUtil.toJson("0", outStr, "上传成功！", "");
+            return jsonUtil.toJson("0", "", "上传成功！", "");
         } catch (Exception e) {
             e.printStackTrace();
             return jsonUtil.toJson("1", "", "上传失败！", "");

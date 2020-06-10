@@ -69,15 +69,15 @@
                     {type: 'checkbox'}
                     , {field: 'stock_code', title: '存货编码', align: "center", width: 95}
                     , {field: 'stock_name', title: '存货名称', align: "center", width: 95}
-                    , {field: 'norms', title: '规格', align: "center", width: 140}
+                    , {field: 'norms', title: '规格', align: "center", width: 120}
                     , {field: 'item_code', title: '项目编码', align: "center", width: 110}
                     , {field: 'item_name', title: '项目名称', align: "center", width: 110}
-                    , {field: 'brand', title: '品牌', align: "center", width: 80}
+                    , {field: 'brand', title: '品牌', align: "center", width: 70}
                     , {field: 'unit', title: '单位', align: "center", width: 60}
-                    , {field: 'quantity', title: '请购数量', align: "center", width: 95}
+                    , {field: 'quantity', title: '请购数量', align: "center", width: 80}
                     , {field: 'supplier_name', title: '供应商', align: "center", width: 100}
                     , {
-                    field: 'offer', title: '报价', align: "center", width: 95, templet: function (row) {
+                    field: 'offer', title: '报价(未含税)', align: "center", width: 95, templet: function (row) {
                         var open_date = row.open_date.substring(0, 19).replace(/-/g, '/');
                         var close_date = row.close_date.substring(0, 19).replace(/-/g, '/');
                         var kaishi = new Date(open_date).getTime();//开标日时间戳
@@ -138,48 +138,20 @@
                         var nowtime = new Date(time).getTime() - 28800000;
 
                         if (parent.layui.index.getCookie("loginLimits_state") == "3") {
-                            if (row.bid_state == "0" || row.bid_state == null) {
-                                if (nowtime < kaishi) {
-                                    return '<a type="button" class="layui-btn layui-btn-sm layui-btn-disabled">未开始报价</a>'
-                                } else if (nowtime >= kaishi) {
-                                    return '<a type="button" class="layui-btn layui-btn-sm" lay-event="bianji">报价</a>'
-                                } else if (nowtime > jieshu) {
-                                    return '<a type="button" class="layui-btn layui-btn-sm layui-btn-disabled">已结束报价</a>'
-                                }
-                            } else if (row.bid_state == "1") {
-                                if (nowtime <= jieshu) {
-                                    return '<a type="button" class="layui-btn layui-btn-sm layui-btn-warm" lay-event="baojia">已报价</a>'
-                                } else if (nowtime > jieshu) {
-                                    return '<a type="button" class="layui-btn layui-btn-sm layui-btn-disabled">已结束报价</a>'
-                                }
-                            } else if (row.bid_state == "2") {
-                                return '<a type="button" class="layui-btn layui-btn-sm layui-bg-red">中标</a>'
-                            } else if (row.bid_state == "3") {
-                                return '<a type="button" class="layui-btn layui-btn-sm layui-bg-black">未中标</a>'
-                            } else if (row.bid_state == "4") {
-                                return '<a type="button" class="layui-btn layui-btn-sm">已推送</a>'
+                            if (nowtime < kaishi) {
+                                return '<a type="button" class="layui-btn layui-btn-sm layui-btn-disabled">未开始报价</a>'
+                            } else if (nowtime >= kaishi) {
+                                return '<a type="button" class="layui-btn layui-btn-sm" lay-event="bianji">报价</a>'
+                            } else if (nowtime > jieshu) {
+                                return '<a type="button" class="layui-btn layui-btn-sm layui-btn-disabled">已结束报价</a>'
                             }
                         } else {
-                            if (row.bid_state == "0" || row.bid_state == null) {
-                                if (nowtime < kaishi) {
-                                    return '<a type="button" class="layui-btn layui-btn-sm layui-btn-disabled">未开始报价</a>'
-                                } else if (nowtime >= kaishi) {
-                                    return '<a type="button" class="layui-btn layui-btn-sm">报价</a>'
-                                } else if (nowtime > jieshu) {
-                                    return '<a type="button" class="layui-btn layui-btn-sm layui-btn-disabled">已结束报价</a>'
-                                }
-                            } else if (row.bid_state == "1") {
-                                if (nowtime <= jieshu) {
-                                    return '<a type="button" class="layui-btn layui-btn-sm layui-btn-warm">已报价</a>'
-                                } else if (nowtime > jieshu) {
-                                    return '<a type="button" class="layui-btn layui-btn-sm layui-btn-disabled">已结束报价</a>'
-                                }
-                            } else if (row.bid_state == "2") {
-                                return '<a type="button" class="layui-btn layui-btn-sm layui-bg-red">中标</a>'
-                            } else if (row.bid_state == "3") {
-                                return '<a type="button" class="layui-btn layui-btn-sm layui-bg-black">未中标</a>'
-                            } else if (row.bid_state == "4") {
-                                return '<a type="button" class="layui-btn layui-btn-sm">已推送</a>'
+                            if (nowtime < kaishi) {
+                                return '<a type="button" class="layui-btn layui-btn-sm layui-btn-disabled">未开始报价</a>'
+                            } else if (nowtime >= kaishi) {
+                                return '<a type="button" class="layui-btn layui-btn-sm">报价</a>'
+                            } else if (nowtime > jieshu) {
+                                return '<a type="button" class="layui-btn layui-btn-sm layui-btn-disabled">已结束报价</a>'
                             }
                         }
                     }
@@ -191,7 +163,48 @@
                 }
                 ]
             ]
-            , page: true
+            , done: function (res) {
+                var data = res.data;
+                var mark = 1; //这里涉及到简单的运算，mark是计算每次需要合并的格子数
+                var columsName = ['stock_code', 'stock_name', 'norms'];//需要合并的列名称
+                var columsIndex = [1, 2, 3];//需要合并的列索引值
+
+                //这里循环所有要合并的列
+                for (var k = 0; k < columsName.length; k++) {
+                    //这里循环表格当前的数据
+                    for (var i = 1; i < res.data.length; i++) {
+                        var trArr = $(".layui-table-body .layui-table").find("tr");//所有行
+                        var tdCurArr = trArr.eq(i).find("td").eq(columsIndex[k]);//获取当前行的当前列
+                        var tdPreArr = trArr.eq(i - 1).find("td").eq(columsIndex[k]);//获取上一行的当前列
+                        if (data[i]['RN'] != data[i - 1]['RN']) {
+                            continue;
+                        }
+                        //后一行的值与前一行的值做比较，相同就需要合并
+                        if (data[i][columsName[k]] == data[i - 1][columsName[k]]) {
+                            mark += 1;
+                            if (mark > 2) {
+                                tdPreArr = trArr.eq(i - mark + 1).find("td").eq(columsIndex[k]);
+                            }
+                            //上一行增加rowspan属性
+                            tdPreArr.each(function () {
+                                $(this).attr("rowspan", mark);
+                                // $(this).attr("colspan", mark);
+                            });
+                            //当前行隐藏
+                            tdCurArr.each(function () {
+                                $(this).css("display", "none");
+                            });
+                        } else {
+                            //一旦前后两行的值不一样了，那么需要合并的格子数mark就需要重新计算
+                            mark = 1;
+                        }
+                    }
+                    //第一个合并完成，重置mark进行下一个合并
+                    mark = 1;
+                }
+
+                $(".laytable-cell-checkbox:first").html("是否退回");
+            }
         });
 
         table.on('tool(demo)', function (obj) {
@@ -312,7 +325,7 @@
         $('#piliang').on('click', function () {
             var checkStatus = table.checkStatus('demo')
                 , data = checkStatus.data;
-            parent.layui.index.setCookie("baojiaData", JSON.stringify(data),"1");
+            parent.layui.index.setCookie("baojiaData", JSON.stringify(data), "1");
             layer.open({
                 type: 2
                 , title: "批量报价"

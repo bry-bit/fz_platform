@@ -46,13 +46,14 @@ public class QuotationServiceImpl implements QuotationService {
 
     @Override
     @Transactional
-    public String backSubquotation(List<Sub_quotation> subQuotations) {
+    public String backSubquotation(List<Sub_quotation> subQuotations, String msg) {
         JSONUtil jsonUtil = new JSONUtil();
         for (Sub_quotation subQuotation : subQuotations) {
-            subQuotation.setBid_state("0");
+            subQuotation.setBid_state("1");
             subQuotation.setOffer(subQuotation.getOffer());
             subQuotation.setIssuance_date(subQuotation.getIssuance_date());
             subQuotation.setOffer_date("");
+            subQuotation.setReturn_msg(msg);
             mapper.insertSub_quotation(subQuotation);
         }
         return jsonUtil.toJson("0", "", "请求成功！", "");

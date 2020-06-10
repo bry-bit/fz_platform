@@ -17,9 +17,9 @@ public interface QuotationService {
 
     void updateSubQuo(Sub_quotation subQuotation);
 
-    String backSubquotation(List<Sub_quotation> subQuotation);
+    String backSubquotation(List<Sub_quotation> subQuotation, String msg);
 
-    String selSubQuoHistory(String yemian,String a,String b);
+    String selSubQuoHistory(String yemian, String a, String b);
 
     void updateBackSubquotation(Sub_quotation subQuotation);
 }

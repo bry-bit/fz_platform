@@ -12,13 +12,13 @@
 </head>
 <style>
     .layui-table-cell {
-        font-size: 13px;
+        font-size: 12px;
         /*padding: 0 5px;*/
-        height: auto;
-        overflow: visible;
-        text-overflow: inherit;
-        white-space: normal;
-        word-break: break-all;
+        /*height: auto;*/
+        /*overflow: visible;*/
+        /*text-overflow: inherit;*/
+        /*white-space: normal;*/
+        /*word-break: break-all;*/
     }
 </style>
 <body>
@@ -216,7 +216,7 @@
             var checkStatus = table.checkStatus('demo')
                 , data = checkStatus.data;
             parent.layui.index.setCookie("dataLength", data.length, "1");
-            parent.layui.index.setCookie("data", JSON.stringify(data), "1");
+            parent.layui.index.setCookie("SupData", JSON.stringify(data), "1");
             parent.layer.open({
                 type: 2
                 , title: data.field0016
@@ -270,12 +270,12 @@
 
         });
 
-        $('#query').on('click', function () {
-            table.reload('demo', {
-                url: '/selPurTable?stock_name=' + stock_name + '&brand=' + brand + '&norms=' + norms + '&id=' +
-                    parent.layui.index.getCookie("relation_id")
-            })
-        });
+        // $('#query').on('click', function () {
+        //     table.reload('demo', {
+        //         url: '/selPurTable?stock_name=' + stock_name + '&brand=' + brand + '&norms=' + norms + '&id=' +
+        //             parent.layui.index.getCookie("relation_id")
+        //     })
+        // });
 
         $('#release').on('click', function () {
             var checkStatus = table.checkStatus('demo')

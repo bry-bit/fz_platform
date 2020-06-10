@@ -10,6 +10,17 @@
     <link rel="stylesheet" href="../../layuiadmin/layui/css/layui.css" media="all">
     <link rel="stylesheet" href="../../layuiadmin/style/admin.css" media="all">
 </head>
+<style>
+    .layui-table-cell {
+        font-size: 12px;
+        /*padding: 0 5px;*/
+        /*height: auto;*/
+        /*overflow: visible;*/
+        /*text-overflow: inherit;*/
+        /*white-space: normal;*/
+        /*word-break: break-all;*/
+    }
+</style>
 <body>
 <div class="layui-card">
     <div class="layui-card-body">
@@ -196,7 +207,7 @@
             var checkStatus = table.checkStatus('demo')
                 , data = checkStatus.data;
             parent.layui.index.setCookie("dataLength", data.length, "1");
-            parent.layui.index.setCookie("data", JSON.stringify(data), "1");
+            parent.layui.index.setCookie("SupData", JSON.stringify(data), "1");
             parent.layer.open({
                 type: 2
                 , title: data.field0016

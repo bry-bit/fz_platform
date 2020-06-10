@@ -47,4 +47,5 @@ public class Sub_quotation {
     private String item_code;
     private String item_name;
     private String proposer;
+    private String return_msg;
 }

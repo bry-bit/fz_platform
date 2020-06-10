@@ -16,11 +16,11 @@
     .layui-table-cell {
         font-size: 12px;
         /*padding: 0 5px;*/
-        height: auto;
-        overflow: visible;
-        text-overflow: inherit;
-        white-space: normal;
-        word-break: break-all;
+        /*height: auto;*/
+        /*overflow: visible;*/
+        /*text-overflow: inherit;*/
+        /*white-space: normal;*/
+        /*word-break: break-all;*/
     }
 </style>
 <body>
@@ -72,11 +72,22 @@
                     , {field: 'brand', title: '品牌', align: "center", width: 60}
                     , {field: 'quantity', title: '数量', align: "center", width: 70}
                     , {field: 'offer', title: '报价', align: "center", width: 100, templet: '#offer'}
-                    , {title: '是否中标', type: 'radio', width: 60}
+                    , {
+                    field: 'a',
+                    title: '是否中标' + '<input type="radio" name="" lay-skin="primary" lay-filter="allChoose">',
+                    width: 100,
+                    align: "center",
+                    templet: function (row) {
+                        var html = "<input type='radio' name='" + row.stock_code + "'>";
+                        return html;
+                    }
+                }
                     , {title: '是否退回', type: 'checkbox', width: 60}
-                    , {field: 'a', title: '历史报价', align: "center", width: 90, templet: function () {
+                    , {
+                    field: 'a', title: '历史报价', align: "center", width: 90, templet: function () {
                         return '<a type="button" class="layui-btn layui-btn-sm" lay-event="history">历史报价</a>'
-                    }}
+                    }
+                }
                 ]
             ]
             , done: function (res) {
@@ -161,10 +172,16 @@
         $('#return').on('click', function () {
             var checkStatus = table.checkStatus('demo')
                 , data = checkStatus.data;
-            layer.confirm('是否对此数据进行退回？', function (index) {
+            layer.confirm('<form class="layui-form layui-form-pane" action="">' +
+                '<div class="layui-form-item">' +
+                '<label class="layui-form-label">退回理由</label>' +
+                '    <div class="layui-input-inline">' +
+                '      <input type="text" id="msg" lay-verify="required" placeholder="请输入退回理由" autocomplete="off" class="layui-input">\n' +
+                '    </div>' +
+                '</div></form>', function (index) {
                 $.ajax({
                     type: 'post'
-                    , url: '/backSubquotation'
+                    , url: '/backSubquotation?msg=' + $('#msg').val()
                     , data: JSON.stringify(data)
                     , dataType: 'json'
                     , contentType: 'application/json; charset=utf-8'
@@ -228,8 +245,8 @@
     function test1(str) {
         if (!str) str = "0.0000";
         let ret = Math.round(parseFloat(str) * 10000) / 10000;
-        if (str.split(".").length === 1){
-            return ret.toString()+".0000";
+        if (str.split(".").length === 1) {
+            return ret.toString() + ".0000";
         }
         var decimal = str.split(".")[0];
         var floats = str.split(".")[1].substring(0, 4);

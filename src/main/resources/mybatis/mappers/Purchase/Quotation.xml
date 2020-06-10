@@ -59,14 +59,14 @@
                                   station_no, norms, unit, brand, supplier_name, supplier_code, delivery_date, quantity,
                                   offer, subtotal, offer_date, field0025, field0024, field0027, remarks, open_date,
                                   close_date, enable_status, select_or_not, bid_id, contract_id, upload_buyer,
-                                  upload_supplier, bid_state, issuance_date)
+                                  upload_supplier, bid_state, issuance_date, return_msg)
         values (#{id}, #{relation_id}, #{orders}, #{line}, #{stock_code}, #{stock_name}, #{class_code}, #{stock_sort},
                 #{station_no}, #{norms}, #{unit},
                 #{brand}, #{supplier_name}, #{supplier_code}, #{delivery_date}, #{quantity}, #{offer}, #{subtotal},
                 #{offer_date}, #{field0025},
                 #{field0024}, #{field0027}, #{remarks}, #{open_date}, #{close_date}, #{enable_status}, #{select_or_not},
                 #{bid_id}, #{contract_id},
-                #{upload_buyer}, #{upload_supplier}, #{bid_state}, #{issuance_date})
+                #{upload_buyer}, #{upload_supplier}, #{bid_state}, #{issuance_date}, #{return_msg})
     </insert>
 
     <select id="whetherOrNotId" resultType="com.system.pojo.Purchase.Main_quotation">
@@ -137,10 +137,11 @@
     <!--退回报价-->
     <update id="updateBackSubquotation" parameterType="com.system.pojo.Purchase.Sub_quotation">
         UPDATE sub_quotation
-        SET bid_state = '5'
+        SET bid_state = '5',
+            return_msg=#{return_msg}
         WHERE id = #{id}
           and offer = #{offer}
-          and (offer_date = #{offer_date} or offer_date is null)
+          and offer_date = #{offer_date}
     </update>
 
     <!--查看被退回的历史报价         AND (s.bid_state = 3 OR s.bid_state = 4)-->

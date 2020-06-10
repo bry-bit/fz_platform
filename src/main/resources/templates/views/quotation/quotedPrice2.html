@@ -89,7 +89,8 @@
                     , {field: 'unit', title: '单位', align: "center", width: 60}
                     , {field: 'quantity', title: '请购数量', align: "center", width: 95}
                     , {field: 'supplier_name', title: '供应商', align: "center", width: 100, filter: true}
-                    , {field: 'offer', title: '报价', align: "center", width: 95, templet: function (row) {
+                    , {
+                    field: 'offer', title: '报价(未含税)', align: "center", width: 95, templet: function (row) {
                         var open_date = row.open_date.substring(0, 19).replace(/-/g, '/');
                         var close_date = row.close_date.substring(0, 19).replace(/-/g, '/');
                         var kaishi = new Date(open_date).getTime();//开标日时间戳
@@ -114,28 +115,35 @@
                                 }
                             }
                         }
-                    }}
+                    }
+                }
                     , {field: 'issuance_date', title: '发货日期', align: "center", width: 110}
+                    , {field: 'return_msg', title: '退回理由', align: "center", width: 110}
                     , {field: 'delivery_date', title: '期望到货日期', align: "center", width: 110}
                     , {field: 'open_date', title: '开标日期', align: "center", width: 110}
                     , {field: 'close_date', title: '结标日期', align: "center", width: 110}
-                    , {field: 'a', title: '供应商图纸上传', align: "center", width: 110, templet: function () {
+                    , {
+                    field: 'a', title: '供应商图纸上传', align: "center", width: 110, templet: function () {
                         if (parent.layui.index.getCookie("loginLimits_state") == "3") {
                             return '<input type="file" id="btn_file" style="display:none;" onchange="upload(this)">' +
                                 '<a class="table-btn uploadTableInfo" lay-event="uploadeSup" style="color: #029789">上传附件</a>'
                         } else {
                             return '<button class="layui-btn layui-btn-normal layui-btn-xs" lay-event="downloadFileSup">下载附件</button>'
                         }
-                    }}
-                    , {field: 'a', title: '采购员图纸上传', align: "center", width: 110, templet: function () {
+                    }
+                }
+                    , {
+                    field: 'a', title: '采购员图纸上传', align: "center", width: 110, templet: function () {
                         if (parent.layui.index.getCookie("loginLimits_state") == "3") {
                             return '<button class="layui-btn layui-btn-normal layui-btn-xs" lay-event="downloadFileQuo">下载附件</button>'
                         } else {
                             return '<input type="file" id="btn_file" style="display:none;" onchange="upload(this)">' +
                                 '<a class="table-btn uploadTableInfo" lay-event="uploadeCai" style="color: #029789">上传附件</a>'
                         }
-                    }}
-                    , {field: 'a', title: '中标状态', align: "center", width: 105, templet: function (row) {
+                    }
+                }
+                    , {
+                    field: 'a', title: '中标状态', align: "center", width: 105, templet: function (row) {
                         var open_date = row.open_date.substring(0, 19).replace(/-/g, '/');
                         var close_date = row.close_date.substring(0, 19).replace(/-/g, '/');
                         var kaishi = new Date(open_date).getTime();//开标日时间戳
@@ -156,10 +164,13 @@
                                 return '<a type="button" class="layui-btn layui-btn-sm layui-btn-disabled">已结束报价</a>'
                             }
                         }
-                    }}
-                    , {field: '', title: '历史报价', align: "center", width: 110, templet: function () {
+                    }
+                }
+                    , {
+                    field: '', title: '历史报价', align: "center", width: 110, templet: function () {
                         return '<a type="button" class="layui-btn layui-btn-sm" lay-event="history">历史报价</a>'
-                    }}
+                    }
+                }
                 ]
             ]
             , page: true

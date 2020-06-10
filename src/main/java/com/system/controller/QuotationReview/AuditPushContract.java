@@ -1,18 +1,13 @@
 package com.system.controller.QuotationReview;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.seeyon.client.CTPRestClient;
 import com.seeyon.client.CTPServiceClientManager;
-import com.seeyon.ctp.services.FileUploadExporter;
 import com.system.pojo.Purchase.Sub_quotation;
-import com.system.pojo.Purchase.Tabulation_listing;
 import com.system.pojo.QuotationReview.Formmain_0076;
 import com.system.pojo.QuotationReview.Formson_0077;
 import com.system.pojo.QuotationReview.SummaryPush;
-import com.system.pojo.Synchro.Formmain0061;
-import com.system.pojo.Synchro.Formson0062;
 import com.system.service.QuotationReview.AuditPushContractService;
 import com.system.util.JSONUtil;
 import com.system.util.MapUtil;
@@ -21,12 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import sun.net.www.protocol.https.Handler;
 
-import javax.servlet.http.HttpServletRequest;
-import java.io.*;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -121,7 +111,7 @@ public class AuditPushContract {
             List<Formson_0077> formson0077List = new ArrayList<>();
             for (int i = 0; i < footerList.size(); i++) {
                 Formson_0077 formson0077 = new Formson_0077();
-                formson0077.setField0006(String.valueOf(i+1));
+                formson0077.setField0006(String.valueOf(i + 1));
                 formson0077.setField0029(footerList.get(i).getLine());
                 formson0077.setField0044("正常");
                 formson0077.setField0008(footerList.get(i).getStock_code());
@@ -266,18 +256,19 @@ public class AuditPushContract {
     @ResponseBody
     public String WhetherOrNotSel(@RequestBody String data) {
         try {
+            System.out.println("data:" + data);
             List<Sub_quotation> list = JSONArray.parseArray(data, Sub_quotation.class);
-            if (list.get(0).getOffer() != null || list.get(0).getOffer() != ""){
-                for (int i = 0; i <list.size() ; i++) {
+            if (list.get(0).getOffer() != null || list.get(0).getOffer() != "") {
+                for (int i = 0; i < list.size(); i++) {
                     Sub_quotation subQuotation = JSONObject.parseObject(
                             JSONObject.toJSONString(list.get(i)), Sub_quotation.class);
-                    service.updateStateZhong(subQuotation);
-
-                    service.updateStateWei(subQuotation);
+//                    service.updateStateZhong(subQuotation);
+//
+//                    service.updateStateWei(subQuotation);
                 }
 
                 return jsonUtil.toJson("0", "", "中标成功！", "");
-            }else {
+            } else {
                 return jsonUtil.toJson("2", "", "未填写报价！", "");
             }
 

@@ -10,6 +10,17 @@
     <link rel="stylesheet" href="../../layuiadmin/layui/css/layui.css" media="all">
     <link rel="stylesheet" href="../../layuiadmin/style/admin.css" media="all">
 </head>
+<style>
+    .layui-table-cell {
+        font-size: 12px;
+        /*padding: 0 5px;*/
+        /*height: auto;*/
+        /*overflow: visible;*/
+        /*text-overflow: inherit;*/
+        /*white-space: normal;*/
+        /*word-break: break-all;*/
+    }
+</style>
 <body>
 <div class="layui-card">
     <div class="layui-card-body">
@@ -92,11 +103,12 @@
 
         $('#selectSup').on('click', function () {
             var tipList = {};
-            tipList.data = parent.layui.index.getCookie("data");
+            tipList.data = parent.layui.index.getCookie("SupData");
             var checkLength = $("input:checkbox[name='layTableCheckbox']:checked").length;
-            var lists=[];
+            var lists = [];
             $("input:checkbox[name='layTableCheckbox']").each(function () { //遍历checkbox的选择状态
-                if ($(this).is(':checked')) { //如果值为checked表明选中了
+                if ($(this).is(':checked') && $(this).closest('tr').find('td').eq(1).text() != "") {
+                    //如果值为checked表明选中了
                     var list = {};
                     list.field0001 = $(this).closest('tr').find('td').eq(1).text();
                     list.field0002 = $(this).closest('tr').find('td').eq(2).text();
