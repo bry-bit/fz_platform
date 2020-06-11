@@ -98,6 +98,9 @@
                         return '<a type="button" class="layui-btn layui-btn-sm" lay-event="history">历史报价</a>'
                     }
                 }
+                    , {field: 'id', title: 'id', align: "center", hide: true}
+                    , {field: 'relation_id', title: 'relation_id', align: "center", hide: true}
+                    , {field: 'offer_date', title: 'offer_date', align: "center", hide: true}
                 ]
             ]
             // , done: function (res) {
@@ -234,7 +237,11 @@
                     list.brand = $(this).closest('tr').find('td').eq(7).text();
                     list.quantity = $(this).closest('tr').find('td').eq(8).text();
                     list.offer = $(this).closest('tr').find('td').eq(9).text();
+                    list.id = $(this).closest('tr').find('td').eq(13).text();
+                    list.relation_id = $(this).closest('tr').find('td').eq(14).text();
+                    list.offer_date = $(this).closest('tr').find('td').eq(15).text();
                     lists.push(list);
+                    console.log($(this).closest('tr').find('td').eq(9).text().split(".")[1])
                 }
             });
             // layer.alert(JSON.stringify(lists));

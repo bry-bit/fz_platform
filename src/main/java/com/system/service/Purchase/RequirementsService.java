@@ -13,7 +13,9 @@ public interface RequirementsService {
 
     List<Purchase_sublist> fileSubTable(Purchase_sublist purchaseSublist);
 
-    List<Tabulation_listing> SupTable();
+    List<Tabulation_listing> SupTable(@org.apache.ibatis.annotations.Param("page") Integer page, @org.apache.ibatis.annotations.Param("limit") Integer limit);
+
+    List<Tabulation_listing> SupTables();
 
     void insertTable(Tabulation_listing formmain0030);
 

@@ -214,7 +214,7 @@
 
         $('#chooseSup').on('click', function () {
             var checkStatus = table.checkStatus('demo')
-                , data = checkStatus.data;
+                , trdata = checkStatus.data;
             parent.layer.open({
                 type: 2
                 , title: trdata.field0016
@@ -225,7 +225,7 @@
                 , success: function (layero, index) {
                     var body = parent.layui.layer.getChildFrame('body', index);
                     // alert(JSON.stringify(data));
-                    body.find("#SupData").val(JSON.stringify(data)); //将选中的数据的id传到编辑页面的隐藏域，便于根据ID修改数据
+                    body.find("#SupData").val(JSON.stringify(trdata)); //将选中的数据的id传到编辑页面的隐藏域，便于根据ID修改数据
                 }
             });
         });

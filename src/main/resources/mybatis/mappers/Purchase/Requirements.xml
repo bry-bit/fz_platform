@@ -44,8 +44,16 @@
     </select>
 
     <select id="SupTable" resultType="com.system.pojo.Purchase.Tabulation_listing">
-        select *
-        from formmain_0030
+        select top ${limit} d.*
+        from (SELECT c.*, row_number() over (ORDER BY field0001 ASC) as rownumber
+              FROM (
+                       select *
+                       from formmain_0030) as c) as d
+        WHERE rownumber > ((${limit} * ${page}) - ${limit})
+    </select>
+
+    <select id="SupTables" resultType="com.system.pojo.Purchase.Tabulation_listing">
+        select * from formmain_0030
     </select>
 
     <insert id="insertTable">

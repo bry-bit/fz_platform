@@ -7,9 +7,11 @@ import com.system.service.Purchase.RequirementsService;
 import com.system.util.JSONUtil;
 import com.system.util.ObjectMapperUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,10 +58,12 @@ public class Requirements {
 
     @RequestMapping("SupTable")
     @ResponseBody
-    public String SupTable() {
+    public String SupTable(Integer page, Integer limit) {
         try {
-            List<Tabulation_listing> list = service.SupTable();
-            return jsonUtil.toJson("0", list, "获取成功！", list.size());
+            List<Tabulation_listing> list = service.SupTable(page, limit);
+
+            List<Tabulation_listing> lists = service.SupTables();
+            return jsonUtil.toJson("0", list, "获取成功！", lists.size());
         } catch (Exception e) {
             e.printStackTrace();
             return jsonUtil.toJson("1", "", "获取失败！", "");
@@ -274,9 +278,9 @@ public class Requirements {
 
             List<Purchase_sublist> sublists = new ArrayList<>();
             for (int i = 0; i < list.size(); i++) {
-               Purchase_sublist sublist = new Purchase_sublist();
-               sublist.setRelation_id(list.get(i).getId());
-               sublists.add(sublist);
+                Purchase_sublist sublist = new Purchase_sublist();
+                sublist.setRelation_id(list.get(i).getId());
+                sublists.add(sublist);
             }
 
             System.out.println(sublists);
