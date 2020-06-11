@@ -215,15 +215,18 @@
         $('#chooseSup').on('click', function () {
             var checkStatus = table.checkStatus('demo')
                 , data = checkStatus.data;
-            parent.layui.index.setCookie("dataLength", data.length, "1");
-            parent.layui.index.setCookie("SupData", JSON.stringify(data), "1");
             parent.layer.open({
                 type: 2
-                , title: data.field0016
+                , title: trdata.field0016
                 , area: ['70%', '70%']
                 , shade: 0
                 , maxmin: true
                 , content: ['/page?url=/demand/SelectSupplier.html', 'yes']
+                , success: function (layero, index) {
+                    var body = parent.layui.layer.getChildFrame('body', index);
+                    // alert(JSON.stringify(data));
+                    body.find("#SupData").val(JSON.stringify(data)); //将选中的数据的id传到编辑页面的隐藏域，便于根据ID修改数据
+                }
             });
         });
 
