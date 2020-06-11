@@ -62,7 +62,7 @@ public class Quotation {
 
                 if (state.equals("3") || state.equals(3)) {
                     //上传文件路径
-                    String filePath = "E://FZ//BZ//fz_platform//src//main//resources//static//uploadSup//";
+                    String filePath = "D:\\ideaIU-2019.3.3.win\\workspace\\fz_platform\\src\\main\\resources\\static\\uploadSup\\";
                     //全路径读取
                     File dest = new File(filePath + fileName);
                     System.out.println(dest);
@@ -75,10 +75,10 @@ public class Quotation {
                     subQuotation.setId(id);
                     subQuotation.setUpload_supplier("uploadSup/" + fileName);
                     subQuotation.setSupplier_name(supplier_name);
-                    service.updateSubQuo(subQuotation);
+                    service.updateUpload(subQuotation);
                 } else {
                     //上传文件路径
-                    String filePath = "E://FZ//BZ//fz_platform//src//main//resources//static//uploadCai//";
+                    String filePath = "D:\\ideaIU-2019.3.3.win\\workspace\\fz_platform\\src\\main\\resources\\static\\uploadCai\\";
                     //全路径读取
                     File dest = new File(filePath + fileName);
                     System.out.println(dest);
@@ -91,7 +91,7 @@ public class Quotation {
                     subQuotation.setId(id);
                     subQuotation.setUpload_buyer("uploadSup/" + fileName);
                     subQuotation.setSupplier_name(supplier_name);
-                    service.updateSubQuo(subQuotation);
+                    service.updateUpload(subQuotation);
                 }
             }
             return jsonUtil.toJson("0", "", "上传成功！", "");

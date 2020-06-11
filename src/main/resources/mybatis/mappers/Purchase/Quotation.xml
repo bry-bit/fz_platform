@@ -119,12 +119,6 @@
             <if test="offer_date != null and offer_date != ''">
                 ,offer_date = #{offer_date}
             </if>
-            <if test="upload_buyer != null and upload_buyer != ''">
-                ,upload_buyer = #{upload_buyer}
-            </if>
-            <if test="upload_supplier != null and upload_supplier != ''">
-                ,upload_supplier = #{upload_supplier}
-            </if>
             <if test="issuance_date != null and issuance_date != ''">
                 ,issuance_date = #{issuance_date}
             </if>
@@ -133,6 +127,19 @@
         where id=#{id} and supplier_name=#{supplier_name} and stock_name = #{stock_name}
         and norms = #{norms} and brand = #{brand} and stock_code = #{stock_code}
         and (return_msg=#{return_msg} or return_msg is null)
+    </update>
+
+    <update id="updateUpload">
+        update Sub_quotation
+        <set>
+            <if test="upload_buyer != null and upload_buyer != ''">
+                upload_buyer = #{upload_buyer}
+            </if>
+            <if test="upload_supplier != null and upload_supplier != ''">
+                upload_supplier = #{upload_supplier}
+            </if>
+        </set>
+        where id=#{id} and supplier_name=#{supplier_name}
     </update>
 
     <!--退回报价-->

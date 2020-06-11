@@ -43,6 +43,11 @@ public class QuotationServiceImpl implements QuotationService {
         mapper.updateSubQuo(subQuotation);
     }
 
+    @Override
+    public void updateUpload(Sub_quotation subQuotation) {
+        mapper.updateUpload(subQuotation);
+    }
+
 
     @Override
     @Transactional

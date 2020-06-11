@@ -19,6 +19,8 @@ public interface QuotationMapper {
 
     void updateSubQuo(Sub_quotation subQuotation);
 
+    void updateUpload(Sub_quotation subQuotation);
+
     int backSubquotation(Sub_quotation subQuotation);
 
     List<Sub_quotation> selSubQuoHistory(@Param("yemian") String yemian
