@@ -62,7 +62,7 @@ public class Quotation {
 
                 if (state.equals("3") || state.equals(3)) {
                     //上传文件路径
-                    String filePath = "D:\\ideaIU-2019.3.3.win\\workspace\\fz_platform\\src\\main\\resources\\static\\uploadSup\\";
+                    String filePath = "D:\\apache-tomcat-9.0.35\\webapps\\fzb\\WEB-INF\\classes\\static\\uploadSup";
                     //全路径读取
                     File dest = new File(filePath + fileName);
                     System.out.println(dest);
@@ -78,7 +78,7 @@ public class Quotation {
                     service.updateUpload(subQuotation);
                 } else {
                     //上传文件路径
-                    String filePath = "D:\\ideaIU-2019.3.3.win\\workspace\\fz_platform\\src\\main\\resources\\static\\uploadCai\\";
+                    String filePath = "D:\\apache-tomcat-9.0.35\\webapps\\fzb\\WEB-INF\\classes\\static\\uploadSup";
                     //全路径读取
                     File dest = new File(filePath + fileName);
                     System.out.println(dest);
