@@ -89,7 +89,7 @@ public class Quotation {
 
                     Sub_quotation subQuotation = new Sub_quotation();
                     subQuotation.setId(id);
-                    subQuotation.setUpload_buyer("uploadSup/" + fileName);
+                    subQuotation.setUpload_buyer("uploadCai/" + fileName);
                     subQuotation.setSupplier_name(supplier_name);
                     service.updateUpload(subQuotation);
                 }
