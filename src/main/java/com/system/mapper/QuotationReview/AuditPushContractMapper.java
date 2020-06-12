@@ -2,7 +2,8 @@ package com.system.mapper.QuotationReview;
 
 import com.system.pojo.Purchase.Sub_quotation;
 import com.system.pojo.QuotationReview.SummaryPush;
-import org.springframework.data.repository.query.Param;
+
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
