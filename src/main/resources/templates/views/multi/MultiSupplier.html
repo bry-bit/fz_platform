@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>多品牌询价-选择供应商</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="../../layuiadmin/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="../../layuiadmin/style/admin.css" media="all">
+</head>
+<body>
+<div class="layui-card">
+    <div class="layui-card-body">
+        <input id="SupData" type="hidden">
+        <form class="layui-form" action="">
+            <div class="layui-inline">
+                <label class="layui-form-label">供应商名称</label>
+                <div class="layui-input-inline">
+                    <input type="search" class="layui-input" id="field0002" placeholder="请输入关键词" autocomplete="off">
+                </div>
+            </div>
+            <button type="button" class="layui-btn layui-btn-normal" id="query">查询</button>
+            <button type="button" class="layui-btn layui-btn-normal" id="selectSup">保存</button>
+        </form>
+        <hr>
+        <table class="layui-hide" id="demo" lay-filter="demo"></table>
+    </div>
+</div>
+
+<script src="../../layuiadmin/layui/layui.js"></script>
+<script>
+    layui.config({
+        base: '../../layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'table', 'layer', 'laydate', 'mockjax', 'testTablePlug'], function () {
+        var $ = layui.jquery
+            , table = layui.table
+            , layer = layui.layer
+            , laydate = layui.laydate
+            , index = parent.layer.getFrameIndex(window.name);
+
+        table.render({
+            elem: '#demo'
+            , url: '/SupTable'
+            , height: 'full-75'
+            , page: true
+            , limit: 30
+            , limits: [30, 50, 100]
+            , cols: [
+                [
+                    {type: 'checkbox'}
+                    , {field: 'field0001', title: '供应商编码', align: "center"}
+                    , {field: 'field0002', title: '供应商名称', align: "center"}
+                ]
+            ]
+        });
+    });
+</script>
+</body>
+</html>
