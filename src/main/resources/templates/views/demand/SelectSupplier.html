@@ -57,7 +57,10 @@
         table.render({
             elem: '#demo'
             , url: '/SupTable'
-            , height: 'full-85'
+            , height: 'full-75'
+            , page: true
+            , limit: 30
+            , limits: [30, 50, 100]
             , cols: [
                 [
                     {type: 'checkbox'}
