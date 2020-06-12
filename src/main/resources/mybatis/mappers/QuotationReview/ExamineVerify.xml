@@ -110,17 +110,4 @@
     </select>
 
 
-    <!---->
-
-    <select id="getContractId">
-        select * from formmain_0042
-        left join COL_SUMMARY on 中标审批单表 COL_SUMMARY.FORM_RECORDID=中标审批单表.ID
-        where ID=流程ID
-    </select>
-
-    <update id="updateSubQuotation">
-        update Sub_quotation
-        set contract_id = #{contract_id}
-        wherre ID = 流程ID
-    </update>
 </mapper>
