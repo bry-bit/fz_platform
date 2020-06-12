@@ -15,7 +15,9 @@ public interface RequirementsMapper {
 
     List<Purchase_sublist> fileSubTable(Purchase_sublist purchaseSublist);
 
-    List<Tabulation_listing> SupTable();
+    List<Tabulation_listing> SupTable(@Param("page") Integer page, @Param("limit") Integer limit);
+
+    List<Tabulation_listing> SupTables();
 
     void insertTable(Tabulation_listing formmain0030);
 

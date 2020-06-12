@@ -51,8 +51,8 @@
 
     <update id="updateStateZhong">
         update Sub_quotation
-        set bid_state=2,
-            select_or_not=1
+        set bid_state='2',
+            select_or_not='1'
         where id = #{id}
           and relation_id = #{relation_id}
           and supplier_name = #{supplier_name}
@@ -63,13 +63,13 @@
           and unit = #{unit}
           and offer = #{offer}
           and offer_date = #{offer_date}
-          and bid_state != '5'
+          and bid_state = '1'
     </update>
 
     <update id="updateStateWei">
         update Sub_quotation
-        set bid_state=3,
-            select_or_not=0
+        set bid_state='3',
+            select_or_not='0'
         where id = #{id}
           and relation_id = #{relation_id}
           and supplier_name != #{supplier_name}
@@ -78,7 +78,7 @@
           and norms = #{norms}
           and brand = #{brand}
           and unit = #{unit}
-          and bid_state != '5'
+          and bid_state = '1'
     </update>
 
     <select id="selStockName" resultType="com.system.pojo.Purchase.Sub_quotation">

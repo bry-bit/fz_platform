@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -143,12 +145,16 @@ public class Quotation {
             System.out.println(data);
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 
+            double num = Double.valueOf(offer);
+            DecimalFormat formater = new DecimalFormat("0.0000");
+            formater.setRoundingMode(RoundingMode.FLOOR);
+
             if (StringUtils.isNotBlank(data)) {
                 data = data.trim();
                 if (data.startsWith("{") && data.endsWith("}")) {
                     Sub_quotation subQuotation = ObjectMapperUtil.toObject(data, Sub_quotation.class);
 
-                    subQuotation.setOffer(offer);
+                    subQuotation.setOffer(formater.format(num));
                     subQuotation.setIssuance_date(issuance_date);
                     subQuotation.setOffer_date(format.format(new Date()));
 
@@ -158,7 +164,7 @@ public class Quotation {
                     for (int i = 0; i < list.size(); i++) {
                         Sub_quotation subQuotation = JSONObject.parseObject(
                                 JSONObject.toJSONString(list.get(i)), Sub_quotation.class);
-                        subQuotation.setOffer(offer);
+                        subQuotation.setOffer(formater.format(num));
                         subQuotation.setIssuance_date(issuance_date);
                         subQuotation.setOffer_date(format.format(new Date()));
 

@@ -30,8 +30,14 @@ public class RequirementsServiceImpl implements RequirementsService {
 
 
     @Override
-    public List<Tabulation_listing> SupTable() {
-        List<Tabulation_listing> list = mapper.SupTable();
+    public List<Tabulation_listing> SupTable(Integer page, Integer limit) {
+        List<Tabulation_listing> list = mapper.SupTable(page, limit);
+        return list;
+    }
+
+    @Override
+    public List<Tabulation_listing> SupTables() {
+        List<Tabulation_listing> list = mapper.SupTables();
         return list;
     }
 
