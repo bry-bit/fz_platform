@@ -11,7 +11,6 @@ import com.system.pojo.QuotationReview.SummaryPush;
 import com.system.service.QuotationReview.AuditPushContractService;
 import com.system.util.JSONUtil;
 import com.system.util.MapUtil;
-import com.system.util.XmlJsonUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -156,15 +155,7 @@ public class AuditPushContract {
 
             Long flowId1 = client.post("flow/xmcgzb001", datad, Long.class);
             System.out.println("flowId1:" + flowId1);
-            String soureData = client.get("flow/data/" + flowId1, String.class);
-            //TODO
-            String xml2JSON = XmlJsonUtils.xml2json(soureData);
-            System.out.println("xml2JSON = " + xml2JSON);
-            JSONObject jsonObject = JSONObject.parseObject(xml2JSON);
-            String formExport = jsonObject.getString("formExport");
-            String summary = JSONObject.parseObject(formExport).getString("summary");
-            String summaryId = JSONObject.parseObject(summary).getString("id");
-            System.out.println("summaryId = " + summaryId);
+
 
 
 
