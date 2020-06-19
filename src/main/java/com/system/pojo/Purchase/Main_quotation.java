@@ -20,4 +20,10 @@ public class Main_quotation {
     private String dept;
     private String create_date;
     private String total;
+    private String name;
+    private String supplier_name;
+    private String bid_state;
+    private Integer page;
+    private Integer limit;
+    private String files_code;
 }

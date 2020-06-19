@@ -2,6 +2,7 @@ package com.system.controller.Purchase;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.system.pojo.Purchase.Main_quotation;
 import com.system.pojo.Purchase.Sub_quotation;
 import com.system.service.Purchase.QuotationService;
 import com.system.util.JSONUtil;
@@ -26,26 +27,56 @@ public class Quotation {
 
     JSONUtil jsonUtil = new JSONUtil();
 
-    @RequestMapping("selSubQuo")
+//    @RequestMapping("selSubQuo")
+//    @ResponseBody
+//    public String selSubQuo(String name, String state, String bid_state) {
+//        try {
+//            System.out.println("bid_state：" + bid_state);
+//            Sub_quotation subQuotation = new Sub_quotation();
+//            subQuotation.setBid_state(bid_state);
+//            if (state.equals("3") || state == "3") {
+//                subQuotation.setSupplier_name(name);
+//                System.out.println(subQuotation);
+//                List<Sub_quotation> list = service.selSubQuo(subQuotation);
+//
+//                return jsonUtil.toJson("0", list, "查询成功！", "");
+//            } else {
+//                subQuotation.setProposer(name);
+//                System.out.println(subQuotation);
+//                List<Sub_quotation> list = service.selSubQuo(subQuotation);
+//
+//                return jsonUtil.toJson("0", list, "查询成功！", "");
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return jsonUtil.toJson("1", "", "查询失败！", "");
+//        }
+//    }
+
+    @RequestMapping("selMainNotQuoted")
     @ResponseBody
-    public String selSubQuo(String name, String state, String bid_state) {
+    public String selMainNotQuoted(String name, String state, String bid_state, Integer page, Integer limit) {
         try {
-            System.out.println("bid_state：" + bid_state);
-            Sub_quotation subQuotation = new Sub_quotation();
-            subQuotation.setBid_state(bid_state);
+            System.out.println(name + "," + state + "," + bid_state);
+            Main_quotation mainQuotation = new Main_quotation();
+            mainQuotation.setBid_state(bid_state);
+            mainQuotation.setPage(page);
+            mainQuotation.setLimit(limit);
+
             if (state.equals("3") || state == "3") {
-                subQuotation.setSupplier_name(name);
-                System.out.println(subQuotation);
-                List<Sub_quotation> list = service.selSubQuo(subQuotation);
+                mainQuotation.setSupplier_name(name);
+                List<Main_quotation> list = service.selMainNotQuoted(mainQuotation);
+                List<Main_quotation> quotationList = service.selMainLiat(mainQuotation);
 
-                return jsonUtil.toJson("0", list, "查询成功！", "");
+                return jsonUtil.toJson("0", list, "查询成功！", quotationList.size());
             } else {
-                subQuotation.setProposer(name);
-                System.out.println(subQuotation);
-                List<Sub_quotation> list = service.selSubQuo(subQuotation);
+                mainQuotation.setName(name);
+                List<Main_quotation> list = service.selMainNotQuoted(mainQuotation);
+                List<Main_quotation> quotationList = service.selMainLiat(mainQuotation);
 
-                return jsonUtil.toJson("0", list, "查询成功！", "");
+                return jsonUtil.toJson("0", list, "查询成功！", quotationList.size());
             }
+
         } catch (Exception e) {
             e.printStackTrace();
             return jsonUtil.toJson("1", "", "查询失败！", "");
@@ -197,7 +228,7 @@ public class Quotation {
             subQuotation.setRelation_id(msg);
             service.updateBackSubquotation(subQuotation);
         }
-        return service.backSubquotation(sub_quotations,msg);
+        return service.backSubquotation(sub_quotations, msg);
     }
 
     /**

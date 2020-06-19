@@ -15,7 +15,7 @@ public interface QuotationMapper {
 
     List<Main_quotation> whetherOrNotId(@Param("id") String id);
 
-    List<Sub_quotation> selSubQuo(Sub_quotation subQuotation);
+//    List<Sub_quotation> selSubQuo(Sub_quotation subQuotation);
 
     void updateSubQuo(Sub_quotation subQuotation);
 
@@ -28,4 +28,8 @@ public interface QuotationMapper {
             , @Param("norms") String norms);
 
     void updateBackSubquotation(Sub_quotation subQuotation);
+
+    List<Main_quotation> selMainNotQuoted(Main_quotation mainQuotation);
+
+    List<Main_quotation> selMainLiat(Main_quotation mainQuotation);
 }

@@ -32,11 +32,11 @@ public class QuotationServiceImpl implements QuotationService {
         return list;
     }
 
-    @Override
-    public List<Sub_quotation> selSubQuo(Sub_quotation subQuotation) {
-        List<Sub_quotation> list = mapper.selSubQuo(subQuotation);
-        return list;
-    }
+//    @Override
+//    public List<Sub_quotation> selSubQuo(Sub_quotation subQuotation) {
+//        List<Sub_quotation> list = mapper.selSubQuo(subQuotation);
+//        return list;
+//    }
 
     @Override
     public void updateSubQuo(Sub_quotation subQuotation) {
@@ -75,4 +75,18 @@ public class QuotationServiceImpl implements QuotationService {
     public void updateBackSubquotation(Sub_quotation subQuotation) {
         mapper.updateBackSubquotation(subQuotation);
     }
+
+    @Override
+    public List<Main_quotation> selMainNotQuoted(Main_quotation mainQuotation) {
+        List<Main_quotation> list = mapper.selMainNotQuoted(mainQuotation);
+        return list;
+    }
+
+    @Override
+    public List<Main_quotation> selMainLiat(Main_quotation mainQuotation) {
+        List<Main_quotation> list = mapper.selMainLiat(mainQuotation);
+        return list;
+    }
+
+
 }

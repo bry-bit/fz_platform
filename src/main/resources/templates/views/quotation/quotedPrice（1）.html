@@ -52,10 +52,11 @@
         base: '../../layuiadmin/' //静态资源所在路径
     }).extend({
         index: 'lib/index' //主入口模块
-    }).use(['index', 'table', 'layer', 'upload'], function () {
+    }).use(['index', 'table', 'layer', 'upload', 'laydate'], function () {
         var $ = layui.$
             , table = layui.table
             , layer = layui.layer
+            , laydate = layui.laydate
             , upload = layui.upload;
 
         table.render({
@@ -107,7 +108,7 @@
                     , {field: 'issuance_date', title: '发货日期', align: "center", width: 110}
                     , {field: 'delivery_date', title: '期望到货日期', align: "center", width: 110}
                     , {field: 'open_date', title: '开标日期', align: "center", width: 110}
-                    , {field: 'close_date', title: '结标日期', align: "center", width: 110}
+                    , {field: 'close_date', title: '结标日期', align: "center", edit: 'text', event: 'date2', width: 110}
                     , {
                     field: '', title: '供应商图纸上传', align: "center", width: 110, templet: function (row) {
                         if (parent.layui.index.getCookie("loginLimits_state") == "3") {
@@ -171,6 +172,7 @@
         });
 
         table.on('tool(demo)', function (obj) {
+            var data = obj.data;
             // document.getElementById("btn_file").click();
             var topLayui = parent === self ? layui : top.layui;
             if (obj.event === 'uploadeSup') {
@@ -279,6 +281,20 @@
                                 tips: 3
                             });
                         }, 500)
+                    }
+                });
+            } else if (obj.event === 'date2') {
+                var field = $(this).data('field');
+                laydate.render({
+                    elem: this.firstChild
+                    , show: true //直接显示
+                    , closeStop: this
+                    , calendar: true
+                    , theme: '#393D49'
+                    , done: function (value, date) {
+                        obj.update({
+                            [field]: value
+                        });
                     }
                 });
             }
