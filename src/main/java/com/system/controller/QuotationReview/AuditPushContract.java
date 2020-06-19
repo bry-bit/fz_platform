@@ -180,6 +180,7 @@ public class AuditPushContract {
                 + "<column name=\"供应商编码\"><value>" + formmain0076.getField0004() + "</value>"
                 + "</column><column name=\"供应商名称\"><value>" + formmain0076.getField0005() + "</value></column>\r\n"
                 + "<column name=\"客户盖章合同附件\"><value>" + formmain0076.getField0031() + "</value></column>"
+                + "<column name=\"客户盖章合同URL\"><value>" + formmain0076.getField0031() + "</value></column>"
                 + "</values><subForms><subForm>\r\n" +
                 "<definitions>";
         for (Formson_0077 formson0077 : formmain0076.getData()) {

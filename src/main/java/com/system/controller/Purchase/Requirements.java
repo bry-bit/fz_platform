@@ -256,6 +256,7 @@ public class Requirements {
     public void timeUpdatePurchaseStatus() throws Exception {
         service.timeUpdatePurchaseStatus();
     }
+
     @RequestMapping("delSup")
     @ResponseBody
     public String delSup(@RequestBody String data) {
