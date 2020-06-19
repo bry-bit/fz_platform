@@ -1,5 +1,7 @@
 package com.system.controller.FileUpload;
 
+import com.system.util.StringUtil;
+import com.system.util.upload.Const;
 import com.system.util.upload.UploadUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.ResourceUtils;
@@ -87,10 +89,11 @@ public class UploadController {
             e.printStackTrace();
         }
         System.out.println("newUrl = " + newUrl);
+        String tt = StringUtil.tt();
         for (int i = 0; i < fileN.length; i++) {
-            UploadUtils.approvalFile(fileN[i], newUrl);
+            UploadUtils.approvalFile(fileN[i], newUrl, tt);
         }
-        return "succ";
+        return Const.URL+"/uploadCai/"+tt;
     }
 
 }
