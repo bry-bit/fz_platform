@@ -26,4 +26,6 @@ public class Main_quotation {
     private Integer page;
     private Integer limit;
     private String files_code;
+    private String field0029;
+    private String field0025;
 }

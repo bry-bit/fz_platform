@@ -49,4 +49,14 @@ public class AuditPushContractServiceImpl implements AuditPushContractService {
         mapper.updateStateWei(subQuotation);
     }
 
+    @Override
+    public String selHTDA(String id) {
+        return mapper.selHTDA(id);
+    }
+
+    @Override
+    public void updateMesg(String bid_id, String contract_id, String id) {
+        mapper.updateMesg(bid_id, contract_id, id);
+    }
+
 }

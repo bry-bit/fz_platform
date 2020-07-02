@@ -29,7 +29,7 @@ spring:     #定义springmvc视图解析器
     test2:
       driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
       jdbc-url: jdbc:sqlserver://192.168.2.2:1433;DatabaseName=UFDATA_006_2015
-#     jdbc-url: jdbc:sqlserver://192.168.1.10:1433;DatabaseName=UFDATA_888_2016
+#      jdbc-url: jdbc:sqlserver://192.168.1.10:1433;DatabaseName=UFDATA_888_2016
       username: sa
       password: sasa
 #     password: asset10010

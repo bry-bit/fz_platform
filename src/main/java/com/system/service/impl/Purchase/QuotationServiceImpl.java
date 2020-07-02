@@ -32,11 +32,11 @@ public class QuotationServiceImpl implements QuotationService {
         return list;
     }
 
-//    @Override
-//    public List<Sub_quotation> selSubQuo(Sub_quotation subQuotation) {
-//        List<Sub_quotation> list = mapper.selSubQuo(subQuotation);
-//        return list;
-//    }
+    @Override
+    public List<Sub_quotation> selSubQuo(Sub_quotation subQuotation) {
+        List<Sub_quotation> list = mapper.selSubQuo(subQuotation);
+        return list;
+    }
 
     @Override
     public void updateSubQuo(Sub_quotation subQuotation) {

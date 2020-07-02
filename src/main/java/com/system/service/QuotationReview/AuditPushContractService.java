@@ -18,4 +18,8 @@ public interface AuditPushContractService {
     void updateStateZhong(Sub_quotation subQuotation);
 
     void updateStateWei(Sub_quotation subQuotation);
+
+    String selHTDA(String id);
+
+    void updateMesg(@Param("bid_id") String bid_id, @Param("contract_id") String contract_id, @Param("id") String id);
 }

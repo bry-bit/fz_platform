@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>未报价-报价部分-子表</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="../../layuiadmin/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="../../layuiadmin/style/admin.css" media="all">
+</head>
+<style>
+    .layui-table-cell {
+        font-size: 12px;
+    }
+</style>
+<body>
+<div class="layui-card">
+    <div class="layui-card-body">
+        <a class="layui-btn layui-btn-danger" id="save" onclick="">保存</a>
+        <hr>
+        <table class="layui-hide" id="demo" lay-filter="demo"></table>
+    </div>
+</div>
+
+<script src="../../layuiadmin/layui/layui.js"></script>
+<script>
+    Date.prototype.Format = function (fmt) {
+        var o = {
+            "M+": this.getMonth() + 1, //月份
+            "d+": this.getDate(), //日
+            "H+": this.getHours(), //小时
+            "m+": this.getMinutes(), //分
+            "s+": this.getSeconds(), //秒
+            "q+": Math.floor((this.getMonth() + 3) / 3), //季度
+            "S": this.getMilliseconds() //毫秒
+        };
+        if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+        for (var k in o)
+            if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+        return fmt;
+    };
+
+    layui.config({
+        base: '../../layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'table', 'layer', 'laydate'], function () {
+        var $ = layui.$
+            , table = layui.table
+            , layer = layui.layer
+            , laydate = layui.laydate
+            , index = parent.layer.getFrameIndex(window.name);
+
+        if (parent.layui.index.getCookie("loginLimits_state") == "3") {
+            table.render({
+                elem: '#demo'
+                , height: 'full-75'
+                , url: '/selSubQuo?relation_id=' + parent.layui.index.getCookie("NotQuoteID")
+                    + '&name=' + parent.layui.index.getCookie("loginName")
+                    + '&state=' + parent.layui.index.getCookie("loginLimits_state")
+                    + '&bid_state=0'
+                , cols: [
+                    [
+                        {field: 'stock_code', title: '存货编码', align: "center", width: 95}
+                        , {field: 'stock_name', title: '存货名称', align: "center", width: 95}
+                        , {field: 'norms', title: '规格', align: "center", width: 120}
+                        , {field: 'item_code', title: '项目编码', align: "center", width: 110}
+                        , {field: 'item_name', title: '项目名称', align: "center", width: 110}
+                        , {field: 'brand', title: '品牌', align: "center", width: 70}
+                        , {field: 'unit', title: '单位', align: "center", width: 60}
+                        , {field: 'quantity', title: '请购数量', align: "center", width: 80}
+                        , {field: 'supplier_name', title: '供应商', align: "center", width: 100}
+                        , {field: 'offer', title: '报价(未含税)', align: "center", width: 95, edit: 'text'}
+                        , {
+                        field: 'issuance_date',
+                        title: '发货日期',
+                        align: "center",
+                        width: 110,
+                        templet: function (row) {
+                            return '<input type="text" class="layui-input layui-input-date" id="test1" style="border: none;font-size: 13px;padding-bottom: 5px">';
+                        }
+                    }
+                        , {field: 'delivery_date', title: '期望到货日期', align: "center", width: 110}
+                        , {field: 'open_date', title: '开标日期', align: "center", width: 100}
+                        , {field: 'close_date', title: '结标日期', align: "center", width: 100}
+                        , {
+                        field: '', title: '报价状态', align: "center", width: 105, templet: function (row) {
+                            var open_date = row.open_date.substring(0, 19).replace(/-/g, '/');
+                            var close_date = row.close_date.substring(0, 19).replace(/-/g, '/');
+                            var kaishi = new Date(open_date).getTime();//开标日时间戳
+                            var jieshu = new Date(close_date).getTime();//结标日时间戳
+                            var time = new Date($.ajax({async: false}).getResponseHeader("Date")).Format("yyyy-MM-dd");
+                            var nowtime = new Date(time).getTime() - 28800000;
+
+                            if (nowtime < kaishi) {
+                                return '<a type="button" class="layui-btn layui-btn-sm layui-btn-disabled">未开始报价</a>'
+                            } else if (nowtime >= kaishi) {
+                                return '<a type="button" class="layui-btn layui-btn-sm">报价</a>'
+                            } else if (nowtime > jieshu) {
+                                return '<a type="button" class="layui-btn layui-btn-sm layui-btn-disabled">已结束报价</a>'
+                            }
+                        }
+                    }
+                        , {
+                        field: '', title: '操作', align: "center", width: 100, templet: function (row) {
+                            return '<a type="button" class="layui-btn layui-btn-sm layui-bg-cyan" lay-event="editNorms">修改规格</a>';
+                        }
+                    }
+                    ]
+                ]
+                , done: function (res, curr, count) {
+                    var tableView = this.elem.next(); // 当前表格渲染之后的视图
+                    layui.each(res.data, function (i, item) {
+                        var open_date = item.open_date.substring(0, 19).replace(/-/g, '/');
+                        var close_date = item.close_date.substring(0, 19).replace(/-/g, '/');
+                        var kaishi = new Date(open_date).getTime();//开标日时间戳
+                        var jieshu = new Date(close_date).getTime();//结标日时间戳
+                        var time = new Date($.ajax({async: false}).getResponseHeader("Date")).Format("yyyy-MM-dd");
+                        var nowtime = new Date(time).getTime() - 28800000;
+                        if (kaishi > nowtime) {
+                            tableView.find('tr[data-index=' + i + ']').find('td').data('edit', false);
+                        } else if (jieshu < nowtime) {
+                            tableView.find('tr[data-index=' + i + ']').find('td').data('edit', false);
+                        }
+                    });
+
+                    lay('.layui-input-date').each(function () {
+                        laydate.render({
+                            elem: this
+                            , closeStop: this
+                            , calendar: true
+                            , theme: '#393D49'
+                        });
+                    });
+                }
+            });
+
+            table.on('tool(demo)', function (obj) {
+                if (obj.event === 'editNorms') {
+                    var data = obj.data;
+                    layer.open({
+                        type: 2
+                        , title: '修改 "' + data.stock_name + '" 的规格'
+                        , area: ['400px', '240px']
+                        , skin: 'layui-layer-rim'
+                        , content: ['page?url=/quotation/EditNorms.html', 'yes']
+                        , success: function (layero, index) {
+                            var body = layui.layer.getChildFrame('body', index);
+                            if (data) {
+                                body.find("#data").val(JSON.stringify(data));
+                                body.find("#norms").val(data.norms);
+                            }
+                        }
+                    })
+                }
+            });
+
+            $('#save').on('click', function () {
+                var tableBack = table.cache["demo"];
+                var lists = [];
+                for (var i = 0; i < tableBack.length; i++) {
+                    var list = {};
+                    if (tableBack[i].offer != undefined && tableBack[i].offer != "") {
+                        list.id = tableBack[i].id;
+                        list.stock_code = tableBack[i].stock_code;
+                        list.stock_name = tableBack[i].stock_name;
+                        list.norms = tableBack[i].norms;
+                        list.item_code = tableBack[i].item_code;
+                        list.item_name = tableBack[i].item_name;
+                        list.brand = tableBack[i].brand;
+                        list.unit = tableBack[i].unit;
+                        list.quantity = tableBack[i].quantity;
+                        list.supplier_name = tableBack[i].supplier_name;
+                        list.offer = tableBack[i].offer;
+                        list.issuance_date = $('.layui-input-date').eq(i).val();
+                        list.delivery_date = tableBack[i].delivery_date;
+                        list.open_date = tableBack[i].open_date;
+                        list.close_date = tableBack[i].close_date;
+                        list.bid_state = "1";
+                        lists.push(list);
+                    }
+                }
+                // layer.alert(JSON.stringify(lists));
+
+                $.ajax({
+                    url: '/quotedPrice?state=' + parent.layui.index.getCookie("loginLimits_state")
+                    , type: 'post'
+                    , data: JSON.stringify(lists)
+                    , dataType: 'json'
+                    , contentType: 'application/json; charset=utf-8'
+                    , success: function (res) {
+                        if (res.code === "0") {
+                            layer.msg('保存成功！', {
+                                offset: '15px'
+                                , icon: 1
+                                , time: 1000
+                            }, function () {
+                                location.reload(index);
+                            });
+                        } else {
+                            layer.msg('保存失败！', {
+                                offset: '15px'
+                                , icon: 1
+                                , time: 1000
+                            });
+                        }
+                    }
+                })
+            });
+
+        } else {
+            table.render({
+                elem: '#demo'
+                , height: 'full-75'
+                , url: '/selSubQuo?relation_id=' + parent.layui.index.getCookie("NotQuoteID")
+                    + '&name=' + parent.layui.index.getCookie("loginName")
+                    + '&state=' + parent.layui.index.getCookie("loginLimits_state")
+                    + '&bid_state=0'
+                , cols: [
+                    [
+                        {field: 'stock_code', title: '存货编码', align: "center", width: 95}
+                        , {field: 'stock_name', title: '存货名称', align: "center", width: 95}
+                        , {field: 'norms', title: '规格', align: "center", width: 120}
+                        , {field: 'item_code', title: '项目编码', align: "center", width: 110}
+                        , {field: 'item_name', title: '项目名称', align: "center", width: 110}
+                        , {field: 'brand', title: '品牌', align: "center", width: 70}
+                        , {field: 'unit', title: '单位', align: "center", width: 60}
+                        , {field: 'quantity', title: '请购数量', align: "center", width: 80}
+                        , {field: 'supplier_name', title: '供应商', align: "center", width: 100}
+                        , {field: 'offer', title: '报价(未含税)', align: "center", width: 95}
+                        , {field: 'issuance_date', title: '发货日期', align: "center", width: 110}
+                        , {field: 'delivery_date', title: '期望到货日期', align: "center", width: 110}
+                        , {field: 'open_date', title: '开标日期', align: "center", width: 110}
+                        , {
+                        field: 'close_date',
+                        title: '结标日期',
+                        align: "center",
+                        edit: 'text',
+                        event: 'date2',
+                        width: 110
+                    }
+                        , {
+                        field: '', title: '报价状态', align: "center", width: 105, templet: function (row) {
+                            var open_date = row.open_date.substring(0, 19).replace(/-/g, '/');
+                            var close_date = row.close_date.substring(0, 19).replace(/-/g, '/');
+                            var kaishi = new Date(open_date).getTime();//开标日时间戳
+                            var jieshu = new Date(close_date).getTime();//结标日时间戳
+                            var time = new Date($.ajax({async: false}).getResponseHeader("Date")).Format("yyyy-MM-dd");
+                            var nowtime = new Date(time).getTime() - 28800000;
+
+                            if (nowtime < kaishi) {
+                                return '<a type="button" class="layui-btn layui-btn-sm layui-btn-disabled">未开始报价</a>'
+                            } else if (nowtime >= kaishi) {
+                                return '<a type="button" class="layui-btn layui-btn-sm">报价</a>'
+                            } else if (nowtime > jieshu) {
+                                return '<a type="button" class="layui-btn layui-btn-sm layui-btn-disabled">已结束报价</a>'
+                            }
+                        }
+                    }
+                    ]
+                ]
+            });
+
+            table.on('tool(demo)', function (obj) {
+                if (obj.event === 'date2') {
+                    var field = $(this).data('field');
+                    laydate.render({
+                        elem: this.firstChild
+                        , show: true //直接显示
+                        , closeStop: this
+                        , calendar: true
+                        , theme: '#393D49'
+                        , done: function (value, date) {
+                            obj.update({
+                                [field]: value
+                            });
+                        }
+                    });
+                }
+            });
+            $('#save').on('click', function () {
+                var tableBack = table.cache["demo"];
+                var lists = [];
+                for (var i = 0; i < tableBack.length; i++) {
+                    var list = {};
+                    list.id = tableBack[i].id;
+                    list.stock_code = tableBack[i].stock_code;
+                    list.stock_name = tableBack[i].stock_name;
+                    list.norms = tableBack[i].norms;
+                    list.item_code = tableBack[i].item_code;
+                    list.item_name = tableBack[i].item_name;
+                    list.brand = tableBack[i].brand;
+                    list.unit = tableBack[i].unit;
+                    list.quantity = tableBack[i].quantity;
+                    list.supplier_name = tableBack[i].supplier_name;
+                    list.offer = tableBack[i].offer;
+                    list.issuance_date = tableBack[i].issuance_date;
+                    list.delivery_date = tableBack[i].delivery_date;
+                    list.open_date = tableBack[i].open_date;
+                    list.close_date = tableBack[i].close_date;
+                    list.bid_state = tableBack[i].bid_state;
+                    lists.push(list);
+                }
+                // layer.alert(JSON.stringify(lists));
+
+                $.ajax({
+                    url: '/quotedPrice?state=' + parent.layui.index.getCookie("loginLimits_state")
+                    , type: 'post'
+                    , data: JSON.stringify(lists)
+                    , dataType: 'json'
+                    , contentType: 'application/json; charset=utf-8'
+                    , success: function (res) {
+                        if (res.code === "0") {
+                            layer.msg('保存成功！', {
+                                offset: '15px'
+                                , icon: 1
+                                , time: 1000
+                            }, function () {
+                                location.reload(index);
+                            });
+                        } else {
+                            layer.msg('保存失败！', {
+                                offset: '15px'
+                                , icon: 1
+                                , time: 1000
+                            });
+                        }
+                    }
+                })
+            });
+        }
+    });
+</script>
+</body>
+</html>

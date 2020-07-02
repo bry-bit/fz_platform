@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>已中标-报价部分-子表</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="../../layuiadmin/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="../../layuiadmin/style/admin.css" media="all">
+</head>
+<style>
+    .layui-table-cell {
+        font-size: 12px;
+    }
+</style>
+<body>
+<div class="layui-card">
+    <div class="layui-card-body">
+        <table class="layui-hide" id="demo" lay-filter="demo"></table>
+    </div>
+</div>
+
+<script src="../../layuiadmin/layui/layui.js"></script>
+<script>
+    layui.config({
+        base: '../../layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'table', 'layer', 'laydate'], function () {
+        var $ = layui.$
+            , table = layui.table
+            , layer = layui.layer
+            , laydate = layui.laydate;
+
+        table.render({
+            elem: '#demo'
+            , height: 'full-75'
+            , url: '/selSubQuo?relation_id=' + parent.layui.index.getCookie("WonID")
+                + '&name=' + parent.layui.index.getCookie("loginName")
+                + '&state=' + parent.layui.index.getCookie("loginLimits_state")
+                + '&bid_state=2'
+            , cols: [
+                [
+                    {field: 'stock_code', title: '存货编码', align: "center", width: 95}
+                    , {field: 'stock_name', title: '存货名称', align: "center", width: 95}
+                    , {field: 'norms', title: '规格', align: "center", width: 120}
+                    , {field: 'item_code', title: '项目编码', align: "center", width: 110}
+                    , {field: 'item_name', title: '项目名称', align: "center", width: 110}
+                    , {field: 'brand', title: '品牌', align: "center", width: 70}
+                    , {field: 'unit', title: '单位', align: "center", width: 60}
+                    , {field: 'quantity', title: '请购数量', align: "center", width: 80}
+                    , {field: 'supplier_name', title: '供应商', align: "center", width: 100}
+                    , {field: 'offer', title: '报价(未含税)', align: "center", width: 95}
+                    , {field: 'issuance_date', title: '发货日期', align: "center", width: 110}
+                    , {field: 'delivery_date', title: '期望到货日期', align: "center", width: 110}
+                    , {field: 'open_date', title: '开标日期', align: "center", width: 110}
+                    , {field: 'close_date', title: '结标日期', align: "center", width: 110}
+                ]
+            ]
+        });
+
+    });
+</script>
+</body>
+</html>

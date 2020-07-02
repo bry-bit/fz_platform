@@ -97,6 +97,7 @@ public class AuditPushContract {
 //            System.out.println("heardList:" + heardList);
 //            System.out.println("footerList:" + footerList);
 
+            String Field0001 = "XMCGZBSPD" + new SimpleDateFormat("yyyyMMddHHmm").format(new Date());
             Formmain_0076 formmain0076 = new Formmain_0076();
             for (int i = 0; i < heardList.size(); i++) {
                 formmain0076.setField0012(heardList.get(i).getForm_code());
@@ -105,6 +106,7 @@ public class AuditPushContract {
                 formmain0076.setField0016(heardList.get(i).getItem_name());
                 formmain0076.setField0004(heardList.get(i).getSupplier_code());
                 formmain0076.setField0005(heardList.get(i).getSupplier_name());
+                formmain0076.setField0001(Field0001);
             }
 //            System.out.println("formmain0076:" + formmain0076);
 
@@ -156,8 +158,8 @@ public class AuditPushContract {
             Long flowId1 = client.post("flow/xmcgzb001", datad, Long.class);
             System.out.println("flowId1:" + flowId1);
 
-
-
+            String contract_id = service.selHTDA(String.valueOf(flowId1));
+            service.updateMesg(Field0001, contract_id, String.valueOf(flowId1));
 
             return jsonUtil.toJson("0", "", "", "");
         } catch (Exception e) {
@@ -177,6 +179,7 @@ public class AuditPushContract {
                 + "<column name=\"组织名称\"><value>" + formmain0076.getField0013() + "</value></column>\r\n"
                 + "<column name=\"项目编码\"><value>" + formmain0076.getField0015() + "</value></column>"
                 + "<column name=\"项目名称\"><value>" + formmain0076.getField0016() + "</value></column>\r\n"
+                + "<column name=\"项目采购中标审批单流水号\"><value>" + formmain0076.getField0001() + "</value></column>"
                 + "<column name=\"供应商编码\"><value>" + formmain0076.getField0004() + "</value>"
                 + "</column><column name=\"供应商名称\"><value>" + formmain0076.getField0005() + "</value></column>\r\n"
                 + "<column name=\"客户盖章合同附件\"><value>" + formmain0076.getField0031() + "</value></column>"

@@ -75,37 +75,56 @@
         where id = #{id}
     </select>
 
-    <!--    <select id="selSubQuo" resultType="com.system.pojo.Purchase.Sub_quotation"-->
-    <!--            parameterType="com.system.pojo.Purchase.Sub_quotation">-->
-    <!--        select m.item_code,m.item_name,s.*-->
-    <!--        from Sub_quotation s-->
-    <!--        left join Main_quotation m on s.relation_id=m.id-->
-    <!--        left join org_member on org_member.ID = m.proposer-->
-    <!--        left join org_unit on org_member.ORG_DEPARTMENT_ID = org_unit.ID-->
-    <!--        where s.enable_status = '正常'-->
-    <!--        <if test="brand != null and brand != ''">-->
-    <!--            and s.brand = #{brand}-->
-    <!--        </if>-->
-    <!--        <if test="stock_name != null and stock_name != ''">-->
-    <!--            and s.stock_name=#{stock_name}-->
-    <!--        </if>-->
-    <!--        <if test="norms != null and norms != ''">-->
-    <!--            and s.norms = #{norms}-->
-    <!--        </if>-->
-    <!--        <if test="supplier_name != null and supplier_name != ''">-->
-    <!--            and s.supplier_name = #{supplier_name}-->
-    <!--        </if>-->
-    <!--        <if test="proposer != null and proposer != ''">-->
-    <!--            and org_member.NAME=#{proposer}-->
-    <!--        </if>-->
-    <!--        <if test='bid_state.equals("zhongbiao")'>-->
-    <!--            and (s.bid_state = 2 or s.bid_state = 3)-->
-    <!--        </if>-->
-    <!--        <if test='bid_state.equals("0") or bid_state.equals("1") '>-->
-    <!--            and s.bid_state = #{bid_state}-->
-    <!--        </if>-->
-    <!--        order by s.stock_code,s.stock_name,s.norms,s.bid_state asc-->
-    <!--    </select>-->
+    <!--        <select id="selSubQuo" resultType="com.system.pojo.Purchase.Sub_quotation"-->
+    <!--                parameterType="com.system.pojo.Purchase.Sub_quotation">-->
+    <!--            select m.item_code,m.item_name,s.*-->
+    <!--            from Sub_quotation s-->
+    <!--            left join Main_quotation m on s.relation_id=m.id-->
+    <!--            left join org_member on org_member.ID = m.proposer-->
+    <!--            left join org_unit on org_member.ORG_DEPARTMENT_ID = org_unit.ID-->
+    <!--            where s.enable_status = '正常'-->
+    <!--            <if test="brand != null and brand != ''">-->
+    <!--                and s.brand = #{brand}-->
+    <!--            </if>-->
+    <!--            <if test="stock_name != null and stock_name != ''">-->
+    <!--                and s.stock_name=#{stock_name}-->
+    <!--            </if>-->
+    <!--            <if test="norms != null and norms != ''">-->
+    <!--                and s.norms = #{norms}-->
+    <!--            </if>-->
+    <!--            <if test="supplier_name != null and supplier_name != ''">-->
+    <!--                and s.supplier_name = #{supplier_name}-->
+    <!--            </if>-->
+    <!--            <if test="proposer != null and proposer != ''">-->
+    <!--                and org_member.NAME=#{proposer}-->
+    <!--            </if>-->
+    <!--            <if test='bid_state.equals("zhongbiao")'>-->
+    <!--                and (s.bid_state = 2 or s.bid_state = 3)-->
+    <!--            </if>-->
+    <!--            <if test='bid_state.equals("0") or bid_state.equals("1") '>-->
+    <!--                and s.bid_state = #{bid_state}-->
+    <!--            </if>-->
+    <!--            order by s.stock_code,s.stock_name,s.norms,s.bid_state asc-->
+    <!--        </select>-->
+
+    <select id="selSubQuo" resultType="com.system.pojo.Purchase.Sub_quotation"
+            parameterType="com.system.pojo.Purchase.Sub_quotation">
+        select m.item_code, m.item_name, s.*
+        from Sub_quotation s
+        left join Main_quotation m on s.relation_id = m.id
+        left join org_member on org_member.ID = m.proposer
+        left join org_unit on org_member.ORG_DEPARTMENT_ID = org_unit.ID
+        where s.enable_status = '正常'
+        and s.bid_state = #{bid_state}
+        and s.relation_id = #{relation_id}
+        <if test="supplier_name != null and supplier_name != ''">
+            and s.supplier_name = #{supplier_name}
+        </if>
+        <if test="proposer != null and proposer != ''">
+            and org_member.NAME=#{proposer}
+        </if>
+        order by s.stock_code, s.stock_name, s.norms, s.bid_state asc
+    </select>
 
     <update id="updateSubQuo">
         update Sub_quotation
@@ -122,7 +141,12 @@
             <if test="issuance_date != null and issuance_date != ''">
                 ,issuance_date = #{issuance_date}
             </if>
-            ,bid_state = '1'
+            <if test="bid_state != null and bid_state != ''">
+                ,bid_state = #{bid_state}
+            </if>
+            <if test="close_date != null and close_date != ''">
+                ,close_date=#{close_date}
+            </if>
         </set>
         where id=#{id} and supplier_name=#{supplier_name} and stock_name = #{stock_name}
         and norms = #{norms} and brand = #{brand} and stock_code = #{stock_code}
@@ -177,7 +201,7 @@
         select top ${limit} d.*
         from (SELECT c.*, row_number() over (ORDER BY files_code ASC) as rownumber
         FROM (
-        select distinct m.*,p.files_code,org_member.name
+        select distinct m.id,m.item_code,m.item_name,p.create_date,p.files_code,org_member.name
         from Main_quotation m
         left join Sub_quotation s on s.relation_id = m.id
         left join org_member on org_member.ID = m.proposer

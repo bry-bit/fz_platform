@@ -2,8 +2,7 @@ package com.system.mapper.QuotationReview;
 
 import com.system.pojo.Purchase.Sub_quotation;
 import com.system.pojo.QuotationReview.SummaryPush;
-
-import org.apache.ibatis.annotations.Param;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -21,4 +20,8 @@ public interface AuditPushContractMapper {
     void updateStateZhong(Sub_quotation subQuotation);
 
     void updateStateWei(Sub_quotation subQuotation);
+
+    String selHTDA(String id);
+
+    void updateMesg(@Param("bid_id") String bid_id, @Param("contract_id") String contract_id, @Param("id") String id);
 }

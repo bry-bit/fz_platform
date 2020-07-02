@@ -7,7 +7,6 @@ import com.system.service.Purchase.RequirementsService;
 import com.system.util.JSONUtil;
 import com.system.util.ObjectMapperUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -252,10 +251,10 @@ public class Requirements {
      *
      * @throws Exception
      */
-    @Scheduled(fixedRate = 1000 * 20)
-    public void timeUpdatePurchaseStatus() throws Exception {
-        service.timeUpdatePurchaseStatus();
-    }
+//    @Scheduled(fixedRate = 1000 * 20)
+//    public void timeUpdatePurchaseStatus() throws Exception {
+//        service.timeUpdatePurchaseStatus();
+//    }
 
     @RequestMapping("delSup")
     @ResponseBody

@@ -13,7 +13,7 @@ public interface QuotationService {
 
     List<Main_quotation> whetherOrNotId(@Param("id") String id);
 
-//    List<Sub_quotation> selSubQuo(Sub_quotation subQuotation);
+    List<Sub_quotation> selSubQuo(Sub_quotation subQuotation);
 
     void updateSubQuo(Sub_quotation subQuotation);
 

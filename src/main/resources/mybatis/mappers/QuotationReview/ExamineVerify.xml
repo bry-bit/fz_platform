@@ -109,4 +109,18 @@
           and s.id = #{id}
     </select>
 
+    <select id="selHTDA" resultType="String">
+        select f.field0001
+        from formmain_0042 f
+                 left join formmain_0076 a on a.field0001 = f.field0060
+                 left join COL_SUMMARY c on c.FORM_RECORDID = a.ID
+        where c.ID = #{ID}
+    </select>
+
+    <update id="updateMesg">
+        update Sub_quotation
+        set bid_id=#{bid_id},
+            contract_id=#{contract_id}
+        where id = #{id}
+    </update>
 </mapper>

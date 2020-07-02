@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.system.mapper.QuotationReview.CallChangeMapper">
+    <select id="MasterTable" resultType="com.system.pojo.Purchase.Main_quotation">
+        select distinct m.*, f.field0029, org_member.name,org_unit.NAME as field0025
+        from Main_quotation m
+                 left join Sub_quotation s on s.relation_id = m.id
+                 left join org_member on org_member.ID = m.proposer
+                 left join org_unit on org_member.ORG_DEPARTMENT_ID = org_unit.ID
+                 left join Purchase_primary p on p.id = m.id
+                 left join formmain_0040 f on p.files_code = f.field0001
+        where m.id = #{id}
+    </select>
+
+    <select id="SubTable" resultType="com.system.pojo.Purchase.Purchase_sublist">
+        select *
+        from Purchase_sublist
+        where relation_id = #{relation_id}
+    </select>
+</mapper>

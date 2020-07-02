@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>修改规格-发送变更申请</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="../../layuiadmin/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="../../layuiadmin/style/admin.css" media="all">
+</head>
+<body style="text-align: center">
+<div class="layui-card-body">
+    <input id="data" type="hidden">
+    <form class="layui-form layui-form-pane" action="">
+        <div class="layui-form-item">
+            <label class="layui-form-label">规格</label>
+            <div class="layui-input-inline">
+                <input type="text" name="norms" id="norms" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item" pane="">
+            <label class="layui-form-label">修改理由</label>
+            <div class="layui-input-block">
+                <input type="radio" name="reason" value="更正错误" title="更正错误" checked="">
+                <input type="radio" name="reason" value="产品升级" title="产品升级">
+            </div>
+        </div>
+        <br>
+        <button type="button" class="layui-btn layui-bg-blue" id="q">确定</button>
+        <button type="button" class="layui-btn layui-bg-black" id="c">关闭</button>
+    </form>
+</div>
+
+<script src="../../layuiadmin/layui/layui.js"></script>
+<script>
+    layui.config({
+        base: 'layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'table', 'upload', 'form', 'laydate'], function () {
+        var $ = layui.$
+            , table = layui.table
+            , layer = layui.layer
+            , laydate = layui.laydate
+            , upload = layui.upload;
+
+        $('#q').on('click', function () {
+            var List = {};
+            List.data = $("#data").val();
+
+            var list = {};
+            list.norms = $("#norms").val();
+            list.reason = $("input[name='reason']:checked").val();
+            List.change = list;
+
+            // layer.alert(JSON.stringify(List));
+
+            $.ajax({
+                url: '/ListChangeOrder'
+                , type: 'post'
+                , data: JSON.stringify(List)
+                , dataType: 'json'
+                , contentType: 'application/json; charset=utf-8'
+                , success: function (res) {
+                    if (res.code === "0") {
+                        layer.msg('修改成功！', {
+                            offset: '15px'
+                            , icon: 1
+                            , time: 1000
+                        }, function () {
+                            location.reload(index);
+                        });
+                    }else {
+                        layer.msg('修改失败！', {
+                            offset: '15px'
+                            , icon: 1
+                            , time: 1000
+                        }, function () {
+                            location.reload(index);
+                        });
+                    }
+                }
+            })
+        })
+    });
+</script>
+</body>
+</html>

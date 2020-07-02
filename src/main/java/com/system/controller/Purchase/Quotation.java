@@ -6,18 +6,12 @@ import com.system.pojo.Purchase.Main_quotation;
 import com.system.pojo.Purchase.Sub_quotation;
 import com.system.service.Purchase.QuotationService;
 import com.system.util.JSONUtil;
-import com.system.util.ObjectMapperUtil;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
-import java.math.RoundingMode;
-import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -52,6 +46,34 @@ public class Quotation {
 //            return jsonUtil.toJson("1", "", "查询失败！", "");
 //        }
 //    }
+
+    @RequestMapping("selSubQuo")
+    @ResponseBody
+    public String selSubQuo(String relation_id, String name, String state, String bid_state) {
+        try {
+            System.out.println("relation_id:" + relation_id);
+            if (state.equals("3") || state == "3") {
+                Sub_quotation subQuotation = new Sub_quotation();
+                subQuotation.setBid_state(bid_state);
+                subQuotation.setSupplier_name(name);
+                subQuotation.setRelation_id(relation_id);
+
+                List<Sub_quotation> list = service.selSubQuo(subQuotation);
+                return jsonUtil.toJson("0", list, "查询成功！", "");
+            } else {
+                Sub_quotation subQuotation = new Sub_quotation();
+                subQuotation.setBid_state(bid_state);
+                subQuotation.setProposer(name);
+                subQuotation.setRelation_id(relation_id);
+
+                List<Sub_quotation> list = service.selSubQuo(subQuotation);
+                return jsonUtil.toJson("0", list, "查询成功！", "");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return jsonUtil.toJson("1", "", "查询失败！", "");
+        }
+    }
 
     @RequestMapping("selMainNotQuoted")
     @ResponseBody
@@ -169,46 +191,73 @@ public class Quotation {
         }
     }
 
+//    @RequestMapping("/quotedPrice")
+//    @ResponseBody
+//    public String quotedPrice(@RequestBody String data, String offer, String issuance_date) {
+//        try {
+//            System.out.println(data);
+//            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+//
+//            double num = Double.valueOf(offer);
+//            DecimalFormat formater = new DecimalFormat("0.0000");
+//            formater.setRoundingMode(RoundingMode.FLOOR);
+//
+//            if (StringUtils.isNotBlank(data)) {
+//                data = data.trim();
+//                if (data.startsWith("{") && data.endsWith("}")) {
+//                    Sub_quotation subQuotation = ObjectMapperUtil.toObject(data, Sub_quotation.class);
+//
+//                    subQuotation.setOffer(formater.format(num));
+//                    subQuotation.setIssuance_date(issuance_date);
+//                    subQuotation.setOffer_date(format.format(new Date()));
+//
+//                    service.updateSubQuo(subQuotation);
+//                } else {
+//                    List<Sub_quotation> list = JSONObject.parseArray(data, Sub_quotation.class);
+//                    for (int i = 0; i < list.size(); i++) {
+//                        Sub_quotation subQuotation = JSONObject.parseObject(
+//                                JSONObject.toJSONString(list.get(i)), Sub_quotation.class);
+//                        subQuotation.setOffer(formater.format(num));
+//                        subQuotation.setIssuance_date(issuance_date);
+//                        subQuotation.setOffer_date(format.format(new Date()));
+//
+//                        service.updateSubQuo(subQuotation);
+//                    }
+//                }
+//            }
+//            return jsonUtil.toJson("0", "", "报价成功！", "");
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return jsonUtil.toJson("1", "", "报价失败！", "");
+//        }
+//    }
+
     @RequestMapping("/quotedPrice")
     @ResponseBody
-    public String quotedPrice(@RequestBody String data, String offer, String issuance_date) {
+    public String quotedPrice(@RequestBody String data, String state) {
         try {
-            System.out.println(data);
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-
-            double num = Double.valueOf(offer);
-            DecimalFormat formater = new DecimalFormat("0.0000");
-            formater.setRoundingMode(RoundingMode.FLOOR);
-
-            if (StringUtils.isNotBlank(data)) {
-                data = data.trim();
-                if (data.startsWith("{") && data.endsWith("}")) {
-                    Sub_quotation subQuotation = ObjectMapperUtil.toObject(data, Sub_quotation.class);
-
-                    subQuotation.setOffer(formater.format(num));
-                    subQuotation.setIssuance_date(issuance_date);
-                    subQuotation.setOffer_date(format.format(new Date()));
-
+            if (state.equals("3") || state.equals(3)) {
+                List<Sub_quotation> list = JSONObject.parseArray(data, Sub_quotation.class);
+                for (int i = 0; i < list.size(); i++) {
+                    Sub_quotation subQuotation = JSONObject.parseObject(
+                            JSONObject.toJSONString(list.get(i)), Sub_quotation.class);
                     service.updateSubQuo(subQuotation);
-                } else {
-                    List<Sub_quotation> list = JSONObject.parseArray(data, Sub_quotation.class);
-                    for (int i = 0; i < list.size(); i++) {
-                        Sub_quotation subQuotation = JSONObject.parseObject(
-                                JSONObject.toJSONString(list.get(i)), Sub_quotation.class);
-                        subQuotation.setOffer(formater.format(num));
-                        subQuotation.setIssuance_date(issuance_date);
-                        subQuotation.setOffer_date(format.format(new Date()));
-
-                        service.updateSubQuo(subQuotation);
-                    }
+                }
+            } else {
+                List<Sub_quotation> list = JSONObject.parseArray(data, Sub_quotation.class);
+                for (int i = 0; i < list.size(); i++) {
+                    Sub_quotation subQuotation = JSONObject.parseObject(
+                            JSONObject.toJSONString(list.get(i)), Sub_quotation.class);
+                    service.updateSubQuo(subQuotation);
                 }
             }
-            return jsonUtil.toJson("0", "", "报价成功！", "");
+            return jsonUtil.toJson("0", "", "保存成功！", "");
         } catch (Exception e) {
             e.printStackTrace();
-            return jsonUtil.toJson("1", "", "报价失败！", "");
+            return jsonUtil.toJson("1", "", "保存失败！", "");
         }
     }
+
 
     /**
      * 退回报价
