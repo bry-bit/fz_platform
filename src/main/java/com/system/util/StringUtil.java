@@ -145,6 +145,13 @@ public class StringUtil {
 
     }
 
+    public static String tt() {
+        //生成订单号
+        Date day = new Date();
+        SimpleDateFormat df = new SimpleDateFormat("yMMdSSSS");
+        String str = df.format(day);
+        return str;
+    }
 
     public static void main(String[] args) {
 

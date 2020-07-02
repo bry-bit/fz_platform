@@ -5,13 +5,13 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.*;
 
 public class UploadUtils {
-    public static void approvalFile(MultipartFile filecontent, String path) {
+
+    public static void approvalFile(MultipartFile filecontent, String path,String fileName) {
         OutputStream os = null;
         InputStream inputStream = null;
-        String fileName = null;
         try {
             inputStream = filecontent.getInputStream();
-            fileName = filecontent.getOriginalFilename();
+//            fileName = filecontent.getOriginalFilename();
         } catch (IOException e) {
             e.printStackTrace();
         }
