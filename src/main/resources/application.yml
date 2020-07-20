@@ -33,7 +33,6 @@ spring:     #定义springmvc视图解析器
       username: sa
       password: sasa
 #     password: asset10010
-
 #mybatis-plush配置
 mybatis-plus:
   type-aliases-package: com.system.pojo.*
@@ -43,4 +42,3 @@ mybatis-plus:
 logging:
   level:
     com.system.mapper: debug
-
