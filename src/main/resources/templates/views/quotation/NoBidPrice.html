@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>已中标-报价部分-子表</title>
+    <title>未中标-报价部分-子表</title>
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport"
@@ -29,7 +29,7 @@
     }).extend({
         index: 'lib/index' //主入口模块
     }).use(['index', 'table', 'layer', 'laydate'], function () {
-        var $ = layui.$
+        let $ = layui.$
             , table = layui.table
             , layer = layui.layer
             , laydate = layui.laydate;
@@ -37,10 +37,10 @@
         table.render({
             elem: '#demo'
             , height: 'full-75'
-            , url: '/selSubQuo?relation_id=' + window.localStorage.getItem('WonID')
+            , url: '/selSubQuo?relation_id=' + window.localStorage.getItem('NotWonID')
                 + '&name=' + parent.layui.index.getCookie("loginName")
                 + '&state=' + parent.layui.index.getCookie("loginLimits_state")
-                + '&bid_state=2'
+                + '&bid_state=3'
             , cols: [
                 [
                     {field: 'stock_code', title: '存货编码', align: "center", width: 95}
@@ -57,13 +57,14 @@
                     , {field: 'delivery_date', title: '期望到货日期', align: "center", width: 110}
                     , {field: 'open_date', title: '开标日期', align: "center", width: 110}
                     , {field: 'close_date', title: '结标日期', align: "center", width: 110}
-                    , {field: '', title: '报价状态', align: "center", width: 105, templet: function (row) {
-                        return '<a type="button" class="layui-btn layui-btn-sm layui-bg-red">已中标</a>'
-                    }}
+                    , {
+                    field: '', title: '报价状态', align: "center", width: 105, templet: function (row) {
+                        return '<a type="button" class="layui-btn layui-btn-sm layui-bg-cyan">未中标</a>'
+                    }
+                }
                 ]
             ]
         });
-
     });
 </script>
 </body>

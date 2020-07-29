@@ -55,15 +55,16 @@
 
 <script src="../../layuiadmin/layui/layui.js"></script>
 <script>
-    var brand = "";
-    var stock_name = "";
-    var norms = "";
+    let brand = "";
+    let stock_name = "";
+    let norms = "";
+    let indexs = "";
     layui.config({
         base: '../../layuiadmin/' //静态资源所在路径
     }).extend({
         index: 'lib/index' //主入口模块
     }).use(['index', 'table', 'layer', 'form', 'mockjax', 'testTablePlug'], function () {
-        var $ = layui.$
+        let $ = layui.$
             , table = layui.table
             , form = layui.form
             , layer = layui.layer
@@ -193,8 +194,8 @@
                 ]
             ]
             , done: function (res) {
-                for (var i in res.data) {
-                    var item = res.data[i];
+                for (let i in res.data) {
+                    let item = res.data[i];
                     if (item.post_status === "2") {
                         $('tr[data-index=' + i + '] input[type="checkbox"]').prop('disabled', true);
                         $('tr[data-index=' + i + '] input[type="checkbox"]').prop('checked', false);
@@ -203,17 +204,17 @@
                 }
             }
             , parseData: function (res) {
-                var data = res.data;
+                let data = res.data;
                 for (index in data) {
-                    var date = data[index].delivery_date;
-                    var time = new Date(date);
+                    let date = data[index].delivery_date;
+                    let time = new Date(date);
                     data[index].delivery_date = time.getFullYear() + "-" + (time.getMonth() + 1) + "-" + time.getDate();
                 }
             }
         });
 
         $('#chooseSup').on('click', function () {
-            var checkStatus = table.checkStatus('demo')
+            let checkStatus = table.checkStatus('demo')
                 , trdata = checkStatus.data;
             parent.layer.open({
                 type: 2
@@ -223,7 +224,7 @@
                 , maxmin: true
                 , content: ['/page?url=/demand/SelectSupplier.html', 'yes']
                 , success: function (layero, index) {
-                    var body = parent.layui.layer.getChildFrame('body', index);
+                    let body = parent.layui.layer.getChildFrame('body', index);
                     // alert(JSON.stringify(data));
                     body.find("#SupData").val(JSON.stringify(trdata)); //将选中的数据的id传到编辑页面的隐藏域，便于根据ID修改数据
                 }
@@ -243,7 +244,7 @@
                 });
             }
             if (obj.event == 'history') {
-                var data = obj.data;
+                let data = obj.data;
                 console.log(JSON.stringify(data));
                 layer.open({
                     type: 2
@@ -252,7 +253,7 @@
                     , skin: 'layui-layer-rim'
                     , content: ['page?url=/demand/purchaseHistory.html', 'yes']
                     , success: function (layero, index) {
-                        var body = layui.layer.getChildFrame('body', index);
+                        let body = layui.layer.getChildFrame('body', index);
                         if (data) {
                             body.find("#mainSn").val(data.id); //将选中的数据的id传到编辑页面的隐藏域，便于根据ID修改数据
                             body.find("#stock_code").val(data.stock_code);
@@ -281,7 +282,7 @@
         // });
 
         $('#release').on('click', function () {
-            var checkStatus = table.checkStatus('demo')
+            let checkStatus = table.checkStatus('demo')
                 , data = checkStatus.data;
             // layer.alert(JSON.stringify(data));
             $.ajax({
@@ -291,6 +292,9 @@
                 , dataType: 'json'
                 , async: false
                 , contentType: 'application/json; charset=utf-8'
+                , beforeSend: function () {
+                    indexs = layer.load(1);
+                }
                 , success: function (res) {
                     if (res.code == "0") {
                         layer.msg('发布成功！', {
@@ -298,6 +302,7 @@
                             , icon: 1
                             , time: 1000
                         }, function () {
+                            layer.close(indexs);
                             location.reload();
                         });
                     } else {

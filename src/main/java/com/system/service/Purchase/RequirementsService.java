@@ -11,9 +11,11 @@ import java.util.List;
 public interface RequirementsService {
     List<Purchase_primary> fileMainTable(@Param("name") String name);
 
+    List<Purchase_primary> fileMainTables(@Param("name") String name, @Param("page") Integer page, @Param("limit") Integer limit);
+
     List<Purchase_sublist> fileSubTable(Purchase_sublist purchaseSublist);
 
-    List<Tabulation_listing> SupTable(@org.apache.ibatis.annotations.Param("page") Integer page, @org.apache.ibatis.annotations.Param("limit") Integer limit);
+    List<Tabulation_listing> SupTable(@Param("page") Integer page, @Param("limit") Integer limit);
 
     List<Tabulation_listing> SupTables();
 

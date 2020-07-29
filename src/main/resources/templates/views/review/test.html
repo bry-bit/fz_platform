@@ -33,6 +33,7 @@
     }).use(['table', 'treetable', 'form', 'element'], function () {
         var $ = layui.$
             , table = layui.table
+            , layer = layui.layer
             , treetable = layui.treetable
             , form = layui.form
             , element = layui.element;
@@ -80,15 +81,26 @@
             var checkStatus = table.checkStatus('demo')
                 , data = checkStatus.data;
             layer.confirm('是否推采购中标审批单？', function (index) {
+                var indexs = layer.load(1);
                 $.ajax({
                     type: 'post'
                     , url: '/test'
                     , data: JSON.stringify(data)
                     , dataType: 'json'
                     , contentType: 'application/json; charset=utf-8'
+                    , beforeSend: function () {
+                        indexs = layer.load(1);
+                    }
                     , success: function (res) {
                         if (res.code == "0") {
-                            layer.alert("成功！")
+                            layer.close(indexs);
+                            layer.msg('推送成功！', {
+                                offset: '15px'
+                                , icon: 1
+                                , time: 1000
+                            }, function () {
+                                location.reload();
+                            });
                         }
                     }
                 });

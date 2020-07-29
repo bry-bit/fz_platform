@@ -110,6 +110,9 @@
                 , dataType: 'json'
                 , type: 'post'
                 , contentType: 'application/json; charset=utf-8'
+                    , beforeSend: function () {
+                        indexs = layer.load(1);
+                    }
                 , done: function (res) {
                     if (res.code == "0") {
                         layer.msg('注册成功！', {

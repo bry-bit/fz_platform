@@ -2,7 +2,7 @@ package com.system.mapper.Purchase;
 
 import com.system.pojo.Purchase.Main_quotation;
 import com.system.pojo.Purchase.Sub_quotation;
-import org.apache.ibatis.annotations.Param;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

@@ -1,10 +1,10 @@
 package com.system.mapper.Purchase;
 
 import com.system.pojo.Purchase.DemandSummary;
-import com.system.pojo.Purchase.Tabulation_listing;
 import com.system.pojo.Purchase.Purchase_primary;
 import com.system.pojo.Purchase.Purchase_sublist;
-import org.apache.ibatis.annotations.Param;
+import com.system.pojo.Purchase.Tabulation_listing;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -12,6 +12,8 @@ import java.util.List;
 @Repository
 public interface RequirementsMapper {
     List<Purchase_primary> fileMainTable(@Param("name") String name);
+
+    List<Purchase_primary> fileMainTables(@Param("name") String name, @Param("page") Integer page, @Param("limit") Integer limit);
 
     List<Purchase_sublist> fileSubTable(Purchase_sublist purchaseSublist);
 

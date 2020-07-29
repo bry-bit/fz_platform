@@ -43,7 +43,7 @@ public class Register {
             List<Login_register> nameList = service.whetherOrNot(name);
             if (nameList.size() > 0) {
                 System.out.println("1");
-                return jsonUtil.toJson("2", "", "该用户已注册！","");
+                return jsonUtil.toJson("2", "", "该用户已注册！", "");
             }
 
             //判断该手机号是否存在
@@ -52,7 +52,7 @@ public class Register {
             List<Login_register> phoneList = service.whetherOrNot(phone);
             if (phoneList.size() > 0) {
                 System.out.println("2");
-                return jsonUtil.toJson("2", "", "该手机号已注册！","");
+                return jsonUtil.toJson("2", "", "该手机号已注册！", "");
             }
 
             //判断该邮箱是否存在
@@ -61,7 +61,7 @@ public class Register {
             List<Login_register> emailList = service.whetherOrNot(email);
             if (emailList.size() > 0) {
                 System.out.println("3");
-                return jsonUtil.toJson("2", "", "该邮箱已注册！","");
+                return jsonUtil.toJson("2", "", "该邮箱已注册！", "");
             }
 
 
@@ -81,10 +81,10 @@ public class Register {
 
                 service.logon(register);
             }
-            return jsonUtil.toJson("0", "", "注册成功！","");
+            return jsonUtil.toJson("0", "", "注册成功！", "");
         } catch (Exception e) {
             e.printStackTrace();
-            return jsonUtil.toJson("1", "", "注册失败！","");
+            return jsonUtil.toJson("1", "", "注册失败！", "");
         }
     }
 
@@ -99,11 +99,15 @@ public class Register {
             register.setPassword(password);
 
             List<Login_register> list = service.whetherOrNot(register);
-            System.out.println(list);
-            return jsonUtil.toJson("0", list, "登录成功！","");
+//            System.out.println(list.size());
+            if (list.size() > 0) {
+                return jsonUtil.toJson("0", list, "登录成功！", "");
+            } else {
+                return jsonUtil.toJson("1", "", "登陆失败，用户名或密码错误！", "");
+            }
         } catch (Exception e) {
             e.printStackTrace();
-            return jsonUtil.toJson("1", "", "登录失败！","");
+            return jsonUtil.toJson("2", "", "登陆失败，用户名或密码错误！", "");
         }
     }
 }

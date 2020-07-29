@@ -31,7 +31,7 @@
     }).extend({
         index: 'lib/index' //主入口模块
     }).use(['index', 'table', 'form', 'laydate', 'layer', 'testTablePlug'], function () {
-        var $ = layui.$
+        let $ = layui.$
             , table = layui.table
             , form = layui.form
             , layer = layui.layer
@@ -61,7 +61,7 @@
         });
 
         $('#chooseSup').on('click', function () {
-            var checkStatus = table.checkStatus('demo')
+            let checkStatus = table.checkStatus('demo')
                 , trdata = checkStatus.data;
             parent.layer.open({
                 type: 2
@@ -71,7 +71,7 @@
                 , maxmin: true
                 , content: ['/page?url=/multi/MultiSupplier.html', 'yes']
                 , success: function (layero, index) {
-                    var body = parent.layui.layer.getChildFrame('body', index);
+                    let body = parent.layui.layer.getChildFrame('body', index);
                     // alert(JSON.stringify(data));
                     body.find("#SupData").val(JSON.stringify(trdata)); //将选中的数据的id传到编辑页面的隐藏域，便于根据ID修改数据
                 }

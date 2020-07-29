@@ -44,7 +44,7 @@
 <script src="../../layuiadmin/layui/layui.js"></script>
 <script>
     Date.prototype.Format = function (fmt) {
-        var o = {
+        let o = {
             "M+": this.getMonth() + 1, //月份
             "d+": this.getDate(), //日
             "H+": this.getHours(), //小时
@@ -54,17 +54,17 @@
             "S": this.getMilliseconds() //毫秒
         };
         if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
-        for (var k in o)
+        for (let k in o)
             if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
         return fmt;
-    }
-
+    };
+    let indexs = "";
     layui.config({
         base: '../../layuiadmin/' //静态资源所在路径
     }).extend({
         index: 'lib/index' //主入口模块
     }).use(['index', 'table', 'layer', 'laydate', 'mockjax', 'testTablePlug'], function () {
-        var $ = layui.jquery
+        let $ = layui.jquery
             , table = layui.table
             , layer = layui.layer
             , laydate = layui.laydate
@@ -99,9 +99,9 @@
 
         //监听行工具事件
         table.on('tool(demo)', function (obj) {
-            var data = obj.data;
+            let data = obj.data;
             if (obj.event === 'date') {
-                var field = $(this).data('field');
+                let field = $(this).data('field');
                 laydate.render({
                     elem: this.firstChild
                     , show: true //直接显示
@@ -115,7 +115,7 @@
                     }
                 });
             } else if (obj.event === 'date2') {
-                var field = $(this).data('field');
+                let field = $(this).data('field');
                 laydate.render({
                     elem: this.firstChild
                     , show: true //直接显示
@@ -132,14 +132,14 @@
         });
 
         $('#selectSup').on('click', function () {
-            var tipList = {};
+            let tipList = {};
             tipList.data = $('#SupData').val();
-            var checkLength = $("input:checkbox[name='layTableCheckbox']:checked").length;
-            var lists = [];
+            let checkLength = $("input:checkbox[name='layTableCheckbox']:checked").length;
+            let lists = [];
             $("input:checkbox[name='layTableCheckbox']").each(function () { //遍历checkbox的选择状态
                 if ($(this).is(':checked') && $(this).closest('tr').find('td').eq(1).text() != "") {
                     //如果值为checked表明选中了
-                    var list = {};
+                    let list = {};
                     list.field0001 = $(this).closest('tr').find('td').eq(1).text();
                     list.field0002 = $(this).closest('tr').find('td').eq(2).text();
                     list.open_date = $(this).closest('tr').find('td').eq(3).text();
@@ -156,6 +156,9 @@
                 , dataType: 'json'
                 , async: false
                 , contentType: 'application/json; charset=utf-8'
+                , beforeSend: function () {
+                    indexs = layer.load(1);
+                }
                 , success: function (res) {
                     if (res.code == "0") {
                         layer.msg('添加供应商成功！', {
@@ -163,6 +166,7 @@
                             , icon: 1
                             , time: 1000
                         }, function () {
+                            layer.close(indexs);
                             parent.layer.close(index);//关闭弹出层
                         });
                     } else {

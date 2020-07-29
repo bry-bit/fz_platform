@@ -95,7 +95,14 @@
                             <dd><a lay-href="page?url=/quotation/NotQuoted.html">未报价</a></dd>
                             <dd><a lay-href="page?url=/quotation/Quoted.html">已报价</a></dd>
                             <dd><a lay-href="page?url=/quotation/WonTheBid.html">已中标</a></dd>
-<!--                            <dd><a lay-href="page?url=/quotation/WonTheBid.html">未中标</a></dd>-->
+                            <dd><a lay-href="page?url=/quotation/NoBid.html">未中标</a></dd>
+                        </dl>
+                    </li>
+                    <li class="layui-nav-item layui-nav-itemed" id="dangan">
+                        <a href="javascript:;"><i class="layui-icon layui-icon-app"></i>供应商档案</a>
+                        <dl class="layui-nav-child">
+                            <dd><a lay-href="page?url=/archives/dossier.html" id="bianji">基础档案编辑</a></dd>
+                            <dd><a lay-href="page?url=/archives/particulars.html" id="xiangqing">基础档案详情</a></dd>
                         </dl>
                     </li>
 <!--                    <li class="layui-nav-item layui-nav-itemed" id="fujian">-->
@@ -163,15 +170,18 @@
                 $('#username').html(parent.layui.index.getCookie("loginName"));
             } else if (status == "1") {
                 $('#username').html(parent.layui.index.getCookie("loginName"));
-                $('#baojia').attr("style", "display:none")
+                $('#baojia').attr("style", "display:none");
+                $('#dangan').attr("style", "display:none");
             } else if (status == "2") {
                 $('#username').html(parent.layui.index.getCookie("loginName"));
-                $('#baojia').attr("style", "display:none")
+                $('#baojia').attr("style", "display:none");
+                $('#dangan').attr("style", "display:none");
             } else {
                 $('#username').html(parent.layui.index.getCookie("loginName"));
                 $('#daoru').attr("style", "display:none");
                 $('#caigou').attr("style", "display:none");
                 $('#xunjiaSup').attr("style", "display:none");
+                $('#xiangqing').attr("style", "display:none");
             }
         } else {
             location.href = '/page?url=user/login';

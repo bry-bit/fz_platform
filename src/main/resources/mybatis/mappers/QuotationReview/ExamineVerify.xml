@@ -13,6 +13,7 @@
             from Main_quotation
                      INNER JOIN Sub_quotation d ON d.relation_id = Main_quotation.ID
             where d.bid_state = '2'
+              and d.contract_id is null
             UNION all
             select Main_quotation.item_code,
                    Main_quotation.item_name,
@@ -23,6 +24,7 @@
             from Main_quotation
                      INNER JOIN Sub_quotation d ON d.relation_id = Main_quotation.ID
             where d.bid_state = '2'
+              and d.contract_id is null
         )
         SELECT distinct *
         FROM temp;
@@ -37,6 +39,7 @@
                      WHERE Main_quotation.item_name = #{item_name}
                        and Sub_quotation.supplier_name = #{supplier_name}
                        and Sub_quotation.bid_state = '2'
+                       and Sub_quotation.contract_id is null
                      UNION ALL
                      SELECT d.*
                      FROM Main_quotation
@@ -44,6 +47,7 @@
                      where Main_quotation.item_name = #{item_name}
                        and d.supplier_name = #{supplier_name}
                        and d.bid_state = '2'
+                       and d.contract_id is null
             )
         SELECT distinct *
         FROM temp1;
@@ -122,5 +126,6 @@
         set bid_id=#{bid_id},
             contract_id=#{contract_id}
         where id = #{id}
+          and bid_state = '2'
     </update>
 </mapper>

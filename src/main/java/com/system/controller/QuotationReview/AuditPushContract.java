@@ -94,12 +94,13 @@ public class AuditPushContract {
                     footerList.add(list.get(i));
                 }
             }
-//            System.out.println("heardList:" + heardList);
-//            System.out.println("footerList:" + footerList);
+            System.out.println("heardList:" + heardList);
+            System.out.println("footerList:" + footerList);
 
-            String Field0001 = "XMCGZBSPD" + new SimpleDateFormat("yyyyMMddHHmm").format(new Date());
-            Formmain_0076 formmain0076 = new Formmain_0076();
             for (int i = 0; i < heardList.size(); i++) {
+                String Field0001 = "XMCG" + new SimpleDateFormat("yyyyMMdd").format(new Date())
+                        + "ZB" + new SimpleDateFormat("HHmmss").format(new Date());
+                Formmain_0076 formmain0076 = new Formmain_0076();
                 formmain0076.setField0012(heardList.get(i).getForm_code());
                 formmain0076.setField0013(heardList.get(i).getForm_name());
                 formmain0076.setField0015(heardList.get(i).getItem_code());
@@ -107,60 +108,75 @@ public class AuditPushContract {
                 formmain0076.setField0004(heardList.get(i).getSupplier_code());
                 formmain0076.setField0005(heardList.get(i).getSupplier_name());
                 formmain0076.setField0001(Field0001);
-            }
-//            System.out.println("formmain0076:" + formmain0076);
+//                System.out.println("formmain0076:" + formmain0076);
 
-            List<Formson_0077> formson0077List = new ArrayList<>();
-            for (int i = 0; i < footerList.size(); i++) {
-                Formson_0077 formson0077 = new Formson_0077();
-                formson0077.setField0006(String.valueOf(i + 1));
-                formson0077.setField0029(footerList.get(i).getLine());
-                formson0077.setField0044("正常");
-                formson0077.setField0008(footerList.get(i).getStock_code());
-                formson0077.setField0009(footerList.get(i).getStock_name());
-                formson0077.setField0034(footerList.get(i).getClass_code());
-                formson0077.setField0035(footerList.get(i).getStock_sort());
-                formson0077.setField0036(footerList.get(i).getStation_no());
-                formson0077.setField0038(footerList.get(i).getNorms());
-                formson0077.setField0039(footerList.get(i).getUnit());
-                formson0077.setField0040(footerList.get(i).getBrand());
-                formson0077.setField0041(footerList.get(i).getSupplier_name());
-                formson0077.setField0042(footerList.get(i).getDelivery_date());
-                formson0077.setField0010(footerList.get(i).getQuantity());
-                formson0077.setField0018(footerList.get(i).getOffer());
-                formson0077.setField0025(footerList.get(i).getField0025());
-                formson0077.setField0020(footerList.get(i).getRemarks());
-                formson0077List.add(formson0077);
-            }
-//            System.out.println("list:" + formson0077List);
-
-            formmain0076.setData(formson0077List);
-//            System.out.println("formmain0076:" + formmain0076);
-
-            Date date = new Date();
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:ss");
-            String map = getData(formmain0076);
-            System.out.println("map:" + map);
-            String format = simpleDateFormat.format(date);
-
-            Map datad = new HashMap() {
-                {
-                    put("templateCode", "xmcgzb001");//模板号
-                    put("senderLoginName", "fz-zyh");//登录名
-                    put("token", token);
-                    put("subject", "采购合同中标审批单-（包荣岩" + format + "）");//标题
-                    put("param", "0");
-                    put("transfertype", "xml");
-                    put("data", map);
+                List<Formson_0077> formson0077List = new ArrayList<>();
+                for (int j = 0; j < footerList.size(); j++) {
+                    if (footerList.get(j).getSupplier_name().equals(heardList.get(i).getSupplier_name())) {
+                        Formson_0077 formson0077 = new Formson_0077();
+                        formson0077.setField0006(String.valueOf(i + 1));
+                        formson0077.setField0029(footerList.get(i).getLine());
+                        formson0077.setField0044("正常");
+                        formson0077.setField0008(footerList.get(i).getStock_code());
+                        formson0077.setField0009(footerList.get(i).getStock_name());
+                        formson0077.setField0034(footerList.get(i).getClass_code());
+                        formson0077.setField0035(footerList.get(i).getStock_sort());
+                        formson0077.setField0036(footerList.get(i).getStation_no());
+                        formson0077.setField0038(footerList.get(i).getNorms());
+                        formson0077.setField0039(footerList.get(i).getUnit());
+                        formson0077.setField0040(footerList.get(i).getBrand());
+                        formson0077.setField0041(footerList.get(i).getSupplier_name());
+                        formson0077.setField0042(footerList.get(i).getDelivery_date());
+                        formson0077.setField0010(footerList.get(i).getQuantity());
+                        formson0077.setField0018(footerList.get(i).getOffer());
+                        formson0077.setField0025(footerList.get(i).getField0025());
+                        formson0077.setField0020(footerList.get(i).getRemarks());
+                        formson0077List.add(formson0077);
+                    } else {
+                        continue;
+                    }
                 }
-            };
 
-            Long flowId1 = client.post("flow/xmcgzb001", datad, Long.class);
-            System.out.println("flowId1:" + flowId1);
+                formmain0076.setData(formson0077List);
+                System.out.println("formmain0076:" + formmain0076);
 
-            String contract_id = service.selHTDA(String.valueOf(flowId1));
-            service.updateMesg(Field0001, contract_id, String.valueOf(flowId1));
+                Date date = new Date();
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+                String map = getData(formmain0076);
+                System.out.println("map:" + map);
+                String format = simpleDateFormat.format(date);
 
+                Map datad = new HashMap() {
+                    {
+                        put("templateCode", "xmcgzb001");//模板号
+                        put("senderLoginName", "fz-zyh");//登录名
+                        put("token", token);
+                        put("subject", "采购合同中标审批单-（包荣岩" + format + "）");//标题
+                        put("param", "0");
+                        put("transfertype", "xml");
+                        put("data", map);
+                    }
+                };
+
+                Long flowId1 = client.post("flow/xmcgzb001", datad, Long.class);
+                System.out.println("flowId1:" + flowId1);
+
+                try {
+                    Thread.sleep(10000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                String contract_id = service.selHTDA(String.valueOf(flowId1));
+
+                for (int j = 0; j < footerList.size(); j++) {
+                    if (footerList.get(j).getSupplier_name().equals(heardList.get(i).getSupplier_name())) {
+                        service.updateMesg(Field0001, contract_id, footerList.get(j).getId());
+                    } else {
+                        continue;
+                    }
+                }
+            }
             return jsonUtil.toJson("0", "", "", "");
         } catch (Exception e) {
             e.printStackTrace();

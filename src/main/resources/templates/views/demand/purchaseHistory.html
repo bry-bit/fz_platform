@@ -57,28 +57,29 @@
     }).extend({
         index: 'lib/index' //主入口模块
     }).use(['index', 'table', 'upload', 'form', 'laydate'], function () {
-        var table = layui.table;
-        var laydate = layui.laydate;
-        var form = layui.form;
+        let table = layui.table;
+        let laydate = layui.laydate;
+        let form = layui.form;
 
         table.render({
             elem: '#table-WZD'
             , url: 'selSubQuoHistory'
             , method: 'post'
-            , where: {id: $("#mainSn").val()
-                        ,yemian:'Purchase'
-                        ,stock_code:$("#stock_code").val()
-                        ,stock_name:$("#stock_name").val()
-                        ,stock_sort:$("#stock_sort").val()
-                        ,norms:$("#norms").val()
-                        ,unit:$("#unit").val()
-                        ,brand:$("#brand").val()
-                     }
+            , where: {
+                id: $("#mainSn").val()
+                , yemian: 'Purchase'
+                , stock_code: $("#stock_code").val()
+                , stock_name: $("#stock_name").val()
+                , stock_sort: $("#stock_sort").val()
+                , norms: $("#norms").val()
+                , unit: $("#unit").val()
+                , brand: $("#brand").val()
+            }
             , cols:
                 [
                     [
                         {type: 'numbers'}
-                        ,{field: 'item_code', title: '项目编码', align: "center", width: 110}
+                        , {field: 'item_code', title: '项目编码', align: "center", width: 110}
                         , {field: 'item_name', title: '项目名称', align: "center", width: 110}
                         , {field: 'stock_code', title: '存货编码', align: "center", width: 95}
                         , {field: 'stock_name', title: '存货名称', align: "center", width: 95}
@@ -93,8 +94,6 @@
                     ]
                 ]
         });
-
-
     });
 
 
@@ -105,7 +104,7 @@
     function f() {
         console.log("查询")
         layui.use('form', function () {
-            var $ = layui.$
+            let $ = layui.$
                 , table = layui.table
                 , layer = layui.layer
             table.reload('table-WZD', {

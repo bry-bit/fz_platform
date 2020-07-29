@@ -1,7 +1,7 @@
 package com.system.mapper.Synchro;
 
 import com.system.pojo.Synchro.Formson0062;
-import org.apache.ibatis.annotations.Param;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

@@ -7,7 +7,6 @@ import com.system.mapper.send.FormSon0032Mapper;
 import com.system.mapper.send.Formmain0031Mapper;
 import com.system.pojo.send.ContractMain;
 import com.system.pojo.send.ContractSon;
-import com.system.pojo.send.FormSon0032;
 import com.system.service.sendService.SendService;
 import org.springframework.stereotype.Service;
 
@@ -35,14 +34,6 @@ public class SendImpl implements SendService {
      * @return
      */
     private <T> List<T> getListCompare(List<T> configDoList, List<T> measureToActivityList) {
-//        List<ContractMain> diff = new ArrayList<>();
-//        for (ContractMain ContractMain : configDoList) {
-//            if (!measureToActivityList.contains(ContractMain)) {
-//                diff.add(ContractMain);
-//            }
-//        }
-//        return diff;
-
         List<T> ContractMains = Lists.newArrayList();
         List<T> maxList = configDoList;
         List<T> minList = measureToActivityList;
@@ -95,6 +86,5 @@ public class SendImpl implements SendService {
         for (ContractSon contractSon : listCompare2) {
             contractSonMapper.insertSelective(contractSon);
         }
-
     }
 }

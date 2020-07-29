@@ -33,4 +33,7 @@ public class Formmain0027 {
     private String field0026;//规格型号
     private String field0027;//品牌
     private String field0024;//存货分类
+    private String field0033;//报错信息
+    private String field0035;//二级分类码
+    private String field0036;//二级分类名称
 }

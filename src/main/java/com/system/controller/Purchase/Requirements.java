@@ -33,7 +33,9 @@ public class Requirements {
             System.out.println(name);
             List<Purchase_primary> list = service.fileMainTable(name);
 
-            return jsonUtil.toJson("0", list, "获取成功！", list.size());
+            List<Purchase_primary> lists = service.fileMainTables(name, page, limit);
+
+            return jsonUtil.toJson("0", lists, "获取成功！", list.size());
         } catch (Exception e) {
             e.printStackTrace();
             return jsonUtil.toJson("1", "", "获取失败！", "");
@@ -255,7 +257,6 @@ public class Requirements {
 //    public void timeUpdatePurchaseStatus() throws Exception {
 //        service.timeUpdatePurchaseStatus();
 //    }
-
     @RequestMapping("delSup")
     @ResponseBody
     public String delSup(@RequestBody String data) {

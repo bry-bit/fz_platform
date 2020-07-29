@@ -1,8 +1,8 @@
-package com.system.pojo.QuotationReview;//
+package com.system.pojo.QuotationReview;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;//
-import lombok.Data;//
-import lombok.experimental.Accessors;//
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.Data;
+import lombok.experimental.Accessors;
 
 /**
  * 采购清单变更单子表

@@ -37,6 +37,7 @@
 <script type="text/html" id="offer">{{test1(d.offer)}}</script>
 <script src="layuiadmin/layui/layui.js"></script>
 <script>
+    var indexs = "";
     layui.config({
         base: 'layuiadmin/' //静态资源所在路径
     }).extend({
@@ -196,6 +197,9 @@
                     , data: JSON.stringify(data)
                     , dataType: 'json'
                     , contentType: 'application/json; charset=utf-8'
+                    , beforeSend: function () {
+                        indexs = layer.load(1);
+                    }
                     , success: function (res) {
                         if (res.code == "0") {
                             layer.msg('退回成功！', {
@@ -252,6 +256,9 @@
                     , data: JSON.stringify(lists)
                     , dataType: 'json'
                     , contentType: 'application/json; charset=utf-8'
+                    , beforeSend: function () {
+                        indexs = layer.load(1);
+                    }
                     , success: function (res) {
                         if (res.code == "0") {
                             layer.msg('选择成功！', {
@@ -259,6 +266,7 @@
                                 , icon: 1
                                 , time: 1000
                             }, function () {
+                                layer.close(indexs);
                                 location.reload(index);
                             });
                         } else {

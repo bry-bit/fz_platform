@@ -123,6 +123,9 @@
                     , data: JSON.stringify(obj.data)
                     , dataType: 'json'
                     , contentType: 'application/json; charset=utf-8'
+                    , beforeSend: function () {
+                        indexs = layer.load(1);
+                    }
                     , success: function (res) {
                         if (res.code === "0") {
                             layer.msg('下载附件成功！', {
@@ -148,6 +151,9 @@
                     , data: JSON.stringify(obj.data)
                     , dataType: 'json'
                     , contentType: 'application/json; charset=utf-8'
+                    , beforeSend: function () {
+                        indexs = layer.load(1);
+                    }
                     , success: function (res) {
                         if (res.code === "0") {
                             layer.msg('下载附件成功！', {

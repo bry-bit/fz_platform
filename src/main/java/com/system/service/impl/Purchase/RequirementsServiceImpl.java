@@ -23,6 +23,12 @@ public class RequirementsServiceImpl implements RequirementsService {
     }
 
     @Override
+    public List<Purchase_primary> fileMainTables(String name, Integer page, Integer limit) {
+        List<Purchase_primary> list = mapper.fileMainTables(name, page, limit);
+        return list;
+    }
+
+    @Override
     public List<Purchase_sublist> fileSubTable(Purchase_sublist purchaseSublist) {
         List<Purchase_sublist> list = mapper.fileSubTable(purchaseSublist);
         return list;

@@ -15,7 +15,27 @@
                  left join org_member on org_member.ID = p.proposer
                  left join org_unit on org_member.ORG_DEPARTMENT_ID = org_unit.ID
         where org_member.NAME = #{name}
-        order by p.item_code, p.item_name
+        order by p.files_code desc
+    </select>
+
+    <select id="fileMainTables" resultType="com.system.pojo.Purchase.Purchase_primary">
+        select top ${limit} d.*
+        from (SELECT c.*, row_number() over (ORDER BY id ASC) as rownumber
+              FROM (select p.id,
+                           p.item_code,
+                           p.item_name,
+                           p.files_code,
+                           p.form_code,
+                           p.form_name,
+                           p.post_status,
+                           org_member.NAME as proposer,
+                           org_unit.NAME   as dept
+                    from Purchase_primary p
+                             left join org_member on org_member.ID = p.proposer
+                             left join org_unit on org_member.ORG_DEPARTMENT_ID = org_unit.ID
+                    where org_member.NAME = #{name}) as c) as d
+        WHERE rownumber > ((${limit} * ${page}) - ${limit})
+        order by d.files_code desc
     </select>
 
     <select id="fileSubTable" resultType="com.system.pojo.Purchase.Purchase_sublist">
@@ -53,7 +73,8 @@
     </select>
 
     <select id="SupTables" resultType="com.system.pojo.Purchase.Tabulation_listing">
-        select * from formmain_0030
+        select *
+        from formmain_0030
     </select>
 
     <insert id="insertTable">

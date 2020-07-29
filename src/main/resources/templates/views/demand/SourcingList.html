@@ -26,7 +26,7 @@
     }).extend({
         index: 'lib/index' //主入口模块
     }).use(['index', 'table', 'layer'], function () {
-        var $ = layui.jquery
+        let $ = layui.jquery
             , table = layui.table
             , layer = layui.layer;
 
@@ -40,13 +40,13 @@
             , cols: [
                 [
                     {type: 'checkbox'}
-                    , {field: 'item_code', title: '项目编码', align: "center"}
-                    , {field: 'item_name', title: '项目名称', align: "center"}
-                    , {field: 'form_code', title: '组织编码', align: "center"}
-                    , {field: 'form_name', title: '组织名称', align: "center"}
-                    , {field: 'files_code', title: '项目采购需求档案编码', align: "center"}
-                    , {field: 'proposer', title: '申请人', align: "center"}
-                    , {field: 'dept', title: '申请部门', align: "center"}
+                    , {field: 'item_code', title: '项目编码', align: "center", width: 200}
+                    , {field: 'item_name', title: '项目名称', align: "center", width: 200}
+                    // , {field: 'form_code', title: '组织编码', align: "center"}
+                    // , {field: 'form_name', title: '组织名称', align: "center"}
+                    , {field: 'files_code', title: '项目采购需求档案编码', align: "center", width: 200}
+                    , {field: 'proposer', title: '申请人', align: "center", width: 150}
+                    , {field: 'dept', title: '申请部门', align: "center", width: 150}
                     // , {field: 'post_status', title: '发布状态', align: "center"}
                     , {
                     field: '', title: '发布状态', align: "center", templet: function (row) {
@@ -65,8 +65,8 @@
 
         // 监听工具条
         table.on('tool(demo)', function (obj) {
-            var id = obj.data.id;
-            var topLayui = parent === self ? layui : top.layui;
+            let id = obj.data.id;
+            let topLayui = parent === self ? layui : top.layui;
             if (obj.event === 'bianji') {
                 parent.layui.index.setCookie("relation_id", obj.data.id, "1");
                 topLayui.index.openTabsPage("/page?url=/demand/Purchase.html", obj.data.item_name + "(" + obj.data.item_code + ")");
@@ -80,9 +80,9 @@
         });
 
         $('#merge').on('click', function () {
-            var checkStatus = table.checkStatus('demo')
+            let checkStatus = table.checkStatus('demo')
                 , data = checkStatus.data;
-            var topLayui = parent === self ? layui : top.layui;
+            let topLayui = parent === self ? layui : top.layui;
             parent.layui.index.setCookie("mergeData", JSON.stringify(data), "1");
             // parent.layui.index.setCookie("mergeData", data, "1");
             topLayui.index.openTabsPage("/page?url=/demand/Purchase2.html", data[0].item_name + "(" + data[0].item_code + ")");

@@ -19,12 +19,13 @@
 
 <script src="../../layuiadmin/layui/layui.js"></script>
 <script>
+    let indexs = "";
     layui.config({
         base: '../../layuiadmin/' //静态资源所在路径
     }).extend({
         index: 'lib/index' //主入口模块
     }).use(['index', 'table', 'layer', 'laydate'], function () {
-        var $ = layui.jquery
+        let $ = layui.jquery
             , table = layui.table
             , layer = layui.layer
             , laydate = layui.laydate
@@ -54,7 +55,7 @@
                 ]
             ]
             , done: function (res) {
-                var tableView = this.elem.next(); // 当前表格渲染之后的视图
+                let tableView = this.elem.next(); // 当前表格渲染之后的视图
                 layui.each(res.data, function (i, item) {
                     if (parent.layui.index.getCookie("post_status") == "2") {
                         tableView.find('tr[data-index=' + i + ']').find('td').data('edit', false);
@@ -65,16 +66,16 @@
         });
 
         table.on('edit(demo)', function (obj) {
-            var data = obj.data;
-            var value = obj.value;
+            let data = obj.data;
+            let value = obj.value;
         });
 
         //监听行工具事件
         table.on('tool(demo)', function (obj) {
-            var data = obj.data;
+            let data = obj.data;
             if (parent.layui.index.getCookie("post_status") != "2") {
                 if (obj.event === 'date') {
-                    var field = $(this).data('field');
+                    let field = $(this).data('field');
                     laydate.render({
                         elem: this.firstChild
                         , show: true //直接显示
@@ -88,7 +89,7 @@
                         }
                     });
                 } else if (obj.event === 'date2') {
-                    var field = $(this).data('field');
+                    let field = $(this).data('field');
                     laydate.render({
                         elem: this.firstChild
                         , show: true //直接显示
@@ -102,10 +103,10 @@
                         }
                     });
                 } else if (obj.event === 'save') {
-                    var tableBack = table.cache["demo"];
-                    var lists = [];
-                    for (var i = 0; i < tableBack.length; i++) {
-                        var list = {};
+                    let tableBack = table.cache["demo"];
+                    let lists = [];
+                    for (let i = 0; i < tableBack.length; i++) {
+                        let list = {};
                         list.field0001 = tableBack[i].field0001;
                         list.field0002 = tableBack[i].field0002;
                         list.open_date = tableBack[i].open_date;
@@ -118,6 +119,9 @@
                         , data: JSON.stringify(lists)
                         , dataType: 'json'
                         , contentType: 'application/json; charset=utf-8'
+                        , beforeSend: function () {
+                            indexs = layer.load(1);
+                        }
                         , type: "post"
                         , success: function (res) {
                             if (res.code == "0") {
@@ -126,6 +130,7 @@
                                     , icon: 1
                                     , time: 1000
                                 }, function () {
+                                    layer.close(indexs);
                                     location.reload(index);
                                 });
                             } else {
@@ -133,6 +138,8 @@
                                     offset: '15px'
                                     , icon: 1
                                     , time: 1000
+                                }, function () {
+                                    layer.close(indexs);
                                 });
                             }
                         }
@@ -143,6 +150,9 @@
                         , data: JSON.stringify(data)
                         , dataType: 'json'
                         , contentType: 'application/json; charset=utf-8'
+                        , beforeSend: function () {
+                            indexs = layer.load(1);
+                        }
                         , type: "post"
                         , success: function (res) {
                             if (res.code == "0") {
@@ -151,6 +161,7 @@
                                     , icon: 1
                                     , time: 1000
                                 }, function () {
+                                    layer.close(indexs);
                                     location.reload(index);
                                 });
                             } else {
@@ -158,6 +169,8 @@
                                     offset: '15px'
                                     , icon: 1
                                     , time: 1000
+                                }, function () {
+                                    layer.close(indexs);
                                 });
                             }
                         }

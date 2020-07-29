@@ -150,7 +150,12 @@
         </set>
         where id=#{id} and supplier_name=#{supplier_name} and stock_name = #{stock_name}
         and norms = #{norms} and brand = #{brand} and stock_code = #{stock_code}
-        and (return_msg=#{return_msg} or return_msg is null)
+        <if test="return_msg != null and return_msg != ''">
+            and return_msg = #{return_msg}
+        </if>
+        <if test="return_msg == null and return_msg == ''">
+            and return_msg is null
+        </if>
     </update>
 
     <update id="updateUpload">
@@ -235,4 +240,48 @@
             and org_member.NAME=#{name}
         </if>
     </select>
+
+
+    <!-- 修改项目采购清单编码 -->
+    <update id="ModifyPurchase">
+        update formson_0047
+        set field0032=#{field0032}
+        where formmain_id = (select f40.field0029
+                             from formmain_0040 f40
+                                      left join Sub_quotation s on s.field0025 = f40.field0001
+                             where f40.field0001 = #{field0001}
+                               and s.line = #{line})
+          and field0010 = #{line}
+    </update>
+
+    <!-- 查询存货档案中是否有该存货信息 -->
+    <select id="QueryStock" resultType="com.system.pojo.Synchro.Formmain0027">
+        select *
+        from formmain_0027
+        where field0003 = #{field0003}
+          and field0026 = #{field0026}
+          and field0027 = #{field0027}
+          and field0036 = #{field0036}
+    </select>
+
+    <!-- 当修改条件为“产品升级”的时候，对曾有的存货档案进行留存，新的存货档案进行新增 -->
+    <insert id="a">
+        insert into formmain_0027 (id, field0001, field0003, field0004, field0005, field0007, field0008,
+                                   field0010, field0011, field0014, field0016, field0017, field0018, field0019,
+                                   field0020, field0021, field0022, field0013, field0023, field0024, field0027,
+                                   field0026, field0029, field0031, field0006, field0033, field0035, field0036)
+        values (#{id}, #{field0001}, #{field0003}, #{field0004}, #{field0005}, #{field0007}, #{field0008},
+                #{field0010}, #{field0011}, #{field0014}, #{field0016}, #{field0017}, #{field0018}, #{field0019},
+                #{field0020}, #{field0021}, #{field0022}, #{field0013}, #{field0023}, #{field0024}, #{field0027},
+                #{field0026}, #{field0029}, #{field0031}, #{field0006}, #{field0033}, #{field0035}, #{field0036});
+    </insert>
+
+    <!-- 当修改条件为“产品升级”的时候，将原有的存货信息进行更新为新的数据 -->
+    <update id="b">
+        update Sub_quotation
+        set stock_code=#{stock_code},
+            norms=#{norms}
+        where id = #{id}
+          and supplier_name = #{supplier_name}
+    </update>
 </mapper>

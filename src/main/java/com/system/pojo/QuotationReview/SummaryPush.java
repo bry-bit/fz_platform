@@ -56,4 +56,5 @@ public class SummaryPush {
     private String permissionId;
     private String seq;
     private String resType;
+    private String id;
 }

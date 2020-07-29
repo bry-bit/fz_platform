@@ -42,7 +42,7 @@
 
 <script>
     Date.prototype.Format = function (fmt) {
-        var o = {
+        let o = {
             "M+": this.getMonth() + 1, //月份
             "d+": this.getDate(), //日
             "H+": this.getHours(), //小时
@@ -52,7 +52,7 @@
             "S": this.getMilliseconds() //毫秒
         };
         if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
-        for (var k in o)
+        for (let k in o)
             if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
         return fmt;
     }
@@ -61,7 +61,7 @@
     }).extend({
         index: 'lib/index' //主入口模块
     }).use(['index', 'table', 'layer', 'upload', 'form', 'testTablePlug'], function () {
-        var $ = layui.$
+        let $ = layui.$
             , table = layui.table
             , layer = layui.layer
             , form = layui.form
@@ -91,12 +91,12 @@
                     , {field: 'supplier_name', title: '供应商', align: "center", width: 100, filter: true}
                     , {
                     field: 'offer', title: '报价(未含税)', align: "center", width: 95, templet: function (row) {
-                        var open_date = row.open_date.substring(0, 19).replace(/-/g, '/');
-                        var close_date = row.close_date.substring(0, 19).replace(/-/g, '/');
-                        var kaishi = new Date(open_date).getTime();//开标日时间戳
-                        var jieshu = new Date(close_date).getTime();//结标日时间戳
-                        var time = new Date($.ajax({async: false}).getResponseHeader("Date")).Format("yyyy-MM-dd");
-                        var nowtime = new Date(time).getTime() - 28800000;
+                        let open_date = row.open_date.substring(0, 19).replace(/-/g, '/');
+                        let close_date = row.close_date.substring(0, 19).replace(/-/g, '/');
+                        let kaishi = new Date(open_date).getTime();//开标日时间戳
+                        let jieshu = new Date(close_date).getTime();//结标日时间戳
+                        let time = new Date($.ajax({async: false}).getResponseHeader("Date")).Format("yyyy-MM-dd");
+                        let nowtime = new Date(time).getTime() - 28800000;
 
                         if (parent.layui.index.getCookie("loginLimits_state") == "3") {
                             if (row.offer == null || row.offer == undefined || row.offer == "") {
@@ -144,12 +144,12 @@
                 }
                     , {
                     field: 'a', title: '中标状态', align: "center", width: 105, templet: function (row) {
-                        var open_date = row.open_date.substring(0, 19).replace(/-/g, '/');
-                        var close_date = row.close_date.substring(0, 19).replace(/-/g, '/');
-                        var kaishi = new Date(open_date).getTime();//开标日时间戳
-                        var jieshu = new Date(close_date).getTime();//结标日时间戳
-                        var time = new Date($.ajax({async: false}).getResponseHeader("Date")).Format("yyyy-MM-dd");
-                        var nowtime = new Date(time).getTime() - 28800000;
+                        let open_date = row.open_date.substring(0, 19).replace(/-/g, '/');
+                        let close_date = row.close_date.substring(0, 19).replace(/-/g, '/');
+                        let kaishi = new Date(open_date).getTime();//开标日时间戳
+                        let jieshu = new Date(close_date).getTime();//结标日时间戳
+                        let time = new Date($.ajax({async: false}).getResponseHeader("Date")).Format("yyyy-MM-dd");
+                        let nowtime = new Date(time).getTime() - 28800000;
 
                         if (parent.layui.index.getCookie("loginLimits_state") == "3") {
                             if (nowtime <= jieshu) {
@@ -178,7 +178,7 @@
 
         table.on('tool(demo)', function (obj) {
             // document.getElementById("btn_file").click();
-            var topLayui = parent === self ? layui : top.layui;
+            let topLayui = parent === self ? layui : top.layui;
             if (obj.event === 'uploadeSup') {
                 document.getElementById("btn_file").click();
                 parent.layui.index.setCookie("uploadID", obj.data.id, "1");
@@ -194,6 +194,9 @@
                     , data: JSON.stringify(obj.data)
                     , dataType: 'json'
                     , contentType: 'application/json; charset=utf-8'
+                    , let: function () {
+                        indexs = layer.load(1);
+                    }
                     , success: function (res) {
                         if (res.code === "0") {
                             layer.msg('下载附件成功！', {
@@ -201,6 +204,7 @@
                                 , icon: 1
                                 , time: 1000
                             }, function () {
+                                layer.close(indexs);
                                 downLoad(res);
                             });
                         } else {
@@ -219,6 +223,9 @@
                     , data: JSON.stringify(obj.data)
                     , dataType: 'json'
                     , contentType: 'application/json; charset=utf-8'
+                    , beforeSend: function () {
+                        indexs = layer.load(1);
+                    }
                     , success: function (res) {
                         if (res.code === "0") {
                             layer.msg('下载附件成功！', {
@@ -226,6 +233,7 @@
                                 , icon: 1
                                 , time: 1000
                             }, function () {
+                                layer.close(indexs);
                                 downLoad(res);
                             });
                         } else {
@@ -238,7 +246,7 @@
                     }
                 });
             } else if (obj.event === 'baojia') {
-                var data = obj.data;
+                let data = obj.data;
                 parent.layui.index.setCookie("baojiaData", JSON.stringify(data), "1");
                 parent.layui.index.setCookie("offer", data.offer, "1");
                 parent.layui.index.setCookie("issuance_date", data.issuance_date, "1");
@@ -250,7 +258,7 @@
                     , content: ['/page?url=/quotation/quotation.html', 'no']
                 });
             } else if (obj.event == 'history') {
-                var data = obj.data;
+                let data = obj.data;
                 console.log(JSON.stringify(data));
                 layer.open({
                     type: 2
@@ -259,7 +267,7 @@
                     , skin: 'layui-layer-rim'
                     , content: ['page?url=/quotation/quotedHistory.html', 'yes']
                     , success: function (layero, index) {
-                        var body = layui.layer.getChildFrame('body', index);
+                        let body = layui.layer.getChildFrame('body', index);
                         if (data) {
                             body.find("#mainSn").val(data.id); //将选中的数据的id传到编辑页面的隐藏域，便于根据ID修改数据
                             body.find("#stock_code").val(data.stock_code);
@@ -281,26 +289,26 @@
 
         //监听表格复选框选择
         table.on('checkbox(demo)', function (obj) {
-            var checkStatus = table.checkStatus('demo')
+            let checkStatus = table.checkStatus('demo')
                 , data = checkStatus.data;
-            var totals = 0;
+            let totals = 0;
             for (let i = 0; i < data.length; i++) {
-                var total = data[i].offer * data[i].quantity;
+                let total = data[i].offer * data[i].quantity;
                 totals = parseFloat(totals) + parseFloat(total);
             }
             $('#total').val(totals);
         });
 
         $('#sheding').on('click', function () {
-            var checkStatus = table.checkStatus('demo')
+            let checkStatus = table.checkStatus('demo')
                 , data = checkStatus.data;
-            var totals = 0;
+            let totals = 0;
             for (let i = 0; i < data.length; i++) {
-                var total = data[i].offer * data[i].quantity;
+                let total = data[i].offer * data[i].quantity;
                 totals = parseFloat(totals) + parseFloat(total);
             }
             //计算修改值后，跟原总计的差额
-            // var margin = parseFloat(totals) - parseFloat($('#total').val());
+            // let margin = parseFloat(totals) - parseFloat($('#total').val());
             // 40 - (40 / 305 * 5)
             $.ajax({
                 url: '/SetQuote?totals=' + totals + '&total=' + $('#total').val()
@@ -308,6 +316,9 @@
                 , data: JSON.stringify(data)
                 , dataType: 'json'
                 , contentType: 'application/json; charset=utf-8'
+                , beforeSend: function () {
+                    indexs = layer.load(1);
+                }
                 , success: function (res) {
                     if (res.code === "0") {
                         layer.msg('修改成功！', {
@@ -315,6 +326,7 @@
                             , icon: 1
                             , time: 1000
                         }, function () {
+                            layer.close(indexs);
                             table.reload('demo', {
                                 url: '/selSubQuo?name=' + parent.layui.index.getCookie("loginName")
                                     + '&state=' + parent.layui.index.getCookie("loginLimits_state")
@@ -350,7 +362,7 @@
                 , processData: false
                 , contentType: false
                 , success: function (res) {
-                    var data = eval("(" + res + ")");
+                    let data = eval("(" + res + ")");
                     if (data.code === "0") {
                         layer.msg('上传成功！', {
                             offset: '15px'
@@ -384,8 +396,8 @@
         if (str.split(".").length === 1) {
             return ret.toString() + ".0000";
         }
-        var decimal = str.split(".")[0];
-        var floats = str.split(".")[1].substring(0, 4);
+        let decimal = str.split(".")[0];
+        let floats = str.split(".")[1].substring(0, 4);
         return decimal + "." + floats;
     }
 </script>
