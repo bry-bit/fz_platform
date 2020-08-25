@@ -4,7 +4,7 @@ import com.system.pojo.Purchase.DemandSummary;
 import com.system.pojo.Purchase.Purchase_primary;
 import com.system.pojo.Purchase.Purchase_sublist;
 import com.system.pojo.Purchase.Tabulation_listing;
-import org.springframework.data.repository.query.Param;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

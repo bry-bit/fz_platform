@@ -202,6 +202,7 @@
                     }
                     , success: function (res) {
                         if (res.code == "0") {
+                            layer.close(indexs);
                             layer.msg('退回成功！', {
                                 offset: '15px'
                                 , icon: 1
@@ -210,6 +211,7 @@
                                 location.reload(index);
                             });
                         } else {
+                            layer.close(indexs);
                             layer.msg('退回失败！', {
                                 offset: '15px'
                                 , icon: 1
@@ -261,15 +263,16 @@
                     }
                     , success: function (res) {
                         if (res.code == "0") {
+                            layer.close(indexs);
                             layer.msg('选择成功！', {
                                 offset: '15px'
                                 , icon: 1
                                 , time: 1000
                             }, function () {
-                                layer.close(indexs);
                                 location.reload(index);
                             });
                         } else {
+                            layer.close(indexs);
                             layer.msg(res.msg, {
                                 offset: '15px'
                                 , icon: 1

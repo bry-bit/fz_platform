@@ -57,4 +57,5 @@ public class SummaryPush {
     private String seq;
     private String resType;
     private String id;
+    private String field0042;
 }

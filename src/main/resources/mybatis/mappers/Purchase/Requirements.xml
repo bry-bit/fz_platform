@@ -2,26 +2,28 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.system.mapper.Purchase.RequirementsMapper">
     <select id="fileMainTable" resultType="com.system.pojo.Purchase.Purchase_primary">
-        select p.id,
-               p.item_code,
-               p.item_name,
-               p.files_code,
-               p.form_code,
-               p.form_name,
-               p.post_status,
-               org_member.NAME as proposer,
-               org_unit.NAME   as dept
+        select distinct p.id,
+                        p.item_code,
+                        p.item_name,
+                        p.files_code,
+                        p.form_code,
+                        p.form_name,
+                        p.post_status,
+                        org_member.NAME as proposer,
+                        org_unit.NAME   as dept
         from Purchase_primary p
-                 left join org_member on org_member.ID = p.proposer
-                 left join org_unit on org_member.ORG_DEPARTMENT_ID = org_unit.ID
+                     left join org_member on org_member.ID = p.proposer
+                     left join org_unit on org_member.ORG_DEPARTMENT_ID = org_unit.ID
+                     left join Purchase_sublist ps on p.ID = ps.relation_id
         where org_member.NAME = #{name}
+          and ps.enable_status = '正常'
         order by p.files_code desc
     </select>
 
     <select id="fileMainTables" resultType="com.system.pojo.Purchase.Purchase_primary">
         select top ${limit} d.*
         from (SELECT c.*, row_number() over (ORDER BY id ASC) as rownumber
-              FROM (select p.id,
+              FROM (select distinct p.id,
                            p.item_code,
                            p.item_name,
                            p.files_code,
@@ -31,31 +33,35 @@
                            org_member.NAME as proposer,
                            org_unit.NAME   as dept
                     from Purchase_primary p
-                             left join org_member on org_member.ID = p.proposer
-                             left join org_unit on org_member.ORG_DEPARTMENT_ID = org_unit.ID
-                    where org_member.NAME = #{name}) as c) as d
+                                 left join org_member on org_member.ID = p.proposer
+                                 left join org_unit on org_member.ORG_DEPARTMENT_ID = org_unit.ID
+                                 left join Purchase_sublist ps on p.ID = ps.relation_id
+                    where org_member.NAME = #{name}
+                      and ps.enable_status = '正常') as c) as d
         WHERE rownumber > ((${limit} * ${page}) - ${limit})
         order by d.files_code desc
     </select>
 
     <select id="fileSubTable" resultType="com.system.pojo.Purchase.Purchase_sublist">
-        select c.field0002,c.sum,s.*
+        select c.field0002, c.sum, s.*
         from Purchase_sublist s
-        left join Purchase_primary p on s.relation_id = p.id
-        left join (
-        SELECT
-        s.sublist_id,field0002 = (stuff((SELECT ',' + field0002 FROM Tabulation_listing WHERE sublist_id = s.sublist_id
-        FOR xml path ('')),1,1,'')),COUNT(s.field0002) sum
-        FROM
-        Tabulation_listing s
-        GROUP BY
-        s.sublist_id)c on s.id=c.sublist_id
-        where p.id = #{id} and s.enable_status='正常'
+                     left join Purchase_primary p on s.relation_id = p.id
+                     left join (
+                SELECT              s.sublist_id,
+                        field0002 = (stuff((SELECT ',' + field0002
+                                            FROM Tabulation_listing
+                                            WHERE sublist_id = s.sublist_id
+                                            FOR xml path ('')), 1, 1, '')),
+                                    COUNT(s.field0002) sum
+                FROM Tabulation_listing s
+                GROUP BY s.sublist_id) c on s.id = c.sublist_id
+                where p.id = #{id}
+                  and s.enable_status = '正常'
         <if test="brand != null and brand != ''">
             and s.brand = #{brand}
         </if>
         <if test="stock_name != null and stock_name != ''">
-            and s.stock_name=#{stock_name}
+            and s.stock_name = #{stock_name}
         </if>
         <if test="norms != null and norms != ''">
             and s.norms = #{norms}
@@ -67,8 +73,8 @@
         select top ${limit} d.*
         from (SELECT c.*, row_number() over (ORDER BY field0001 ASC) as rownumber
               FROM (
-                       select *
-                       from formmain_0030) as c) as d
+                           select *
+                           from formmain_0030) as c) as d
         WHERE rownumber > ((${limit} * ${page}) - ${limit})
     </select>
 
@@ -85,8 +91,8 @@
     <select id="selectTable" resultType="com.system.pojo.Purchase.Tabulation_listing">
         select *
         from Tabulation_listing
-        where 1=1
-        <if test="sublist_id != null and sublist_id != '' ">
+                where 1 = 1
+        <if test="sublist_id != null and sublist_id != ''">
             and sublist_id = #{sublist_id}
         </if>
         <if test="field0001 != null and field0001 != ''">
@@ -115,8 +121,8 @@
     <select id="queryP_T" resultType="com.system.pojo.Purchase.DemandSummary">
         select p.*, t.*
         from Purchase_primary p
-                 left join Purchase_sublist s on p.id = s.relation_id
-                 left join Tabulation_listing t on t.sublist_id = s.id
+                     left join Purchase_sublist s on p.id = s.relation_id
+                     left join Tabulation_listing t on t.sublist_id = s.id
         where s.id = #{id}
     </select>
 
@@ -133,7 +139,8 @@
                 ,close_date= #{close_date}
             </if>
         </set>
-        where sublist_id=#{sublist_id} and field0002=#{field0002}
+        where sublist_id = #{sublist_id}
+          and field0002 = #{field0002}
     </update>
 
     <!--查询未发布采购主表-->
@@ -153,7 +160,7 @@
     <!--查询对应子表已发布-->
     <select id="getYSublist" resultType="int" parameterType="com.system.pojo.Purchase.Purchase_primary">
         SELECT (SELECT COUNT(*) FROM Purchase_sublist WHERE relation_id = #{id} AND enable_status = '正常')
-                   -
+                       -
                (SELECT COUNT(*)
                 FROM Purchase_sublist
                 WHERE post_status = 2
@@ -178,21 +185,23 @@
 
     <select id="getSubList" resultType="com.system.pojo.Purchase.Purchase_sublist"
             parameterType="com.system.pojo.Purchase.Purchase_sublist">
-        select c.field0002,c.sum,s.*
+        select c.field0002, c.sum, s.*
         from Purchase_sublist s
-        left join Purchase_primary p on s.relation_id = p.id
-        left join (
-        SELECT
-        s.sublist_id,field0002 = (stuff((SELECT ',' + field0002 FROM Tabulation_listing WHERE sublist_id = s.sublist_id
-        FOR xml path ('')),1,1,'')),COUNT(s.field0002) sum
-        FROM
-        Tabulation_listing s
-        GROUP BY s.sublist_id)c on s.id=c.sublist_id
-        where p.id in
+                     left join Purchase_primary p on s.relation_id = p.id
+                     left join (
+                SELECT              s.sublist_id,
+                        field0002 = (stuff((SELECT ',' + field0002
+                                            FROM Tabulation_listing
+                                            WHERE sublist_id = s.sublist_id
+                                            FOR xml path ('')), 1, 1, '')),
+                                    COUNT(s.field0002) sum
+                FROM Tabulation_listing s
+                GROUP BY s.sublist_id) c on s.id = c.sublist_id
+                where p.id in
         <foreach item="item" collection="list" open="(" separator="," close=")">
             #{item.relation_id}
         </foreach>
-        and s.enable_status='正常'
-        order by s.stock_name asc
+        and s.enable_status = '正常'
+                order by s.stock_name asc
     </select>
 </mapper>

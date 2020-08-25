@@ -71,14 +71,20 @@
                         , {field: 'brand', title: '品牌', align: "center", width: 100}
                         , {field: 'unit', title: '单位', align: "center", width: 60}
                         , {field: 'quantity', title: '请购数量', align: "center", width: 80}
-                        , {field: 'offer', title: '报价(未含税)', align: "center", width: 95, edit: 'text'}
+                        , {
+                        field: 'offer', title: '报价(未含税)', align: "center", width: 95
+                        // , edit: 'text'
+                        , templet: function (row) {
+                            return '<input type="number" class="layui-input text" id="test1" style="border: none;font-size: 13px;padding-bottom: 5px">';
+                        }
+                    }
                         , {
                         field: 'issuance_date',
                         title: '发货日期',
                         align: "center",
                         width: 110,
                         templet: function (row) {
-                            return '<input type="text" class="layui-input layui-input-date" id="test1" style="border: none;font-size: 13px;padding-bottom: 5px">';
+                            return '<input type="text" class="layui-input layui-input-date" style="border: none;font-size: 13px;padding-bottom: 5px">';
                         }
                     }
                         , {field: 'delivery_date', title: '期望到货日期', align: "center", width: 110}
@@ -171,58 +177,78 @@
                     list.unit = tableBack[i].unit;
                     list.quantity = tableBack[i].quantity;
                     list.supplier_name = tableBack[i].supplier_name;
-                    //判断供应商填写报价和到货日期是否为空
-                    if (tableBack[i].offer == undefined && $('.layui-input-date').eq(i).val() == "") {
-                        continue;
-                    } else {
-                        //报价不为空
-                        if (tableBack[i].offer != undefined && tableBack[i].offer != "") {
-                            list.offer = tableBack[i].offer;
-                            list.offer_date = new Date($.ajax({async: false}).getResponseHeader("Date")).Format("yyyy-MM-dd");
-                        } else {
-                            return layer.alert("保存失败，未填写报价！");
-                        }
-                        //到货日期不为空
-                        if ($('.layui-input-date').eq(i).val() != undefined && $('.layui-input-date').eq(i).val() != "") {
-                            list.issuance_date = $('.layui-input-date').eq(i).val();
-                        } else {
-                            return layer.alert("保存失败，未填写到货日期！");
-                        }
-                    }
-                    list.delivery_date = tableBack[i].delivery_date;
-                    list.open_date = tableBack[i].open_date;
-                    list.close_date = tableBack[i].close_date;
-                    list.bid_state = "1";
-                    lists.push(list);
+                    console.log("offer:" + $('.text').eq(i).val());
+                    // //判断供应商填写报价和到货日期是否为空
+                    // if ($('#test1').eq(i).val() == undefined && $('.layui-input-date').eq(i).val() == "") {
+                    //     continue;
+                    // } else {
+                    //     //报价不为空
+                    //     if ($('#test1').eq(i).val() != undefined && $('#test1').eq(i).val() != "") {
+                    //         list.offer = $('#test1').eq(i).val();
+                    //         list.offer_date = new Date($.ajax({async: false}).getResponseHeader("Date")).Format("yyyy-MM-dd");
+                    //     } else {
+                    //         return layer.alert("保存失败，未填写报价！");
+                    //     }
+                    //     //到货日期不为空
+                    //     if ($('.layui-input-date').eq(i).val() != undefined && $('.layui-input-date').eq(i).val() != "") {
+                    //         list.issuance_date = $('.layui-input-date').eq(i).val();
+                    //     } else {
+                    //         return layer.alert("保存失败，未填写到货日期！");
+                    //     }
+                    // }
+                    // if (tableBack[i].offer == undefined && $('.layui-input-date').eq(i).val() == "") {
+                    //     continue;
+                    // } else {
+                    //     //报价不为空
+                    //     if (tableBack[i].offer != undefined && tableBack[i].offer != "") {
+                    //         list.offer = tableBack[i].offer;
+                    //         list.offer_date = new Date($.ajax({async: false}).getResponseHeader("Date")).Format("yyyy-MM-dd");
+                    //     } else {
+                    //         return layer.alert("保存失败，未填写报价！");
+                    //     }
+                    //     //到货日期不为空
+                    //     if ($('.layui-input-date').eq(i).val() != undefined && $('.layui-input-date').eq(i).val() != "") {
+                    //         list.issuance_date = $('.layui-input-date').eq(i).val();
+                    //     } else {
+                    //         return layer.alert("保存失败，未填写到货日期！");
+                    //     }
+                    // }
+                    // list.delivery_date = tableBack[i].delivery_date;
+                    // list.open_date = tableBack[i].open_date;
+                    // list.close_date = tableBack[i].close_date;
+                    // list.bid_state = "1";
+                    // lists.push(list);
                 }
 
-                $.ajax({
-                    url: '/quotedPrice?state=' + parent.layui.index.getCookie("loginLimits_state")
-                    , type: 'post'
-                    , data: JSON.stringify(lists)
-                    , dataType: 'json'
-                    , contentType: 'application/json; charset=utf-8'
-                    , beforeSend: function () {
-                        indexs = layer.load(1);
-                    }
-                    , success: function (res) {
-                        if (res.code === "0") {
-                            layer.msg('保存成功！', {
-                                offset: '15px'
-                                , icon: 1
-                                , time: 1000
-                            }, function () {
-                                location.reload(index);
-                            });
-                        } else {
-                            layer.msg('保存失败！', {
-                                offset: '15px'
-                                , icon: 1
-                                , time: 1000
-                            });
-                        }
-                    }
-                })
+                // $.ajax({
+                //     url: '/quotedPrice?state=' + parent.layui.index.getCookie("loginLimits_state")
+                //     , type: 'post'
+                //     , data: JSON.stringify(lists)
+                //     , dataType: 'json'
+                //     , contentType: 'application/json; charset=utf-8'
+                //     , beforeSend: function () {
+                //         indexs = layer.load(1);
+                //     }
+                //     , success: function (res) {
+                //         if (res.code === "0") {
+                //             layer.close(indexs);
+                //             layer.msg('保存成功！', {
+                //                 offset: '15px'
+                //                 , icon: 1
+                //                 , time: 1000
+                //             }, function () {
+                //                 location.reload(index);
+                //             });
+                //         } else {
+                //             layer.close(indexs);
+                //             layer.msg('保存失败！', {
+                //                 offset: '15px'
+                //                 , icon: 1
+                //                 , time: 1000
+                //             });
+                //         }
+                //     }
+                // })
             });
 
         } else {
@@ -331,6 +357,7 @@
                     }
                     , success: function (res) {
                         if (res.code === "0") {
+                            layer.close(indexs);
                             layer.msg('保存成功！', {
                                 offset: '15px'
                                 , icon: 1
@@ -339,6 +366,7 @@
                                 location.reload(index);
                             });
                         } else {
+                            layer.close(indexs);
                             layer.msg('保存失败！', {
                                 offset: '15px'
                                 , icon: 1

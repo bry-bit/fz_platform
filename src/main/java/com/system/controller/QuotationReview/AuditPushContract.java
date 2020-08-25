@@ -94,8 +94,8 @@ public class AuditPushContract {
                     footerList.add(list.get(i));
                 }
             }
-            System.out.println("heardList:" + heardList);
-            System.out.println("footerList:" + footerList);
+//            System.out.println("heardList:" + heardList);
+//            System.out.println("footerList:" + footerList);
 
             for (int i = 0; i < heardList.size(); i++) {
                 String Field0001 = "XMCG" + new SimpleDateFormat("yyyyMMdd").format(new Date())
@@ -112,31 +112,35 @@ public class AuditPushContract {
 
                 List<Formson_0077> formson0077List = new ArrayList<>();
                 for (int j = 0; j < footerList.size(); j++) {
+                    System.out.println("首先："+footerList.get(j));
                     if (footerList.get(j).getSupplier_name().equals(heardList.get(i).getSupplier_name())) {
+                        System.out.println("其次："+footerList.get(j));
+
                         Formson_0077 formson0077 = new Formson_0077();
-                        formson0077.setField0006(String.valueOf(i + 1));
-                        formson0077.setField0029(footerList.get(i).getLine());
+                        formson0077.setField0006(String.valueOf(j + 1));
+                        formson0077.setField0029(footerList.get(j).getLine());
                         formson0077.setField0044("正常");
-                        formson0077.setField0008(footerList.get(i).getStock_code());
-                        formson0077.setField0009(footerList.get(i).getStock_name());
-                        formson0077.setField0034(footerList.get(i).getClass_code());
-                        formson0077.setField0035(footerList.get(i).getStock_sort());
-                        formson0077.setField0036(footerList.get(i).getStation_no());
-                        formson0077.setField0038(footerList.get(i).getNorms());
-                        formson0077.setField0039(footerList.get(i).getUnit());
-                        formson0077.setField0040(footerList.get(i).getBrand());
-                        formson0077.setField0041(footerList.get(i).getSupplier_name());
-                        formson0077.setField0042(footerList.get(i).getDelivery_date());
-                        formson0077.setField0010(footerList.get(i).getQuantity());
-                        formson0077.setField0018(footerList.get(i).getOffer());
-                        formson0077.setField0025(footerList.get(i).getField0025());
-                        formson0077.setField0020(footerList.get(i).getRemarks());
+                        formson0077.setField0008(footerList.get(j).getStock_code());
+                        formson0077.setField0009(footerList.get(j).getStock_name());
+                        formson0077.setField0034(footerList.get(j).getClass_code());
+                        formson0077.setField0035(footerList.get(j).getStock_sort());
+                        formson0077.setField0036(footerList.get(j).getStation_no());
+                        formson0077.setField0038(footerList.get(j).getNorms());
+                        formson0077.setField0039(footerList.get(j).getUnit());
+                        formson0077.setField0040(footerList.get(j).getBrand());
+                        formson0077.setField0041(footerList.get(j).getSupplier_name());
+                        formson0077.setField0042(footerList.get(j).getDelivery_date());
+                        formson0077.setField0010(footerList.get(j).getQuantity());
+                        formson0077.setField0018(footerList.get(j).getOffer());
+                        formson0077.setField0025(footerList.get(j).getField0025());
+                        formson0077.setField0020(footerList.get(j).getRemarks());
+                        formson0077.setField0046(footerList.get(j).getField0042());
                         formson0077List.add(formson0077);
                     } else {
                         continue;
                     }
                 }
-
+//                System.out.println(formson0077List);
                 formmain0076.setData(formson0077List);
                 System.out.println("formmain0076:" + formmain0076);
 
@@ -149,7 +153,7 @@ public class AuditPushContract {
                 Map datad = new HashMap() {
                     {
                         put("templateCode", "xmcgzb001");//模板号
-                        put("senderLoginName", "fz-zyh");//登录名
+                        put("senderLoginName", "fz-lis");//登录名
                         put("token", token);
                         put("subject", "采购合同中标审批单-（包荣岩" + format + "）");//标题
                         put("param", "0");
@@ -219,7 +223,8 @@ public class AuditPushContract {
                     "<column id=\"field0010\" type=\"0\" name=\"采购数量\" isNullable=\"false\" length=\"100\"/>\r\n" +
                     "<column id=\"field0018\" type=\"0\" name=\"单价\" isNullable=\"false\" length=\"100\"/>\r\n" +
                     "<column id=\"field0025\" type=\"0\" name=\"采购需求档案编码\" isNullable=\"false\" length=\"100\"/>\r\n" +
-                    "<column id=\"field0020\" type=\"0\" name=\"备注\" isNullable=\"false\" length=\"100\"/>\r\n";
+                    "<column id=\"field0020\" type=\"0\" name=\"备注\" isNullable=\"false\" length=\"100\"/>\r\n" +
+                    "<column id=\"field0046\" type=\"0\" name=\"预算类别\" isNullable=\"false\" length=\"100\"/>\r\n";
         }
         data = data + "</definitions><values>";
         for (Formson_0077 formson0077 : formmain0076.getData()) {
@@ -241,6 +246,7 @@ public class AuditPushContract {
                     + "<column name=\"采购需求档案编码\"><value>" + formson0077.getField0025() + "</value></column>"
                     + "<column name=\"工位号\"><value>" + formson0077.getField0036() + "</value></column>"
                     + "<column name=\"备注\"><value>" + formson0077.getField0020() + "</value></column>"
+                    + "<column name=\"预算类别\"><value>" + formson0077.getField0046() + "</value></column>"
                     + "</row>";
         }
         data = data + "</values></subForm></subForms></formExport>";

@@ -53,4 +53,6 @@ public class Formson_0077 {
     private String field0027;
     //备注
     private String field0020;
+    //预算类别
+    private String field0046;
 }

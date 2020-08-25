@@ -2,7 +2,7 @@ package com.system.mapper.Synchro;
 
 import com.system.pojo.Synchro.Formmain_0046_temp;
 import com.system.pojo.Synchro.Formson_0047_temp;
-import org.springframework.data.repository.query.Param;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

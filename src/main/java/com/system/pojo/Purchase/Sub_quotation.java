@@ -48,4 +48,5 @@ public class Sub_quotation {
     private String item_name;
     private String proposer;
     private String return_msg;
+    private String field0042;//预算类别
 }

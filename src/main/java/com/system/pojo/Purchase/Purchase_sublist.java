@@ -57,4 +57,6 @@ public class Purchase_sublist {
     private String field0002;
     //已选供应商数量
     private String sum;
+    //预算类别
+    private String field0042;
 }

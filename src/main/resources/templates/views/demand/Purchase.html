@@ -308,8 +308,10 @@
                     } else {
                         layer.msg('发布失败！', {
                             offset: '15px'
-                            , icon: 1
+                            , icon: 2
                             , time: 1000
+                        }, function () {
+                            layer.close(indexs);
                         });
                     }
                 }

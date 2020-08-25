@@ -38,9 +38,12 @@
 </div>
 
 <script src="../../layuiadmin/layui/layui.js"></script>
+<script type="text/javascript" src="jquery/jquery-3.4.1.js"></script>
+<script type="text/javascript" src="jquery/jquery-3.4.1.min.js"></script>
+<script type="text/javascript" src="jquery/jquery.cookie.js"></script>
 <script>
     Date.prototype.Format = function (fmt) {
-        let o = {
+        var o = {
             "M+": this.getMonth() + 1, //月份
             "d+": this.getDate(), //日
             "H+": this.getHours(), //小时
@@ -50,20 +53,21 @@
             "S": this.getMilliseconds() //毫秒
         };
         if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
-        for (let k in o)
+        for (var k in o)
             if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
         return fmt;
     };
-    let indexs = "";
+    var indexs = "";
     layui.config({
         base: '../../layuiadmin/' //静态资源所在路径
     }).extend({
         index: 'lib/index' //主入口模块
-    }).use(['index', 'table', 'layer', 'laydate'], function () {
-        let $ = layui.$
+    }).use(['index', 'table', 'layer', 'laydate', 'upload'], function () {
+        var $ = layui.$
             , table = layui.table
             , layer = layui.layer
             , laydate = layui.laydate
+            , upload = layui.upload
             , index = parent.layer.getFrameIndex(window.name);
 
         if (parent.layui.index.getCookie("loginLimits_state") == "3") {
@@ -102,12 +106,12 @@
                         , {field: 'close_date', title: '结标日期', align: "center", width: 100}
                         , {
                         field: '', title: '报价状态', align: "center", width: 105, templet: function (row) {
-                            let open_date = row.open_date.substring(0, 19).replace(/-/g, '/');
-                            let close_date = row.close_date.substring(0, 19).replace(/-/g, '/');
-                            let kaishi = new Date(open_date).getTime();//开标日时间戳
-                            let jieshu = new Date(close_date).getTime();//结标日时间戳
-                            let time = new Date($.ajax({async: false}).getResponseHeader("Date")).Format("yyyy-MM-dd");
-                            let nowtime = new Date(time).getTime() - 28800000;
+                            var open_date = row.open_date.substring(0, 19).replace(/-/g, '/');
+                            var close_date = row.close_date.substring(0, 19).replace(/-/g, '/');
+                            var kaishi = new Date(open_date).getTime();//开标日时间戳
+                            var jieshu = new Date(close_date).getTime();//结标日时间戳
+                            var time = new Date($.ajax({async: false}).getResponseHeader("Date")).Format("yyyy-MM-dd");
+                            var nowtime = new Date(time).getTime() - 28800000;
                             if (nowtime >= kaishi) {
                                 return '<a type="button" class="layui-btn layui-btn-sm layui-bg-orange">已报价</a>'
                             } else if (nowtime > jieshu) {
@@ -136,14 +140,14 @@
                 , done: function (res, curr, count) {
                     $('#save1').hide();
                     $('#test').show();
-                    let tableView = this.elem.next(); // 当前表格渲染之后的视图
+                    var tableView = this.elem.next(); // 当前表格渲染之后的视图
                     layui.each(res.data, function (i, item) {
-                        let open_date = item.open_date.substring(0, 19).replace(/-/g, '/');
-                        let close_date = item.close_date.substring(0, 19).replace(/-/g, '/');
-                        let kaishi = new Date(open_date).getTime();//开标日时间戳
-                        let jieshu = new Date(close_date).getTime();//结标日时间戳
-                        let time = new Date($.ajax({async: false}).getResponseHeader("Date")).Format("yyyy-MM-dd");
-                        let nowtime = new Date(time).getTime() - 28800000;
+                        var open_date = item.open_date.substring(0, 19).replace(/-/g, '/');
+                        var close_date = item.close_date.substring(0, 19).replace(/-/g, '/');
+                        var kaishi = new Date(open_date).getTime();//开标日时间戳
+                        var jieshu = new Date(close_date).getTime();//结标日时间戳
+                        var time = new Date($.ajax({async: false}).getResponseHeader("Date")).Format("yyyy-MM-dd");
+                        var nowtime = new Date(time).getTime() - 28800000;
                         if (kaishi > nowtime) {
                             tableView.find('tr[data-index=' + i + ']').find('td').data('edit', false);
                         } else if (jieshu < nowtime) {
@@ -163,10 +167,10 @@
             });
 
             $('#save').on('click', function () {
-                let tableBack = table.cache["demo"];
-                let lists = [];
-                for (let i = 0; i < tableBack.length; i++) {
-                    let list = {};
+                var tableBack = table.cache["demo"];
+                var lists = [];
+                for (var i = 0; i < tableBack.length; i++) {
+                    var list = {};
                     if (tableBack[i].offer != undefined && tableBack[i].offer != "") {
                         list.id = tableBack[i].id;
                         list.stock_code = tableBack[i].stock_code;
@@ -222,16 +226,28 @@
                 })
             });
 
-            $('#sheding').on('click', function () {
-                let checkStatus = table.checkStatus('demo')
+            //监听表格复选框选择
+            table.on('checkbox(demo)', function (obj) {
+                var checkStatus = table.checkStatus('demo')
                     , data = checkStatus.data;
-                let totals = 0;
-                for (let i = 0; i < data.length; i++) {
-                    let total = data[i].offer * data[i].quantity;
+                var totals = 0;
+                for (var i = 0; i < data.length; i++) {
+                    var total = data[i].offer * data[i].quantity;
+                    totals = parseFloat(totals) + parseFloat(total);
+                }
+                $('#total').val(totals);
+            });
+
+            $('#sheding').on('click', function () {
+                var checkStatus = table.checkStatus('demo')
+                    , data = checkStatus.data;
+                var totals = 0;
+                for (var i = 0; i < data.length; i++) {
+                    var total = data[i].offer * data[i].quantity;
                     totals = parseFloat(totals) + parseFloat(total);
                 }
                 //计算修改值后，跟原总计的差额
-                // let margin = parseFloat(totals) - parseFloat($('#total').val());
+                // var margin = parseFloat(totals) - parseFloat($('#total').val());
                 // 40 - (40 / 305 * 5)
                 $.ajax({
                     url: '/SetQuote?totals=' + totals + '&total=' + $('#total').val()
@@ -303,12 +319,12 @@
                     }
                         , {
                         field: '', title: '报价状态', align: "center", width: 105, templet: function (row) {
-                            let open_date = row.open_date.substring(0, 19).replace(/-/g, '/');
-                            let close_date = row.close_date.substring(0, 19).replace(/-/g, '/');
-                            let kaishi = new Date(open_date).getTime();//开标日时间戳
-                            let jieshu = new Date(close_date).getTime();//结标日时间戳
-                            let time = new Date($.ajax({async: false}).getResponseHeader("Date")).Format("yyyy-MM-dd");
-                            let nowtime = new Date(time).getTime() - 28800000;
+                            var open_date = row.open_date.substring(0, 19).replace(/-/g, '/');
+                            var close_date = row.close_date.substring(0, 19).replace(/-/g, '/');
+                            var kaishi = new Date(open_date).getTime();//开标日时间戳
+                            var jieshu = new Date(close_date).getTime();//结标日时间戳
+                            var time = new Date($.ajax({async: false}).getResponseHeader("Date")).Format("yyyy-MM-dd");
+                            var nowtime = new Date(time).getTime() - 28800000;
 
                             if (nowtime >= kaishi) {
                                 return '<a type="button" class="layui-btn layui-btn-sm">已报价</a>'
@@ -338,7 +354,7 @@
 
             table.on('tool(demo)', function (obj) {
                 if (obj.event === 'date2') {
-                    let field = $(this).data('field');
+                    var field = $(this).data('field');
                     laydate.render({
                         elem: this.firstChild
                         , show: true //直接显示
@@ -355,10 +371,10 @@
             });
 
             $('#save1').on('click', function () {
-                let tableBack = table.cache["demo"];
-                let lists = [];
-                for (let i = 0; i < tableBack.length; i++) {
-                    let list = {};
+                var tableBack = table.cache["demo"];
+                var lists = [];
+                for (var i = 0; i < tableBack.length; i++) {
+                    var list = {};
                     list.id = tableBack[i].id;
                     list.stock_code = tableBack[i].stock_code;
                     list.stock_name = tableBack[i].stock_name;
@@ -391,21 +407,20 @@
                     }
                     , success: function (res) {
                         if (res.code === "0") {
+                            layer.close(indexs);
                             layer.msg('保存成功！', {
                                 offset: '15px'
                                 , icon: 1
                                 , time: 1000
                             }, function () {
-                                layer.close(indexs);
                                 location.reload(index);
                             });
                         } else {
+                            layer.close(indexs);
                             layer.msg('保存失败！', {
                                 offset: '15px'
                                 , icon: 1
                                 , time: 1000
-                            },function () {
-                                layer.close(indexs);
                             });
                         }
                     }
@@ -415,7 +430,7 @@
 
         table.on('tool(demo)', function (obj) {
             // document.getElementById("btn_file").click();
-            let topLayui = parent === self ? layui : top.layui;
+            var topLayui = parent === self ? layui : top.layui;
             if (obj.event === 'uploadeSup') {
                 document.getElementById("btn_file").click();
                 parent.layui.index.setCookie("uploadID", obj.data.id, "1");
@@ -431,26 +446,25 @@
                     , data: JSON.stringify(obj.data)
                     , dataType: 'json'
                     , contentType: 'application/json; charset=utf-8'
-                    , let: function () {
+                    , var: function () {
                         indexs = layer.load(1);
                     }
                     , success: function (res) {
                         if (res.code === "0") {
+                            layer.close(indexs);
                             layer.msg('下载附件成功！', {
                                 offset: '15px'
                                 , icon: 1
                                 , time: 1000
                             }, function () {
-                                layer.close(indexs);
                                 downLoad(res);
                             });
                         } else {
+                            layer.close(indexs);
                             layer.msg(res.msg, {
                                 offset: '15px'
                                 , icon: 1
                                 , time: 1000
-                            },function () {
-                                layer.close(indexs);
                             });
                         }
                     }
@@ -467,27 +481,26 @@
                     }
                     , success: function (res) {
                         if (res.code === "0") {
+                            layer.close(indexs);
                             layer.msg('下载附件成功！', {
                                 offset: '15px'
                                 , icon: 1
                                 , time: 1000
                             }, function () {
-                                layer.close(indexs);
                                 downLoad(res);
                             });
                         } else {
+                            layer.close(indexs);
                             layer.msg(res.msg, {
                                 offset: '15px'
                                 , icon: 1
                                 , time: 1000
-                            },function () {
-                                layer.close(indexs);
                             });
                         }
                     }
                 });
             } else if (obj.event === 'baojia') {
-                let data = obj.data;
+                var data = obj.data;
                 parent.layui.index.setCookie("baojiaData", JSON.stringify(data), "1");
                 parent.layui.index.setCookie("offer", data.offer, "1");
                 parent.layui.index.setCookie("issuance_date", data.issuance_date, "1");
@@ -499,7 +512,7 @@
                     , content: ['/page?url=/quotation/quotation.html', 'no']
                 });
             } else if (obj.event == 'history') {
-                let data = obj.data;
+                var data = obj.data;
                 console.log(JSON.stringify(data));
                 layer.open({
                     type: 2
@@ -508,7 +521,7 @@
                     , skin: 'layui-layer-rim'
                     , content: ['page?url=/quotation/quotedHistory.html', 'yes']
                     , success: function (layero, index) {
-                        let body = layui.layer.getChildFrame('body', index);
+                        var body = layui.layer.getChildFrame('body', index);
                         if (data) {
                             body.find("#mainSn").val(data.id); //将选中的数据的id传到编辑页面的隐藏域，便于根据ID修改数据
                             body.find("#stock_code").val(data.stock_code);
@@ -527,14 +540,12 @@
                 });
             }
         });
-
-
     });
 
     function upload(file) {
-        let img = document.getElementById('btn_file');
-        let formData = new FormData();
-        let temp = file.files[0];
+        var img = document.getElementById('btn_file');
+        var formData = new FormData();
+        var temp = file.files[0];
         if (temp) {
             formData.append('file', temp);
             $.ajax({
@@ -549,13 +560,13 @@
                     indexs = layer.load(1);
                 }
                 , success: function (res) {
-                    let data = eval("(" + res + ")");
+                    var data = eval("(" + res + ")");
                     if (data.code === "0") {
                         layer.msg('上传成功！', {
                             offset: '15px'
                             , icon: 1
                             , time: 1000
-                        },function () {
+                        }, function () {
                             layer.close(indexs);
                         });
                     } else {
@@ -563,7 +574,7 @@
                             offset: '15px'
                             , icon: 1
                             , time: 1000
-                        },function () {
+                        }, function () {
                             layer.close(indexs);
                         });
                     }
@@ -578,6 +589,18 @@
         ele.setAttribute('download', result.data);//用于设置下载文件的文件名
         ele.click();
         console.log();
+    }
+
+    //小数位为4
+    function test1(str) {
+        if (!str) str = "0.0000";
+        let ret = Math.round(parseFloat(str) * 10000) / 10000;
+        if (str.split(".").length === 1) {
+            return ret.toString() + ".0000";
+        }
+        let decimal = str.split(".")[0];
+        let floats = str.split(".")[1].substring(0, 4);
+        return decimal + "." + floats;
     }
 </script>
 </body>

@@ -4,7 +4,7 @@ import com.system.pojo.FileUpload.File_leading;
 import com.system.pojo.FileUpload.Formmain_0046_temp;
 import com.system.pojo.FileUpload.Formson_0047_temp;
 import com.system.pojo.FileUpload.Org_member;
-import org.springframework.data.repository.query.Param;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 

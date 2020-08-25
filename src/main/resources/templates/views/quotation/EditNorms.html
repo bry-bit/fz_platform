@@ -78,12 +78,11 @@
                             location.reload(index);
                         });
                     } else {
+                        layer.close(indexs);
                         layer.msg('修改失败！', {
                             offset: '15px'
                             , icon: 1
                             , time: 1000
-                        }, function () {
-                            location.reload(index);
                         });
                     }
                 }

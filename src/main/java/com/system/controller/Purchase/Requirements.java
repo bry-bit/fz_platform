@@ -187,6 +187,7 @@ public class Requirements {
                 subQuotation.setRemarks(sublists.get(i).getRemarks());
                 subQuotation.setClass_code(sublists.get(i).getClass_code());
                 subQuotation.setEnable_status(sublists.get(i).getEnable_status());
+                subQuotation.setField0042(sublists.get(i).getField0042());
                 subQuotation.setBid_state("0");
 
                 List<DemandSummary> summaryList = service.queryP_T(sublists.get(i).getId());
