@@ -138,7 +138,7 @@
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
-            <version>1.2.15</version>
+            <version>1.2.83</version>
         </dependency>
         <!-- 分页助手 -->
         <dependency>
@@ -192,7 +192,7 @@
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
-            <version>1.2.39</version>
+            <version>1.2.83</version>
         </dependency>
     </dependencies>
 
